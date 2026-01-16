@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Crazy App | All in One</title>
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+  <Style>
+  :root {
+  --p: #6366f1; --d: #1e293b; --g: #10b981; --r: #ef4444; --y: #f59e0b;
+  --bg: #0f172a; --card: #1e293b; --text: #e2e8f0; --light: #334155;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: var(--text); min-height:100vh;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; line-height: 1.4;
+  padding-bottom: 80px;
+  overflow-x: hidden;
+}
+
+/* Header */
+.header {
+  background: rgba(15, 23, 42, 0.98);
+  backdrop-filter: blur(12px);
+  padding: 12px 14px;
+  text-align: center;
+  border-bottom: 1px solid var(--light);
+  position: sticky; top: 0; z-index: 100;
+}
+.welcome {
+  font-size: 18px; font-weight: 800; color: white;
+  text-shadow: 0 2px 8px rgba(99,102,241,0.4);
+}
+.user-tag { font-size: 13px; color: #94a3b8; margin-top: 3px; font-weight: 600; }
+.animated-banner {
+  font-size: 11px; color: var(--y); margin-top: 5px;
+  animation: fadeIn 1.5s ease-in-out infinite alternate;
+}
+@keyframes fadeIn { from { opacity: 0.5; } to { opacity: 1; } }
+
+/* Balance Card */
+.balance-card {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 16px; padding: 16px;
+  margin: 14px; box-shadow: 0 8px 20px rgba(99,102,241,0.4);
+  text-align: center; color: white;
+  position: relative;
+}
+.balance-label { font-size: 11px; opacity: 0.9; }
+.balance-amount { font-size: 26px; font-weight: 800; margin: 6px 0; }
+.total-orders { font-size: 11px; opacity: 0.8; position: absolute; top: 10px; right: 10px; }
+
+/* Deposit Processing Alert */
+.deposit-processing {
+  background: rgba(251, 191, 36, 0.2); border: 1px dashed var(--y);
+  color: var(--y); padding: 8px; border-radius: 8px; margin: 8px 14px;
+  font-size: 11px; text-align: center; animation: pulse 2s infinite;
+  display: none;
+}
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+/* App Update Card */
+.app-update-card {
+  background: linear-gradient(135deg, #ef4444, #f59e0b);
+  border-radius: 16px; padding: 16px;
+  margin: 14px; box-shadow: 0 8px 20px rgba(239,68,68,0.4);
+  text-align: center; color: white;
+  display: none;
+}
+.app-update-message { font-size: 13px; margin-bottom: 10px; }
+.app-update-btn {
+  background: white; color: #ef4444; padding: 8px 16px; border-radius: 8px;
+  cursor: pointer; font-weight: 600; transition: all 0.3s ease;
+}
+.app-update-btn:active { transform: scale(0.98); }
+
+/* App Rating Box */
+.app-rating {
+  background: var(--g); color: white; padding: 4px 8px; border-radius: 20px;
+  font-size: 10px; position: absolute; top: 10px; left: 10px; animation: bounce 1.5s infinite;
+  display: flex; align-items: center;
+}
+@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-5px); } 60% { transform: translateY(-3px); } }
+
+/* Section Headers */
+.section-header {
+  background: var(--card); border-radius: 12px;
+  margin: 12px 14px; padding: 12px;
+  border: 1px solid var(--light); cursor: pointer;
+  font-weight: 700; color: var(--p); font-size: 14px;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: all 0.3s ease;
+}
+.section-header:active { transform: scale(0.98); }
+.section-header i { transition: transform 0.3s ease; }
+.section-header.open i { transform: rotate(180deg); }
+
+/* Profile Section */
+.profile-section {
+  background: var(--card); border-radius: 14px;
+  margin: 0 14px; padding: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  border: 1px solid var(--light); display: none;
+}
+.pro-badge {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  color: white; padding: 4px 12px; border-radius: 26px;
+  font-size: 10px; font-weight: 700; display: inline-block;
+}
+.profile-field {
+  background: var(--light); border: none; color: white;
+  padding: 8px 10px; border-radius: 8px; font-size: 12px;
+  width: 100%; margin: 5px 0;
+}
+.save-btn {
+  background: var(--g); color: white; border: none;
+  padding: 8px 18px; border-radius: 8px; font-weight: 600;
+  cursor: pointer; margin-top: 12px; width: 100%;
+  transition: all 0.3s ease;
+}
+.save-btn:active { transform: scale(0.98); }
+.profile-info { margin-top: 12px; font-size: 12px; }
+
+/* WhatsApp Bind */
+.whatsapp-card {
+  background: linear-gradient(135deg, #128C7E, #25D366);
+  color: white; border-radius: 14px; padding: 14px;
+  margin-top: 14px; text-align: center;
+  box-shadow: 0 6px 20px rgba(37,211,102,0.3);
+}
+.whatsapp-card input {
+  background: white; color: #000; padding: 10px;
+  border-radius: 8px; border: none; margin: 8px 0;
+  width: 100%; font-size: 13px;
+}
+.bind-btn {
+  background: #075E54; padding: 8px 20px; border: none;
+  border-radius: 8px; font-weight: 600; cursor: pointer;
+  transition: all 0.3s ease;
+}
+.bind-btn:active { transform: scale(0.95); }
+
+/* Update Alert */
+.update-alert {
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+  background: #000; color: white; padding: 14px 18px;
+  border-radius: 12px; max-width: 90%; text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  z-index: 9999; border: 2px solid var(--p);
+  animation: popIn 0.4s ease-out;
+}
+@keyframes popIn { from { opacity: 0; transform: translateX(-50%) scale(0.9); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+.update-alert .msg {
+  font-size: 12px; line-height: 1.5; margin: 8px 0;
+  background: rgba(99,102,241,0.1); padding: 8px;
+  border-radius: 6px; border: 1px dashed var(--p);
+}
+.update-alert button {
+  background: var(--p); padding: 8px 24px; border: none;
+  border-radius: 8px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 3px 12px rgba(99,102,241,0.4);
+  transition: all 0.3s ease;
+}
+.update-alert button:active { transform: scale(0.95); }
+
+/* Cards */
+.card {
+  background: var(--card); border-radius: 12px;
+  margin: 0 14px; padding: 14px;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.25);
+  border: 1px solid var(--light);
+  animation: fadeUp 0.5s ease-out; display: none;
+}/* =================================================== */
+/*   CRAZY APP - WINTER ULTRA PREMIUM 2026 THEME       */
+/*   Full App - Login + Dashboard + All Sections       */
+/*   Based on your killer balance card style           */
+/* =================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Inter', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0b1d2a, #102a43, #0f3c4c);
+    color: #e0f2ff;
+    padding-bottom: 100px;
+    overflow-x: hidden;
+}
+
+
+/* ===== Dashboard Header ===== */
+.header {
+    background: rgba(11,29,42,0.95);
+    backdrop-filter: blur(12px);
+    padding: 14px 16px;
+    text-align: center;
+    border-bottom: 1px solid rgba(120,200,255,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.welcome {
+    font-size: 19px;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(150,220,255,0.4);
+}
+
+.user-tag, .animated-banner {
+    font-size: 12px;
+    color: #9fc7dc;
+    margin-top: 4px;
+}
+
+/* ===== Balance Card - Your Killer Style ===== */
+.balance-card {
+    width: 330px;
+    padding: 25px;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #122b3e, #0d2233);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.45),
+        inset 0 0 20px rgba(255, 255, 255, 0.03);
+    position: relative;
+    overflow: hidden;
+    margin: 16px auto;
+}
+
+.balance-card::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(120,200,255,0.12), transparent 60%);
+    animation: glowMove 6s linear infinite;
+}
+
+.balance-amount {
+    font-size: 34px;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(150,220,255,0.4);
+}
+
+/* ===== All Cards & Sections ===== */
+.card, .profile-section, .section-header {
+    width: 330px;
+    margin: 14px auto;
+    padding: 18px;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #122b3e, #0d2233);
+    border: 1px solid rgba(120,200,255,0.15);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+.section-header {
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+/* ===== Buttons ===== */
+button, .save-btn, .bind-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #10b981, #34d399);
+    color: white;
+    border: none;
+    font-weight: 700;
+    font-size: 14.5px;
+    box-shadow: 0 10px 25px rgba(16,185,129,0.4);
+}
+
+/* Floating Buttons */
+.deposit-btn, .support-btn, .logout {
+    position: fixed;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    z-index: 100;
+}
+.deposit-btn { background: linear-gradient(135deg, #10b981, #34d399); bottom: 140px; }
+.support-btn { background: linear-gradient(135deg, #25D366, #128C7E); bottom: 80px; }
+.logout { background: linear-gradient(135deg, #ef4444, #dc2626); bottom: 16px; }
+
+/* Animations */
+@keyframes glowMove {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.service-item, .order-item, .sim-method {
+  background: var(--light); padding: 12px;
+  border-radius: 10px; margin: 6px 0;
+  text-align: center; cursor: pointer;
+  transition: all 0.3s ease; font-weight: 600;
+  font-size: 12px;
+}
+.service-item:active, .sim-method:active {
+  transform: scale(0.95);
+  background: var(--p); color: white;
+}
+
+/* Order Details */
+.order-details-item {
+  background: var(--light); padding: 10px; border-radius: 8px;
+  margin: 6px 0; font-size: 11px; line-height: 1.4; position: relative;
+}
+.order-id { display: flex; align-items: center; }
+.copy-btn { background: var(--p); color: white; padding: 3px 6px; border-radius: 5px; margin-left: 6px; cursor: pointer; font-size: 10px; transition: all 0.3s ease; }
+.copy-btn:active { transform: scale(0.9); }
+.status { font-weight: 600; }
+.status.success { color: var(--g); }
+.status.cancel { color: var(--r); }
+.status.processing { color: var(--y); animation: pulse 1.5s infinite; }
+
+/* History Item */
+.history-item {
+  background: var(--light); padding: 10px; border-radius: 8px;
+  margin: 6px 0; font-size: 11px; line-height: 1.4;
+}
+
+/* Buttons */
+.deposit-btn, .support-btn, .logout {
+  position: fixed; z-index: 100; border-radius: 50px;
+  padding: 10px 18px; font-weight: 600; box-shadow: 0 5px 18px rgba(0,0,0,0.4);
+  cursor: pointer; font-size: 12px; transition: all 0.3s ease;
+}
+.deposit-btn:active, .support-btn:active, .logout:active { transform: scale(0.9); }
+.deposit-btn { background: var(--g); color: white; bottom: 120px; right: 14px; }
+.support-btn { background: #25D366; color: white; bottom: 60px; right: 14px; }
+.logout { background: var(--r); color: white; bottom: 14px; right: 14px; }
+
+/* Loading */
+.spinner {
+  border: 3px solid var(--light); border-top: 3px solid var(--p);
+  border-radius: 50%; width: 30px; height: 30px;
+  animation: spin 1s linear infinite; margin: 14px auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Login Box */
+.login-box { 
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+  background: rgba(0,0,0,0.85); display: flex; align-items: center; 
+  justify-content: center; z-index: 999; padding: 14px;
+}
+.login-card { 
+  background: white; padding: 30px; border-radius: 12px; 
+  width: 100%; max-width: 340px; box-shadow: 0 16px 30px rgba(0,0,0,0.3); 
+}
+.input-group { position: relative; margin: 14px 0; }
+.input-group i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888; }
+input, textarea { 
+  width: 100%; padding: 12px 12px 12px 40px; border: 2px solid #e2e8f0; 
+  border-radius: 8px; font-size: 14px; transition: all 0.3s ease;
+}
+input:focus, textarea:focus { outline: none; border-color: var(--p); }
+button { 
+  width: 100%; padding: 12px; background: var(--p); color: white; 
+  border: none; border-radius: 8px; font-weight: 600; cursor: pointer; 
+  margin: 6px 0; transition: all 0.3s ease;
+}
+button:active { transform: scale(0.98); }
+.link { text-align: center; color: #666; font-size: 12px; }
+.link a { color: var(--p); font-weight: 600; }
+.wallet-btn {
+  background: rgba(18,43,62,0.8);
+  border: 1.5px solid rgba(120,200,255,0.3);
+  color: white;
+  padding: 16px;
+  border-radius: 18px;
+  font-weight: 700;
+  font-size: 13px;
+  transition: 0.3s;
+}
+.wallet-btn:active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  transform: scale(0.95);
+}
+.wallet-btn img { filter: brightness(0) invert(1); }
+/* SIM Section */
+.sim-methods {
+  display: flex; gap: 8px; margin: 10px 0;
+}
+.sim-method {
+  flex: 1; padding: 10px; font-size: 11px;
+}
+.sim-method.free { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
+.sim-method.paid { background: linear-gradient(135deg, #f59e0b, #f97316); color: white; }
+.sim-method:active { transform: scale(0.94); }
+
+.sim-form, .sim-status { margin-top: 10px; }
+.sim-input input { padding: 10px 12px 10px 40px; font-size: 13px; }
+.countdown-big { font-size: 20px; font-weight: 800; color: var(--y); margin: 8px 0; }
+.admin-box { background: rgba(99,102,241,0.1); padding: 8px; border-radius: 6px; font-size: 11px; margin-top: 6px; animation: fadeIn 1s ease-in-out; }
+
+/* Unfreeze Section */
+.unfreeze-desc { font-size: 12px; margin-bottom: 12px; }
+.unfreeze-input { margin-bottom: 10px; }
+.unfreeze-submit { background: var(--p); color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; }
+.unfreeze-status { margin-top: 12px; font-weight: 600; color: var(--r); }
+.unfreeze-btn { background: var(--g); color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; margin-top: 10px; }
+.unfreeze-processing { margin-top: 12px; text-align: center; display: none; }
+.unfreeze-id { font-size: 12px; color: #94a3b8; }
+.unfreeze-wait { font-size: 11px; margin-top: 6px; }
+.unfreeze-admin-box { 
+  background: rgba(99,102,241,0.1); padding: 8px; border-radius: 6px; 
+  font-size: 11px; margin-top: 8px; animation: slideInUp 0.6s ease-out; 
+  border-left: 4px solid var(--p); display: none;
+}/* ===== Animated Deposit Button - Money Rain Vibe ===== */
+.animated-deposit {
+  position: fixed;
+  right: 18px;
+  bottom: 140px; /* Thoda upar */
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 15px 35px rgba(16,185,129,0.6),
+    0 0 40px rgba(16,185,129,0.4);
+  z-index: 100;
+  cursor: pointer;
+  overflow: hidden;
+  animation: pulseGlow 2s infinite, floatUpDown 4s infinite ease-in-out;
+  border: 3px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.animated-deposit:active {
+  transform: scale(0.92);
+}
+
+.money-icon {
+  font-size: 28px;
+  animation: bounce 1.5s infinite;
+}
+
+.animated-deposit span {
+  font-size: 10px;
+  font-weight: 800;
+  color: white;
+  margin-top: 4px;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* Floating Money Animation */
+.floating-money {
+  position: absolute;
+  font-size: 18px;
+  pointer-events: none;
+  animation: moneyRain 3s linear infinite;
+  opacity: 0;
+}
+
+@keyframes moneyRain {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120px) translateX(30px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 15px 35px rgba(16,185,129,0.6), 0 0 40px rgba(16,185,129,0.4); }
+  50% { box-shadow: 0 15px 35px rgba(16,185,129,0.8), 0 0 60px rgba(16,185,129,0.7); }
+}
+
+@keyframes floatUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.unfreeze-success { 
+  color: var(--g); font-weight: 600; margin-top: 12px; display: none;
+  animation: fadeIn 0.8s ease-out;
+}
+.complaint-form-box {
+  background: var(--light);
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid var(--p);
+}
+
+.complaint-form-box input,
+.complaint-form-box textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  background: #334155;
+  border: none;
+  color: white;
+  font-size: 13px;
+}
+
+.complaint-form-box textarea {
+  height: 110px;
+  resize: none;
+}
+
+/* Feedback Section */
+.feedback-desc { font-size: 12px; margin-bottom: 12px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; }
+.feedback-form { margin-top: 12px; }
+.feedback-textarea {
+  width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--light);
+  background: var(--light); color: white; font-size: 13px; min-height: 80px; margin-bottom: 8px;
+}
+.feedback-submit { background: var(--g); color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: 600; }
+.feedback-list { margin-top: 16px; }
+.feedback-item {
+  background: var(--light); padding: 12px; border-radius: 10px; margin: 10px 0;
+  border: 1px solid rgba(99,102,241,0.2);
+  transition: all 0.3s ease;
+}
+.feedback-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99,102,241,0.15);
+}
+.feedback-user { font-weight: 700; color: var(--p); font-size: 13px; margin-bottom: 6px; }
+.feedback-text { font-size: 12px; line-height: 1.5; margin-bottom: 8px; }
+.feedback-actions {
+  display: flex; justify-content: space-between; font-size: 11px;
+}
+.feedback-like, .feedback-dislike {
+  cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: all 0.3s ease;
+  user-select: none;
+}
+.feedback-like { color: var(--g); background: rgba(16,185,129,0.1); }
+.feedback-dislike { color: var(--r); background: rgba(239,68,68,0.1); }
+.feedback-like:active, .feedback-dislike:active { transform: scale(0.9); }
+.feedback-count { margin-left: 4px; font-weight: 600; }
+.feedback-liked { background: var(--g) !important; color: white; }
+.feedback-disliked { background: var(--r) !important; color: white; }
+
+.admin-reply-box {
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  color: white; padding: 10px; border-radius: 8px;
+  margin-top: 10px; font-size: 12px; font-style: italic;
+  border-left: 4px solid #ddd6fe;
+  animation: slideInUp 0.6s ease-out;
+}
+
+/* Feedback Rating Stars */
+.feedback-rating {
+  margin: 10px 0;
+  text-align: center;
+  font-size: 20px;
+}
+.feedback-rating .star {
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.feedback-rating .star.selected {
+  color: #f59e0b;
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Deposit Loading */
+.deposit-loading {
+  text-align: center; margin-top: 10px; display: none;
+  color: var(--y); font-weight: 600;
+}
+
+/* Informations Item */
+.info-item {
+  background: var(--light); padding: 10px; border-radius: 8px;
+  margin: 6px 0; cursor: pointer;
+}
+.info-title { font-size: 13px; font-weight: 600; }
+.info-desc { font-size: 11px; color: #94a3b8; }
+.watch-btn {
+  background: var(--p); color: white; padding: 6px 12px; border-radius: 8px;
+  margin-top: 6px; cursor: pointer; animation: pulse 1.5s infinite;
+  display: inline-block; font-size: 11px; font-weight: 600;
+}
+.info-item:active { transform: scale(0.98); }
+.history-tab-btn {
+  background: rgba(18,43,62,0.8);
+  border: 1.5px solid rgba(120,200,255,0.3);
+  color: #9fc7dc;
+  padding: 12px 8px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.3s;
+}
+.history-tab-btn.active, .history-tab-btn:active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border-color: #8fd3ff;
+  box-shadow: 0 8px 25px rgba(99,102,241,0.4);
+}
+.history-tab-btn i { font-size: 18px; display: block; margin-bottom: 4px; }
+
+.history-tab-content {
+  background: rgba(18,43,62,0.5);
+  border-radius: 16px;
+  padding: 14px;
+  border: 1px solid rgba(120,200,255,0.15);
+}
+/* Responsive Adjustments */
+@media (max-width: 380px) {
+  .header { padding: 10px 12px; }
+  .welcome { font-size: 16px; }
+  .balance-card, .whatsapp-card, .profile-section, .card { margin: 10px; }
+  .deposit-btn, .support-btn, .logout { padding: 8px 14px; font-size: 11px; }
+}
+ </style>
+</head>
+<body>
+
+  <!-- LOGIN / SIGNUP -->
+  <div class="login-box" id="loginBox">
+    <div class="login-card">
+      <h2 id="formTitle">Welcome Back!</h2>
+      <div class="loading" id="loading" style="display:none;"><div class="spinner"></div></div>
+
+      <!-- Signup Form -->
+      <div id="signupForm">
+        <div class="input-group"><i class="fas fa-user"></i><input type="text" id="s_user" placeholder="Username" required/></div>
+        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="s_email" placeholder="Gmail" required/></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="s_pass" placeholder="Password" required/></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="s_confirm" placeholder="Confirm Password" required/></div>
+        <div class="input-group"><i class="fas fa-code"></i><input type="text" id="s_referral" placeholder="Referral Code (Optional)"/></div>
+        <button onclick="signup()">Create Account</button>
+        <div class="link">Already have account? <a href="#" onclick="toggleForm()">Login</a></div>
+      </div>
+
+
+
+      <!-- Login Form -->
+      <div id="loginForm" style="display:none;">
+        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="l_email" placeholder="Gmail" required/></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="l_pass" placeholder="Password" required/></div>
+        <button onclick="login()">Login</button>
+        <div class="link">New here? <a href="#" onclick="toggleForm()">Sign Up</a></div>
+        <div class="link"><a href="#" style="color:#f59e0b;" onclick="forgotPassword()">Forgot Password?</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NORMAL POPUP -->
+  <div id="normalPop" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#6366f1;color:white;padding:30px;border-radius:24px;text-align:center;max-width:90%;">
+      <button onclick="document.getElementById('normalPop').style.display='none'" style="position:absolute;top:10px;right:15px;background:none;border:none;color:white;font-size:30px;">×</button>
+      <h3 id="nTitle" style="font-size:26px;margin:0 0 15px;"></h3>
+      <p id="nMsg" style="font-size:18px;line-height:1.7;"></p>
+    </div>
+  </div>
+
+  <!-- EMERGENCY POPUP -->
+  <div id="emergencyPop" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.98);z-index:99999;align-items:center;justify-content:center;">
+    <div style="background:#ef4444;color:white;padding:35px;border-radius:24px;text-align:center;max-width:90%;border:4px solid #dc2626;">
+      <h2 style="font-size:38px;margin:0 0 20px;font-weight:900;">EMERGENCY</h2>
+      <h3 id="eTitle" style="font-size:26px;margin:0 0 15px;"></h3>
+      <p id="eMsg" style="font-size:19px;line-height:1.7;"></p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  
+  <div class="dashboard" id="dashboard" style="display:none;">
+    <div class="header">
+      <div class="welcome">Welcome Back!</div>
+      <div class="user-tag" id="user">Loading...</div>
+      <div class="animated-banner" id="banner">Loading admin message...</div>
+    </div>
+
+    <!-- Deposit Processing Alert -->
+    <div class="deposit-processing" id="depositProcessing">
+      <i class="fas fa-spinner fa-spin"></i> Your deposit request is processing...
+    </div>
+
+    <div class="balance-card">
+      <div class="app-rating" id="appRating">Rating: 0/5 <i class="fas fa-star"></i></div>
+      <div class="balance-label">Your Total Balance</div>
+      <div class="balance-amount" id="balance">0 PKR</div>
+      <div class="total-orders">Your Total Orders: <span id="userTotalOrders">0</span></div>
+    </div>
+
+    <div class="app-update-card" id="appUpdateCard">
+      <div class="app-update-message" id="appUpdateMessage">New update available!</div>
+      <div class="app-update-btn" onclick="openUpdateLink()">Update Now</div>
+    </div>
+<!-- Surveys Section Header -->
+<div class="section-header" onclick="toggleSection('surveysSection')">
+  Surveys & Polls <i class="fas fa-chevron-down"></i>
+</div>
+
+<!-- Surveys Main Section -->
+<div class="card" id="surveysSection">
+  <h3 style="text-align:center; color:#8fd3ff; margin:16px 0;">Active Surveys</h3>
+  <div id="surveyList">
+    <p style="text-align:center; color:#9fc7dc;">Loading surveys...</p>
+  </div>
+</div>
+
+<!-- Survey Popup (Hidden) -->
+<div id="surveyPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:rgba(18,43,62,0.9); border-radius:24px; padding:28px; max-width:380px; width:100%; border:2px solid rgba(99,102,241,0.4); box-shadow:0 20px 50px rgba(0,0,0,0.7);">
+    <h3 style="color:#8fd3ff; text-align:center; margin-bottom:16px;" id="popupQuestion">Survey Question?</h3>
+    <div id="popupOptions"></div>
+    <button onclick="closeSurveyPopup()" style="margin-top:20px; background:#ef4444;">Close</button>
+    <input type="hidden" id="currentSurveyId">
+  </div>
+</div>
+<!-- New Animated Deposit Button -->
+<div class="deposit-btn animated-deposit" onclick="toggleDepositForm()">
+  <div class="money-icon">💸</div>
+  <span>Deposit Funds</span>
+  <div class="floating-money">💰</div>
+  <div class="floating-money" style="animation-delay: 0.5s;">💵</div>
+  <div class="floating-money" style="animation-delay: 1s;">🪙</div>
+</div>
+
+    <div class="card" id="depositForm" style="display:none; margin:14px;">
+      <h3 style="color:var(--p);text-align:center;">Deposit System</h3>
+      <div style="background:#1e293b;padding:10px;border-radius:8px;font-size:11px;margin:6px 0;">
+        <strong>Full Details:</strong><br>
+        - Minimum deposit: 100 PKR, Maximum: 10000 PKR.<br>
+        - Use SadaPay or any bank app to send to 03257436319.<br>
+        - Note TID/Reference Number from transaction.<br>
+        - Enter TID and Amount below.<br>
+        - Admin will verify and add to balance within hours.<br>
+        Name: Muhammad Naeem
+      </div>
+      <div class="input-group"><i class="fas fa-receipt"></i><input type="text" id="tidNumber" placeholder="TID / Reference Number" /></div>
+      <div class="input-group"><i class="fas fa-rupee-sign"></i><input type="number" id="depositAmount" placeholder="Amount (100-10000 PKR)" min="100" max="10000" /></div>
+      <button onclick="submitDeposit()" style="background:var(--g);">Submit Deposit</button>
+      <div class="deposit-loading" id="depositLoading">Loading: 0%</div>
+    </div>
+
+<!-- Profile Section Header -->
+<div class="section-header" onclick="toggleSection('profileSection')">
+  Profile <i class="fas fa-chevron-down"></i>
+</div>
+
+<!-- New Clean Profile Section -->
+<div class="profile-section" id="profileSection">
+  <div class="profile-header">
+    <div class="pro-badge">PRO USER</div>
+    <h3 style="margin: 12px 0; color: white;">Your Account Info</h3>
+  </div>
+  
+  <div class="profile-info-item">
+    <i class="fas fa-user"></i>
+    <div>
+      <small style="color:#9fc7dc;">Username</small><br>
+      <strong id="showUsername" style="color:white; font-size:15px;">Loading...</strong>
+    </div>
+  </div>
+  
+  <div class="profile-info-item">
+    <i class="fas fa-envelope"></i>
+    <div>
+      <small style="color:#9fc7dc;">Gmail</small><br>
+      <strong id="showGmail" style="color:white; font-size:15px;">Loading...</strong>
+    </div>
+  </div>
+  
+  <div class="profile-info-item">
+    <i class="fab fa-whatsapp" style="color:#25D366;"></i>
+    <div>
+      <small style="color:#9fc7dc;">WhatsApp Number</small><br>
+      <strong id="showWhatsApp" style="color:#25D366; font-size:15px;">Not Bound</strong>
+    </div>
+  </div>
+  
+  <!-- WhatsApp Bind Card (Optional - agar bind nahi hai to dikhao) -->
+  <div class="whatsapp-card" id="whatsappBindCard">
+    <strong>Bind Your WhatsApp for Notifications</strong><br><br>
+    <input type="text" placeholder="03xxxxxxxxx" id="whatsappNumber" maxlength="11">
+    <button class="bind-btn" onclick="bindWhatsApp()">Bind Now</button>
+  </div>
+</div>
+<!-- Balance Transfer Section Header -->
+<div class="section-header" onclick="toggleSection('transferSection')">
+  Balance Transfer <i class="fas fa-chevron-down"></i>
+</div>
+
+<!-- Balance Transfer Main Section -->
+<div class="card" id="transferSection">
+  <div style="text-align:center; margin-bottom:16px;">
+    <h3 style="color:#8fd3ff;">Withdraw to Wallet</h3>
+    <small style="color:#9fc7dc;">Monthly Limit: Only 1 time Rs.99</small>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+    <button class="wallet-btn" onclick="selectWallet('jazzcash')">
+      <img src="https://i.imgur.com/5z3p3jM.png" width="40"><br>JazzCash
+    </button>
+    <button class="wallet-btn" onclick="selectWallet('easypaisa')">
+      <img src="https://i.imgur.com/9kL9jKx.png" width="40"><br>EasyPaisa
+    </button>
+  </div>
+
+  <!-- Form (hidden initially) -->
+  <div id="transferForm" style="display:none;">
+    <div style="text-align:center; margin-bottom:16px;">
+      <h4 id="selectedWallet" style="color:#8fd3ff;">JazzCash</h4>
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-mobile-alt"></i>
+      <input type="text" id="walletNumber" placeholder="03xxxxxxxxx" maxlength="11">
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-user"></i>
+      <input type="text" id="accName" placeholder="Account Holder Name">
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-rupee-sign"></i>
+      <input type="number" value="99" readonly placeholder="Amount (PKR)">
+    </div>
+
+    <button onclick="submitTransfer()" style="background:linear-gradient(135deg,#10b981,#34d399); margin-top:16px;">
+      Submit Withdrawal
+    </button>
+  </div>
+
+  <!-- Success Screenshot Card -->
+  <div id="successCard" style="display:none; text-align:center; background:rgba(16,185,129,0.2); padding:20px; border-radius:20px; border:2px solid #34d399;">
+    <h3 style="color:#34d399;">Payment Submitted!</h3>
+    <p>Your withdrawal request has been sent.</p>
+    <div style="background:#0d2233; padding:16px; border-radius:16px; margin:16px 0; border:1px dashed #34d399;">
+      <strong>TID:</strong> <span id="genTID" style="color:#8fd3ff; font-size:18px;">MRZ-XXXXXX</span><br><br>
+      <strong>Amount:</strong> Rs.99<br>
+      <strong>Wallet:</strong> <span id="successWallet">JazzCash</span><br>
+      <strong>Status:</strong> <span style="color:#f59e0b;">Processing (30 min)</span><br><br>
+      <small>Payment will be transferred within 30 minutes</small>
+    </div>
+    <p style="color:#9fc7dc; font-size:12px;">Take screenshot for record</p>
+  </div>
+</div>
+<!-- Edit Profile Section Header -->
+<div class="section-header" onclick="toggleSection('editProfileSection')">
+  Edit Profile <i class="fas fa-chevron-down"></i>
+</div>
+
+<!-- Edit Profile Main Section -->
+<div class="card" id="editProfileSection">
+  <div style="text-align:center; margin-bottom:16px;">
+    <h3 style="color:#8fd3ff;">Update Your Info</h3>
+    <small style="color:#9fc7dc;">Username: 7 days cooldown</small>
+  </div>
+  
+  <div class="input-group">
+    <i class="fas fa-user"></i>
+    <input type="text" id="newUsername" placeholder="New Username">
+    <small id="usernameCooldown" style="color:#f59e0b; margin-left:40px;"></small>
+  </div>
+  
+  <div class="input-group">
+    <i class="fab fa-whatsapp"></i>
+    <input type="text" id="newWhatsApp" placeholder="WhatsApp Number (03xxxxxxxxx)" maxlength="11">
+  </div>
+  
+  <div class="input-group">
+    <i class="fas fa-home"></i>
+    <input type="text" id="newAddress" placeholder="Address (City/District)">
+  </div>
+  
+  <div class="input-group">
+    <i class="fas fa-school"></i>
+    <input type="text" id="newSchool" placeholder="School/College/University">
+  </div>
+  
+  <div class="input-group">
+    <i class="fas fa-heart"></i>
+    <input type="text" id="newSince" placeholder="MrCrazy ke saath kab se? (e.g. Jan 2025)">
+  </div>
+  
+  <button onclick="saveProfileChanges()" style="background:linear-gradient(135deg,#6366f1,#8b5cf6); margin-top:20px;">
+    Save Changes
+  </button>
+  
+  <div id="profileSuccess" style="display:none; text-align:center; margin-top:16px; padding:16px; background:rgba(16,185,129,0.2); border-radius:16px; border:2px solid #34d399;">
+    <h4 style="color:#34d399;">Profile Updated Successfully!</h4>
+  </div>
+</div>
+    <!-- Informations Section Header -->
+    <div class="section-header" onclick="toggleSection('informationsSection')">
+      Informations <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="card" id="informationsSection" style="display:none;">
+      <h3 style="color:var(--p);">Informations</h3>
+      <div id="infoList">Loading...</div>
+    </div>
+
+    <!-- Complaints Section -->
+    <div class="section-header" onclick="toggleSection('complaintsSection')">
+      Complaints (شکایات) <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="card" id="complaintsSection" style="display:none;">
+      <h3 style="color:var(--p);text-align:center;margin-bottom:15px;">Apni Shikayat Yahan Darj Karein</h3>
+      <div style="background:var(--light);padding:12px;border-radius:10px;margin:10px 0;font-size:12px;text-align:center;">
+        <strong>Important:</strong> 📌 Please select the issue below that matches your problem. Our team will resolve it as soon as possible. We are available 24/7!"
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0;">
+        <button onclick="showComplaintForm('deposit')"    class="service-item" style="background:#f59e0b;">Deposit Issue</button>
+        <button onclick="showComplaintForm('withdraw')"   class="service-item" style="background:#ef4444;">Withdraw Issue</button>
+        <button onclick="showComplaintForm('profit')"     class="service-item" style="background:#8b5cf6;">Profit Issue</button>
+        <button onclick="showComplaintForm('plan')"       class="service-item" style="background:#6366f1;">Plan Issue</button>
+        <button onclick="showComplaintForm('sim')"        class="service-item" style="background:#10b981;">Sim Details Issue</button>
+        <button onclick="showComplaintForm('social')"     class="service-item" style="background:#ec4899;">Likes/Views Issue</button>
+        <button onclick="showComplaintForm('other')"      class="service-item" style="background:#64748b;grid-column:1/3;">Other Issue</button>
+      </div>
+      <div id="complaintFormArea" style="display:none;margin-top:20px;"></div>
+      <div style="margin-top:30px;">
+        <h4 style="color:var(--y);text-align:center;margin-bottom:10px;">Apni Purani Shikayatein</h4>
+        <div id="complaintsList">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Services Section Header -->
+    <div class="section-header" onclick="toggleSection('serviceList')">
+      Services <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="card" id="serviceList" style="display:none;">
+      <h3 style="color:var(--p);text-align:center;margin-bottom:6px;">Services</h3>
+    </div>
+
+    <div class="card" id="serviceDetails" style="display:none; margin:0 14px;"></div>
+
+    <div class="card" id="orderForm" style="display:none; margin:0 14px;">
+      <h3>Place Order</h3>
+      <div class="input-group"><i class="fas fa-link"></i><input type="text" id="videoLink" placeholder="Paste Video Link" /></div>
+      <div class="input-group"><i class="fas fa-hashtag"></i><input type="number" id="quantity" placeholder="Quantity (e.g. 1000)" min="1" oninput="calcPrice()"/></div>
+      <div class="price-calc" id="totalPrice" style="margin:8px 0; font-weight:600; color:var(--y);">Total: 0 PKR</div>
+      <button onclick="placeOrder()" style="background:var(--g);">Submit Order</button>
+    </div>
+
+    <!-- SIM Details Section Header -->
+    <div class="section-header" onclick="toggleSection('simSection')">
+      SIM Details <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="card" id="simSection" style="display:none;">
+      <div class="sim-title" style="color:var(--p); text-align:center; margin-bottom:8px;">SIM DETAILS</div>
+      <div class="sim-methods">
+        <div class="sim-method free" onclick="openSimForm('free')">
+          Free Data<br><small style="font-weight:400;">5 Hours Processing</small>
+        </div>
+        <div class="sim-method paid" onclick="openSimForm('paid')">
+          Paid Data<br><small style="font-weight:400;">3 Hours • Full Info</small>
+        </div>
+      </div>
+
+      <div class="sim-desc" id="simDesc" style="display:none; font-size:11px; margin:8px 0; background:rgba(255,255,255,0.05); padding:8px; border-radius:6px;"></div>
+
+      <div class="sim-form" id="simForm" style="display:none;">
+        <h3 id="simFormTitle" style="font-size:14px; margin-bottom:8px;">Free Data Request</h3>
+        <div style="font-size:11px; margin-bottom:10px;" id="simFormDetails">Details here...</div>
+        <div class="sim-input input-group"><i class="fas fa-mobile-alt"></i><input type="text" id="simNumber" placeholder="Enter 11-digit number (03xxxxxxxxx)" maxlength="11"/></div>
+        <button onclick="submitSimRequest()" style="background:var(--g); width:100%; padding:11px; border:none; border-radius:8px; color:white; font-weight:600; cursor:pointer; margin-top:8px;">Submit Request</button>
+      </div>
+
+      <div class="sim-status" id="simStatus" style="display:none; text-align:center;">
+        <div class="tracking" style="font-size:11px; color:#94a3b8;">Tracking ID: <span id="trackId">SIM12345</span></div>
+        <div class="status-text" id="simStatusText" style="font-weight:600; margin:6px 0;">Processing...</div>
+        <div class="countdown-big" id="simCountdown">05:00:00</div>
+        <div class="admin-box" id="adminMessage">Admin is checking your request...</div>
+      </div>
+    </div>
+
+    <!-- SIM Request Details Section Header -->
+    <div class="section-header" onclick="toggleSection('simDetailsSection')">
+      SIM Request Details <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="card" id="simDetailsSection" style="display:none;">
+      <h3 style="color:var(--p);">SIM Request Details</h3>
+      <div id="simDetailsList">Loading SIM requests...</div>
+    </div>
+
+    <!-- Balance Usage History Section Header -->
+    <div class="section-header" onclick="toggleSection('historySection')">
+      Balance Usage History <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="card" id="historySection" style="display:none;">
+      <h3 style="color:var(--p);">Balance Usage History</h3>
+      <div id="historyList">Loading...</div>
+    </div>
+
+    <!-- My Order Details Section Header -->
+    <div class="section-header" onclick="toggleSection('orderDetailsSection')">
+      My Order Details <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="card" id="orderDetailsSection" style="display:none;">
+      <h3 style="color:var(--p);">My Order Details</h3>
+      <div id="orderDetailsList">Loading orders...</div>
+    </div>
+
+ <!-- My History Section Header -->
+<div class="section-header" onclick="toggleSection('myHistorySection')">
+  My History <i class="fas fa-chevron-down"></i>
+</div>
+
+<!-- My History Main Section -->
+<div class="card" id="myHistorySection">
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+    <button class="history-tab-btn active" onclick="showHistoryTab('deposits')">
+      <i class="fas fa-wallet"></i><br>Deposit
+    </button>
+    <button class="history-tab-btn" onclick="showHistoryTab('activity')">
+      <i class="fas fa-history"></i><br>Activity
+    </button>
+    <button class="history-tab-btn" onclick="showHistoryTab('complaints')">
+      <i class="fas fa-exclamation-triangle"></i><br>Complaints
+    </button>
+  </div>
+  
+  <!-- Deposit History -->
+  <div id="depositsTab" class="history-tab-content">
+    <h3 style="text-align:center; color:#8fd3ff; margin:10px 0;">Deposit History</h3>
+    <div id="depositHistoryList">Loading deposits...</div>
+  </div>
+  
+  <!-- Activity/Login History -->
+  <div id="activityTab" class="history-tab-content" style="display:none;">
+    <h3 style="text-align:center; color:#8fd3ff; margin:10px 0;">Login & Activity History</h3>
+    <div id="activityHistoryList">Loading activity...</div>
+  </div>
+  
+  <!-- Complaints History -->
+  <div id="complaintsTab" class="history-tab-content" style="display:none;">
+    <h3 style="text-align:center; color:#8fd3ff; margin:10px 0;">My Complaints</h3>
+    <div id="complaintsHistoryList">Loading complaints...</div>
+  </div>
+</div>
+    <!-- Feedback Section Header -->
+    <div class="section-header" onclick="toggleSection('feedbackSection')">
+      Feedback (Apki Raaye) <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="card" id="feedbackSection" style="display:none;">
+      <p class="feedback-desc">
+        Assalam o Alaikum! Hum Crazy App ki team aap se darkhwast karti hai ke aap apni qeemti raaye humein zaroor batayein. Aap ko humari app kaisi lagi? Kya behtar kiya ja sakta hai? Koi naya feature jo aap chahte hain hum add karein? Aap ki har baat humare liye ahem hai.
+      </p>
+      <div class="feedback-form">
+        <strong>Please write your feedback</strong><br>
+        <textarea class="feedback-textarea" id="feedbackText" placeholder="Apni raaye yahan likhein..."></textarea>
+        <div class="feedback-rating" id="feedbackStars">
+          <i class="fas fa-star star" data-rate="1"></i>
+          <i class="fas fa-star star" data-rate="2"></i>
+          <i class="fas fa-star star" data-rate="3"></i>
+          <i class="fas fa-star star" data-rate="4"></i>
+          <i class="fas fa-star star" data-rate="5"></i>
+        </div>
+        <button class="feedback-submit" onclick="submitFeedback()">Submit Feedback</button>
+      </div>
+      <div class="feedback-list" id="feedbackList">
+        Loading feedbacks...
+      </div>
+    </div>
+
+ 
+
+    <div class="logout" onclick="logout()">
+      Logout
+    </div>
+
+    <!-- Update Alert -->
+    <div class="update-alert" id="updateAlert" style="display:none;">
+      <div class="msg" id="updateMsg">New update available!</div>
+      <button onclick="hideUpdate()">Got it!</button>
+    </div>
+  </div>
+
+  <script>
+    
+ const firebaseConfig = {
+  apiKey: "AIzaSyD3uBXUfhb6yG0ScWjXKf3DV-rpG_1fmaI",
+  authDomain: "crazy-9a4d8.firebaseapp.com",
+  databaseURL: "https://crazy-9a4d8-default-rtdb.firebaseio.com",
+  projectId: "crazy-9a4d8",
+  storageBucket: "crazy-9a4d8.appspot.com"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+const storage = firebase.storage();
+
+let currentUser = null;
+let selectedService = '';
+let serviceRates = { pak_likes: 210 / 1000 };
+let serviceDescs = { pak_likes: 'Rs.210 per 1000 likes' };
+let countdownIntervals = {};
+let userBalance = 0;
+let lastUpdateSeen = 0;
+let currentSimType = '';
+let currentTrackingId = '';
+let userWhatsApp = '';
+let currentUnfreezeId = '';
+let pendingDeposit = false;
+let updateLink = '';
+let appRating = 0;
+let ratingCount = 0;
+let lastRatingTime = 0;
+let selectedRating = 0;
+let feedbackRating = 0;
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    currentUser = user;
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadAllData(user.uid);
+    loadUserOrdersHistory(user.uid);
+    loadUserSimHistory(user.uid);
+    loadBalanceHistory(user.uid);
+    loadAllFeedbacks(user.uid);
+    checkForUpdates();
+    loadLatestSimRequest(user.uid);
+    loadLatestUnfreezeRequest(user.uid);
+    loadUserComplaints(user.uid);
+    checkPendingDeposit(user.uid);
+    loadAppRating();
+    loadInformations();
+    loadUserTotalOrders(user.uid);
+    checkForAppUpdate(user.uid);
+    loadLastRatingTime(user.uid);
+  } else {
+    document.getElementById('loginBox').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+});
+
+function loadLastRatingTime(uid) {
+  db.ref('users/' + uid + '/lastRatingTime').once('value').then(snap => {
+    lastRatingTime = snap.val() || 0;
+  });
+}
+
+function showRatingPopup() {
+  if (Date.now() - lastRatingTime > 7 * 24 * 60 * 60 * 1000) {
+    document.getElementById('ratingPopup').style.display = 'flex';
+  }
+}
+
+const stars = document.querySelectorAll('.star');
+stars.forEach(star => {
+  star.addEventListener('click', () => {
+    selectedRating = star.dataset.rate;
+    stars.forEach(s => s.classList.remove('selected'));
+    for (let i = 0; i < selectedRating; i++) {
+      stars[i].classList.add('selected');
+    }
+  });
+});
+
+function submitRating() {
+  if (selectedRating === 0) return alert("Select a rating!");
+  db.ref('app_rating').transaction(r => {
+    r = r || { total: 0, count: 0 };
+    r.total += parseInt(selectedRating);
+    r.count += 1;
+    return r;
+  }).then(() => {
+    db.ref('users/' + currentUser.uid + '/lastRatingTime').set(Date.now());
+    document.getElementById('ratingPopup').style.display = 'none';
+    selectedRating = 0;
+    stars.forEach(s => s.classList.remove('selected'));
+  });
+}
+
+db.ref('admin/announcements').on('value', s => {
+  const a = s.val() || {};
+
+  if (a.normal) {
+    document.getElementById('nTitle').textContent = a.normal.title;
+    document.getElementById('nMsg').innerHTML = a.normal.message.replace(/\n/g, '<br>');
+    document.getElementById('normalPop').style.display = 'flex';
+  } else {
+    document.getElementById('normalPop').style.display = 'none';
+  }
+
+  if (a.emergency) {
+    document.getElementById('eTitle').textContent = a.emergency.title;
+    document.getElementById('eMsg').innerHTML = a.emergency.message.replace(/\n/g, '<br>');
+    document.getElementById('emergencyPop').style.display = 'flex';
+  } else {
+    document.getElementById('emergencyPop').style.display = 'none';
+  }
+});
+
+function loadAppRating() {
+  db.ref('app_rating').on('value', snap => {
+    const r = snap.val() || { total: 0, count: 0 };
+    appRating = r.count > 0 ? (r.total / r.count).toFixed(1) : 0;
+    ratingCount = r.count;
+    document.getElementById('appRating').innerText = `Rating: ${appRating}/5 (${ratingCount})`;
+  });
+}
+
+function loadInformations() {
+  db.ref('admin/informations').on('value', snap => {
+    const infos = snap.val() || {};
+    let html = '';
+    for (let key in infos) {
+      const info = infos[key];
+      html += `<div class="info-item">
+        <div class="info-title">${info.title}</div>
+        <small class="info-desc">${info.desc}</small>
+        <div class="watch-btn" onclick="window.open('${info.link}', '_blank')">Watch Video</div>
+      </div>`;
+    }
+    document.getElementById('infoList').innerHTML = html || 'No informations yet.';
+  });
+}
+
+function checkForAppUpdate(uid) {
+  db.ref('admin/app_update').on('value', snap => {
+    const update = snap.val();
+    if (update && update.timestamp > lastUpdateSeen) {
+      document.getElementById('appUpdateCard').style.display = 'block';
+      document.getElementById('appUpdateMessage').innerText = update.message || 'New update available!';
+      updateLink = update.link;
+    } else {
+      document.getElementById('appUpdateCard').style.display = 'none';
+    }
+  });
+}
+
+function openUpdateLink() {
+  window.open(updateLink, '_blank');
+  db.ref('users/' + currentUser.uid + '/lastUpdateSeen').set(Date.now());
+}
+
+function loadUserTotalOrders(uid) {
+  db.ref('orders').orderByChild('uid').equalTo(uid).on('value', snap => {
+    document.getElementById('userTotalOrders').innerText = snap.numChildren() || 0;
+  });
+}
+
+function checkPendingDeposit(uid) {
+  db.ref('deposits').orderByChild('uid').equalTo(uid).on('value', snap => {
+    let hasPending = false;
+    snap.forEach(child => {
+      const d = child.val();
+      if (d.status === 'Pending') {
+        hasPending = true;
+      }
+    });
+    document.getElementById('depositProcessing').style.display = hasPending ? 'block' : 'none';
+  });
+}
+
+function loadAllData(uid) {
+  db.ref('users/' + uid).on('value', snap => {
+    const d = snap.val();
+    document.getElementById('user').innerText = d.username;
+    userBalance = d.balance || 0;
+    document.getElementById('balance').innerText = userBalance + " PKR";
+    lastUpdateSeen = d.lastUpdateSeen || 0;
+    document.getElementById('showGmail').innerText = d.email;
+    userWhatsApp = d.whatsapp || 'Not Bound';
+    document.getElementById('showWhatsApp').innerText = userWhatsApp;
+  });
+
+  db.ref('admin/banner').on('value', s => {
+    document.getElementById('banner').innerText = s.val() || "Welcome to Crazy App!";
+  });
+
+  db.ref('admin/services').on('value', s => {
+    const services = s.val() || {};
+    let html = '';
+    for (let key in services) {
+      const srv = services[key];
+      serviceRates[key] = srv.price / 1000;
+      serviceDescs[key] = srv.desc;
+      html += `<div class="service-item" onclick="showDetails('${key}')">${srv.name}</div>`;
+    }
+    document.getElementById('serviceList').innerHTML = '<h3 style="color:var(--p);text-align:center;margin-bottom:6px;">Services</h3>' + html;
+  });
+}
+
+function checkForUpdates() {
+  db.ref('admin/updates').limitToLast(1).on('child_added', snap => {
+    const update = snap.val();
+    if (update.timestamp > lastUpdateSeen) {
+      document.getElementById('updateMsg').innerText = update.message;
+      document.getElementById('updateAlert').style.display = 'block';
+    }
+  });
+}
+
+function hideUpdate() {
+  db.ref('users/' + currentUser.uid + '/lastUpdateSeen').set(Date.now());
+  document.getElementById('updateAlert').style.display = 'none';
+}
+
+function toggleForm() {
+      const s = document.getElementById('signupForm');
+      const l = document.getElementById('loginForm');
+      const t = document.getElementById('formTitle');
+      if (s.style.display === 'none') { 
+        s.style.display = 'block'; l.style.display = 'none'; t.innerText = 'Create Account'; 
+      } else { 
+        s.style.display = 'none'; l.style.display = 'block'; t.innerText = 'Welcome Back!'; 
+      }
+    }
+
+    function signup() {
+      const u = document.getElementById('s_user').value.trim();
+      const e = document.getElementById('s_email').value.trim();
+      const p = document.getElementById('s_pass').value;
+      const cp = document.getElementById('s_confirm').value;
+      const refCode = document.getElementById('s_referral').value.trim();
+
+      if (!u || !e || !p) return alert("Fill all fields!");
+      if (!e.endsWith('@gmail.com')) return alert("Only Gmail allowed!");
+      if (p !== cp) return alert("Passwords do not match!");
+      if (p.length < 6) return alert("Password must be 6+ characters!");
+
+      const referralCode = u + '_' + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+      auth.createUserWithEmailAndPassword(e, p)
+        .then(cr => {
+          return db.ref('users/' + cr.user.uid).set({
+            username: u,
+            email: e,
+            password: p,        // plain password save kiya (sirf tumhari request pe)
+            balance: 0,
+            referralCode: referralCode,
+            isAdmin: false,
+            lastUpdateSeen: 0,
+            lastRatingTime: 0
+          }).then(() => {
+            processReferral(refCode, cr.user.uid);
+          });
+        })
+        .then(() => {
+          alert("Account Created Successfully! Now you can login.");
+        })
+        .catch(err => alert(err.message));
+    }
+    function claimReferral() {
+      const code = document.getElementById('earnReferral').value.trim();
+      if (!code) return alert("Enter a referral code!");
+      if (usedReferralCode) return alert("You have already used a referral code!");
+      if (code === currentReferralCode) return alert("Cannot use your own code!");
+      processReferral(code, currentUser.uid);
+      document.getElementById('earnStatus').innerText = "Processing...";
+      setTimeout(() => {
+        document.getElementById('earnStatus').innerText = "Reward claimed successfully! Refresh to see updates.";
+        document.getElementById('earnReferral').value = '';
+      }, 2000);
+    }
+
+    function login() {
+      const e = document.getElementById('l_email').value.trim();
+      const p = document.getElementById('l_pass').value;
+
+      if (!e || !p) return alert("Fill all!");
+      if (!e.endsWith('@gmail.com')) return alert("Use Gmail!");
+
+      auth.signInWithEmailAndPassword(e, p)
+        .catch(err => alert(err.message));
+    }
+
+    function forgotPassword() {
+      const email = prompt("Enter your registered Gmail:");
+      if (!email) return;
+      auth.sendPasswordResetEmail(email)
+        .then(() => alert("Password reset link sent! Check your email + spam folder."))
+        .catch(err => alert("Error: " + err.message));
+    }
+
+    function resetPassword() {
+      if (!currentUser) return;
+      auth.sendPasswordResetEmail(currentUser.email)
+        .then(() => alert("Password reset link sent to your email!"))
+        .catch(err => alert(err.message));
+    }
+function showComplaintForm(type) {
+  const area = document.getElementById('complaintFormArea');
+  area.style.display = 'block';
+
+  const titles = {
+    deposit: "Deposit Issue",
+    withdraw: "Withdraw Issue",
+    profit: "Profit Issue",
+    plan: "Plan Issue",
+    sim: "Sim Details Issue",
+    social: "Likes/Views/Followers Issue",
+    other: "Other Issue"
+  };
+
+  const idPlaceholders = {
+    deposit: "Deposit ID darj karein (jaise dep_123456789)",
+    withdraw: "Withdraw ID darj karein (jaise wit_123456789)",
+    profit: "Profit date ya amount likhein",
+    plan: "Plan name ya activation date likhein",
+    sim: "SIM Tracking ID darj karein",
+    social: "Order ID darj karein",
+    other: "Koi bhi ID ya detail likh sakte hain"
+  };
+
+  area.innerHTML = `
+    <div class="complaint-form-box">
+      <h4 style="color:var(--p);text-align:center;margin-bottom:15px;">${titles[type]}</h4>
+      
+      <input type="text" id="compIdInput" placeholder="${idPlaceholders[type]}" />
+      
+      <input type="text" id="compWhatsApp" placeholder="WhatsApp number (03xxxxxxxxx)" maxlength="11" />
+      
+      <textarea id="compDetail" placeholder="Apni poori shikayat yahan detail se likhein..."></textarea>
+      
+      <div style="display:flex;gap:10px;">
+        <button onclick="submitThisComplaint('${type}')" style="flex:1;background:var(--g);padding:12px;border:none;border-radius:8px;color:white;font-weight:600;">
+          Submit Karein
+        </button>
+        <button onclick="document.getElementById('complaintFormArea').style.display='none'" style="flex:1;background:var(--r);padding:12px;border:none;border-radius:8px;color:white;">
+          Cancel
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function submitThisComplaint(type) {
+  const id = document.getElementById('compIdInput').value.trim();
+  const whatsapp = document.getElementById('compWhatsApp').value.trim();
+  const detail = document.getElementById('compDetail').value.trim();
+
+  if (!id && type !== 'profit' && type !== 'plan') {
+    return alert("ID field khali nahi ho sakta!");
+  }
+  if (!whatsapp || !/^\d{11}$/.test(whatsapp)) {
+    return alert("Sahih WhatsApp number darj karein!");
+  }
+  if (!detail || detail.length < 15) {
+    return alert("Detail mein kam se kam 15 letters likhein!");
+  }
+
+  const compId = 'comp_' + Date.now();
+  const complaint = {
+    uid: currentUser.uid,
+    username: document.getElementById('user').innerText,
+    type: type,
+    orderId: id || 'N/A',
+    whatsapp: whatsapp,
+    detail: detail,
+    compId: compId,
+    status: "Processing",
+    time: new Date().toLocaleString('en-US'),
+    adminReply: ""
+  };
+
+  db.ref('complaints/' + compId).set(complaint)
+    .then(() => {
+      alert("Complaint Submitted Successfully!\nOur team will resolve your issue as soon as possible. ⚡🤝");
+      document.getElementById('complaintFormArea').style.display = 'none';
+    })
+    .catch(() => alert("Koi error aa gaya, dobara try karein"));
+}
+
+function loadUserComplaints(uid) {
+  db.ref('complaints').orderByChild('uid').equalTo(uid).on('value', snap => {
+    const list = document.getElementById('complaintsList');
+    if (!snap.exists()) {
+      list.innerHTML = '<p style="text-align:center;color:#94a3b8;">Abhi tak koi shikayat nahi ki gayi</p>';
+      return;
+    }
+    let html = '';
+    snap.forEach(child => {
+      const c = child.val();
+      const statusColor = c.status === 'Processing' ? 'var(--y)' : 
+                         c.status === 'Successful' ? 'var(--g)' : 'var(--r)';
+      
+      html += `
+        <div class="complaint-item">
+          <div class="complaint-id">ID: ${c.compId} <span class="copy-btn" onclick="copyToClipboard('${c.compId}')">Copy</span></div>
+          <strong>Type:</strong> ${c.type.toUpperCase()}<br>
+          <strong>ID:</strong> ${c.orderId}<br>
+          <strong>Detail:</strong> ${c.detail}<br>
+          <strong>WhatsApp:</strong> ${c.whatsapp}<br>
+          <strong>Status:</strong> <span style="color:${statusColor};font-weight:700;">${c.status}</span><br>
+          <strong>Date:</strong> ${c.time}
+          ${c.adminReply ? `<div class="admin-reply">Admin: ${c.adminReply}</div>` : ''}
+        </div>`;
+    });
+    list.innerHTML = html;
+  });
+}
+
+function toggleDepositForm() {
+  const form = document.getElementById('depositForm');
+  form.style.display = form.style.display === 'block' ? 'none' : 'block';
+}
+
+function submitDeposit() {
+  const tid = document.getElementById('tidNumber').value.trim();
+  const amt = parseInt(document.getElementById('depositAmount').value) || 0;
+  if (!tid || amt < 100 || amt > 10000) return alert("Invalid TID or Amount!");
+
+  const loading = document.getElementById('depositLoading');
+  loading.style.display = 'block';
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += 1;
+    loading.innerText = `Loading: ${progress}%`;
+    if (progress >= 100) {
+      clearInterval(interval);
+      loading.style.display = 'none';
+      proceedDeposit(tid, amt);
+    }
+  }, 20);
+}
+
+function proceedDeposit(tid, amt) {
+  const depId = 'dep_' + Date.now();
+  const deposit = {
+    uid: currentUser.uid,
+    username: document.getElementById('user').innerText,
+    tid, amount: amt,
+    depId, status: "Pending",
+    time: new Date().toLocaleString()
+  };
+  db.ref('deposits/' + depId).set(deposit).then(() => {
+    alert("Deposit Submitted! Admin will verify.");
+    toggleDepositForm();
+    document.getElementById('tidNumber').value = '';
+    document.getElementById('depositAmount').value = '';
+  });
+}
+
+function showDetails(service) {
+  selectedService = service;
+  document.getElementById('serviceDetails').innerHTML = `<small>${serviceDescs[service]}</small>`;
+  document.getElementById('serviceDetails').style.display = 'block';
+  document.getElementById('orderForm').style.display = 'block';
+  document.getElementById('videoLink').value = '';
+  document.getElementById('quantity').value = '';
+  document.getElementById('totalPrice').innerText = 'Total: 0 PKR';
+  showRatingPopup();
+}
+
+function calcPrice() {
+  if (!selectedService) return;
+  const qty = parseInt(document.getElementById('quantity').value) || 0;
+  const pricePerUnit = serviceRates[selectedService];
+  const total = Math.round(qty * pricePerUnit);
+  document.getElementById('totalPrice').innerText = `Total: ${total} PKR`;
+}
+let selectedWalletType = '';
+
+function selectWallet(type) {
+  selectedWalletType = type;
+  document.getElementById('selectedWallet').innerText = type === 'jazzcash' ? 'JazzCash' : 'EasyPaisa';
+  document.getElementById('transferForm').style.display = 'block';
+}
+
+function submitTransfer() {
+  const number = document.getElementById('walletNumber').value.trim();
+  const name = document.getElementById('accName').value.trim();
+
+  if (!number || number.length !== 11 || !name) {
+    return alert("Fill all details correctly!");
+  }
+  if (userBalance < 99) {
+    return alert("Insufficient Balance! Need 99 PKR");
+  }
+
+  // Monthly limit check
+  const today = new Date().toISOString().slice(0,7); // YYYY-MM
+  db.ref('withdrawals/' + currentUser.uid).once('value', snap => {
+    const data = snap.val() || {};
+    for (let key in data) {
+      if (data[key].month === today) {
+        return alert("Monthly limit exceeded! Only 1 withdrawal per month.");
+      }
+    }
+
+    // Generate TID
+    const tid = 'MRZ-' + Math.random().toString(36).substr(2,6).toUpperCase();
+
+    // Deduct balance
+    db.ref('users/' + currentUser.uid + '/balance').transaction(b => (b || 0) - 99);
+
+    // Save withdrawal request
+    const req = {
+      uid: currentUser.uid,
+      username: document.getElementById('user').innerText,
+      wallet: selectedWalletType,
+      number: number,
+      name: name,
+      amount: 99,
+      tid: tid,
+      status: 'Processing',
+      month: today,
+      time: new Date().toLocaleString()
+    };
+    db.ref('withdrawals/' + currentUser.uid + '/' + tid).set(req);
+
+    // Show success card
+    document.getElementById('transferForm').style.display = 'none';
+    document.getElementById('successCard').style.display = 'block';
+    document.getElementById('genTID').innerText = tid;
+    document.getElementById('successWallet').innerText = selectedWalletType.toUpperCase();
+  });
+}
+function placeOrder() {
+  const link = document.getElementById('videoLink').value.trim();
+  const qty = parseInt(document.getElementById('quantity').value) || 0;
+  if (!link || qty < 1 || !selectedService) return alert("Fill link & quantity!");
+
+  const totalPrice = Math.round(qty * serviceRates[selectedService]);
+  if (userBalance < totalPrice) return alert("Insufficient Balance!");
+
+  db.ref('users/' + currentUser.uid + '/balance').transaction(b => (b || 0) - totalPrice);
+
+  const orderId = 'crazy_' + Math.random().toString(36).substr(2, 9);
+  const order = {
+    uid: currentUser.uid,
+    username: document.getElementById('user').innerText,
+    link, qty, type: selectedService,
+    totalPrice, orderId,
+    status: "Processing",
+    time: new Date().toLocaleString(),
+    countdownEnd: Date.now() + 3600000
+  };
+
+  db.ref('orders/' + orderId).set(order).then(() => {
+    alert("Order Placed!");
+    document.getElementById('orderForm').style.display = 'none';
+    document.getElementById('serviceDetails').style.display = 'none';
+    showRatingPopup();
+  });
+}
+let lastUsernameChange = 0;
+
+function loadProfileForEdit() {
+  db.ref('users/' + currentUser.uid).once('value', snap => {
+    const d = snap.val() || {};
+    lastUsernameChange = d.lastUsernameChange || 0;
+
+    const daysLeft = Math.ceil((lastUsernameChange + (7 * 24 * 60 * 60 * 1000) - Date.now()) / (24 * 60 * 60 * 1000));
+    if (daysLeft > 0) {
+      document.getElementById('usernameCooldown').innerText = `Wait ${daysLeft} day(s) to change username`;
+      document.getElementById('newUsername').disabled = true;
+    } else {
+      document.getElementById('usernameCooldown').innerText = 'You can change username now';
+      document.getElementById('newUsername').disabled = false;
+    }
+
+    // Pre-fill fields
+    document.getElementById('newWhatsApp').value = d.whatsapp || '';
+    document.getElementById('newAddress').value = d.address || '';
+    document.getElementById('newSchool').value = d.school || '';
+    document.getElementById('newSince').value = d.since || '';
+  });
+}
+
+// Call this when Edit Profile section opens
+function toggleSection(id) {
+  const el = document.getElementById(id);
+  const header = el.previousElementSibling;
+  if (el.style.display === 'block') {
+    el.style.display = 'none';
+    header.classList.remove('open');
+  } else {
+    el.style.display = 'block';
+    header.classList.add('open');
+    if (id === 'editProfileSection') loadProfileForEdit();
+  }
+}
+
+function saveProfileChanges() {
+  const newUser = document.getElementById('newUsername').value.trim();
+  const whatsapp = document.getElementById('newWhatsApp').value.trim();
+  const address = document.getElementById('newAddress').value.trim();
+  const school = document.getElementById('newSchool').value.trim();
+  const since = document.getElementById('newSince').value.trim();
+
+  const updates = {};
+
+  if (newUser && newUser !== document.getElementById('user').innerText) {
+    if (lastUsernameChange + (7 * 24 * 60 * 60 * 1000) > Date.now()) {
+      return alert("Username 7 din mein sirf ek baar change kar sakte hain!");
+    }
+    updates.username = newUser;
+    updates.lastUsernameChange = Date.now();
+  }
+
+  if (whatsapp) updates.whatsapp = whatsapp;
+  if (address) updates.address = address;
+  if (school) updates.school = school;
+  if (since) updates.since = since;
+
+  if (Object.keys(updates).length === 0) return alert("Koi change nahi kiya!");
+
+  db.ref('users/' + currentUser.uid).update(updates).then(() => {
+    document.getElementById('profileSuccess').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('profileSuccess').style.display = 'none';
+    }, 3000);
+  });
+}
+function loadUserOrdersHistory(uid) {
+  db.ref('orders').orderByChild('uid').equalTo(uid).on('value', snap => {
+    const list = document.getElementById('orderDetailsList');
+    if (!snap.exists()) { list.innerHTML = "No orders yet."; return; }
+    let html = '';
+    snap.forEach(child => {
+      const o = child.val();
+      let statusClass = 'processing';
+      let statusText = 'Processing';
+      if (o.status === 'Approved') {
+        statusClass = 'success';
+        statusText = 'Successful';
+      } else if (o.status === 'Rejected' || o.status === 'Cancelled') {
+        statusClass = 'cancel';
+        statusText = 'Cancel';
+      }
+      html += `<div class="order-details-item">
+        <div class="order-id"><strong>Order ID:</strong> ${o.orderId} <span class="copy-btn" onclick="copyToClipboard('${o.orderId}')">Copy</span></div>
+        <strong>Link:</strong> ${o.link}<br>
+        <strong>Quantity:</strong> ${o.qty}<br>
+        <strong>Price:</strong> ${o.totalPrice} PKR<br>
+        <strong>Status:</strong> <span class="status ${statusClass}">${statusText}</span><br>
+        <strong>Time:</strong> ${o.time}
+      </div>`;
+    });
+    list.innerHTML = html;
+  });
+}
+// Load Surveys + Popup System
+function loadSurveys() {
+  db.ref('surveys').orderByChild('createdAt').on('value', snap => {
+    const surveys = snap.val() || {};
+    let html = '';
+    let popupShown = false;
+    
+    for (let id in surveys) {
+      const s = surveys[id];
+      const isCustom = s.targetUsers && !s.targetUsers.includes('all');
+      const isForMe = !isCustom || (s.targetUsers && s.targetUsers.includes(currentUser.uid));
+      
+      if (!isForMe) continue;
+      
+      // Already answered check
+      const answered = localStorage.getItem('survey_' + id);
+      if (!answered && !popupShown) {
+        showSurveyPopup(id, s);
+        popupShown = true;
+      }
+      
+      const type = s.type === 'yesno' ? 'Yes/No' : s.type === 'rating' ? 'Rating' : 'Multiple Choice';
+      const badge = isCustom ? '<span style="background:#f59e0b; padding:4px 10px; border-radius:12px; font-size:10px;">CUSTOM</span>' : '';
+      
+      html += `
+        <div style="background:rgba(18,43,62,0.7); padding:16px; border-radius:18px; margin:12px 0; border-left:5px solid #6366f1;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:white;">${s.question}</strong>
+            ${badge}
+          </div>
+          <small style="color:#9fc7dc;">Type: ${type} • ${new Date(s.createdAt).toLocaleDateString()}</small>
+          ${answered ? '<br><span style="color:#34d399; font-size:12px;">✓ Answered</span>' : ''}
+        </div>`;
+    }
+    
+    if (!html) html = '<p style="text-align:center; color:#9fc7dc;">No active surveys</p>';
+    document.getElementById('surveyList').innerHTML = html;
+  });
+}
+
+function showSurveyPopup(surveyId, survey) {
+  document.getElementById('currentSurveyId').value = surveyId;
+  document.getElementById('popupQuestion').innerText = survey.question;
+  
+  let optionsHtml = '';
+  if (survey.type === 'yesno') {
+    optionsHtml = `
+      <button onclick="submitSurveyAnswer('yes')" style="width:48%; margin:5px; background:#34d399;">Yes</button>
+      <button onclick="submitSurveyAnswer('no')" style="width:48%; margin:5px; background:#ef4444;">No</button>`;
+  } else if (survey.type === 'rating') {
+    optionsHtml = '<div style="text-align:center; font-size:30px;">';
+    for (let i = 1; i <= 5; i++) {
+      optionsHtml += `<span onclick="submitSurveyAnswer(${i})" style="cursor:pointer; margin:0 8px;">${i}⭐</span>`;
+    }
+    optionsHtml += '</div>';
+  } else {
+    survey.options.forEach((opt, i) => {
+      optionsHtml += `<button onclick="submitSurveyAnswer('${opt}')" style="width:100%; margin:8px 0; background:rgba(99,102,241,0.6);">${opt}</button>`;
+    });
+  }
+  
+  document.getElementById('popupOptions').innerHTML = optionsHtml;
+  document.getElementById('surveyPopup').style.display = 'flex';
+}
+
+function submitSurveyAnswer(answer) {
+  const surveyId = document.getElementById('currentSurveyId').value;
+  const response = {
+    uid: currentUser.uid,
+    username: document.getElementById('user').innerText,
+    answer: answer,
+    time: new Date().toLocaleString()
+  };
+  
+  db.ref('survey_responses/' + surveyId + '/' + currentUser.uid).set(response);
+  localStorage.setItem('survey_' + surveyId, 'true');
+  closeSurveyPopup();
+  alert("Thank you for your response! ❤️");
+}
+
+function closeSurveyPopup() {
+  document.getElementById('surveyPopup').style.display = 'none';
+}
+
+// Call on login
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // ... baaki code
+    loadSurveys(); // Yeh add kar do
+  }
+});
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => alert('Copied!'));
+}
+
+function loadUserSimHistory(uid) {
+  db.ref('sim_requests').orderByChild('uid').equalTo(uid).on('value', snap => {
+    const list = document.getElementById('simDetailsList');
+    if (!snap.exists()) { list.innerHTML = "No SIM requests yet."; return; }
+    let html = '';
+    snap.forEach(child => {
+      const r = child.val();
+      html += `<div class="order-details-item">
+        <strong>Tracking ID:</strong> ${r.trackingId}<br>
+        <strong>Type:</strong> ${r.type}<br>
+        <strong>Number:</strong> ${r.number}<br>
+        <strong>Status:</strong> ${r.status}<br>
+        <strong>Time:</strong> ${r.time}<br>
+        <strong>Admin Message:</strong> ${r.adminMessage || 'None'}
+      </div>`;
+    });
+    list.innerHTML = html;
+  });
+}
+
+function loadBalanceHistory(uid) {
+  db.ref('orders').orderByChild('uid').equalTo(uid).on('value', snap => {
+    const list = document.getElementById('historyList');
+    if (!snap.exists()) { list.innerHTML = "No usage history yet."; return; }
+    let html = '';
+    snap.forEach(child => {
+      const o = child.val();
+      if (o.totalPrice > 0) {
+        html += `<div class="history-item">
+          <strong>Order ID:</strong> ${o.orderId}<br>
+          <strong>Used For:</strong> ${o.type}<br>
+          <strong>Total Used:</strong> ${o.totalPrice} PKR<br>
+          <strong>Time:</strong> ${o.time}
+        </div>`;
+      }
+    });
+    list.innerHTML = html || 'No usage history yet.';
+  });
+}
+
+function saveProfile() {
+  const username = document.getElementById('editUsername').value.trim();
+  if (!username) return alert("Invalid username!");
+  db.ref('users/' + currentUser.uid).update({ username });
+  alert("Profile Updated!");
+}
+function loadAllData(uid) {
+  // User Data (Username, Gmail, WhatsApp, Balance)
+  db.ref('users/' + uid).on('value', snap => {
+    const d = snap.val() || {};
+    
+    document.getElementById('user').innerText = d.username || 'User';
+    document.getElementById('showUsername').innerText = d.username || 'Not Set';
+    document.getElementById('showGmail').innerText = d.email || 'Not Found';
+    
+    userBalance = d.balance || 0;
+    document.getElementById('balance').innerText = userBalance + " PKR";
+
+    // WhatsApp Show/Hide Logic
+    userWhatsApp = d.whatsapp || '';
+    if (userWhatsApp && userWhatsApp !== 'Not Bound') {
+      document.getElementById('showWhatsApp').innerText = userWhatsApp;
+      document.getElementById('showWhatsApp').style.color = '#25D366';
+      document.getElementById('whatsappBindCard') && (document.getElementById('whatsappBindCard').style.display = 'none');
+    } else {
+      document.getElementById('showWhatsApp').innerText = 'Not Bound';
+      document.getElementById('whatsappBindCard') && (document.getElementById('whatsappBindCard').style.display = 'block');
+    }
+  });
+
+  // Admin Banner (yeh miss ho raha tha)
+  db.ref('admin/banner').on('value', s => {
+    document.getElementById('banner').innerText = s.val() || "Welcome to Crazy App!";
+  });
+
+  // Services Load (yeh bhi miss ho raha tha)
+  db.ref('admin/services').on('value', s => {
+    const services = s.val() || {};
+    let html = '';
+    for (let key in services) {
+      const srv = services[key];
+      serviceRates[key] = srv.price / 1000;
+      serviceDescs[key] = srv.desc;
+      html += `<div class="service-item" onclick="showDetails('${key}')">${srv.name}</div>`;
+    }
+    document.getElementById('serviceList').innerHTML = '<h3 style="color:var(--p);text-align:center;margin-bottom:6px;">Services</h3>' + html;
+  });
+
+  // App Rating (optional, agar hai toh)
+  loadAppRating();
+}
+function bindWhatsApp() {
+  const num = document.getElementById('whatsappNumber').value.trim();
+  if (!/^\d{11}$/.test(num)) return alert("Enter valid 11-digit number!");
+  db.ref('users/' + currentUser.uid + '/whatsapp').set(num);
+  alert("WhatsApp Bound!");
+}
+
+function openSimForm(type) {
+  currentSimType = type;
+  document.getElementById('simFormTitle').innerText = type === 'free' ? 'Free Data Request' : 'Paid Data Request';
+  document.getElementById('simDesc').style.display = 'block';
+  document.getElementById('simDesc').innerText = type === 'free' ? 'Full Details: Free data provides basic SIM info after 5 hours processing. No cost.' : 'Full Details: Paid data provides full SIM info including owner details after 3 hours. Costs 450 PKR.';
+  document.getElementById('simFormDetails').innerText = type === 'free' ? 'Enter number for free basic data.' : 'Enter number for paid full data (450 PKR will be deducted).';
+  document.getElementById('simForm').style.display = 'block';
+  showRatingPopup();
+}
+
+function submitSimRequest() {
+  const number = document.getElementById('simNumber').value.trim();
+  if (!/^\d{11}$/.test(number)) return alert("Enter valid 11-digit number!");
+
+  if (currentSimType === 'paid') {
+    if (userBalance < 450) return alert("Insufficient balance! Need 450 PKR.");
+    if (!confirm("Paid Data costs 450 PKR. Proceed?")) return;
+
+    db.ref('users/' + currentUser.uid + '/balance').transaction(b => (b || 0) - 450).then(() => {
+      userBalance -= 450;
+      document.getElementById('balance').innerText = userBalance + " PKR";
+      proceedSimRequest(number);
+    });
+  } else {
+    proceedSimRequest(number);
+  }
+}
+
+function proceedSimRequest(number) {
+  const trackId = 'SIM_' + Math.random().toString(36).substr(2, 8).toUpperCase();
+  const req = {
+    uid: currentUser.uid,
+    username: document.getElementById('user').innerText,
+    number, type: currentSimType,
+    trackingId: trackId, status: "Processing",
+    time: new Date().toLocaleString(),
+    countdownEnd: Date.now() + (currentSimType === 'free' ? 5*3600000 : 3*3600000)
+  };
+
+  db.ref('sim_requests/' + trackId).set(req).then(() => {
+    currentTrackingId = trackId;
+    document.getElementById('simForm').style.display = 'none';
+    document.getElementById('simStatus').style.display = 'block';
+    document.getElementById('trackId').innerText = trackId;
+    startCountdown('simCountdown', req.countdownEnd);
+  });
+}
+// Tab Switch Function
+function showHistoryTab(tab) {
+  document.querySelectorAll('.history-tab-content').forEach(t => t.style.display = 'none');
+  document.querySelectorAll('.history-tab-btn').forEach(b => b.classList.remove('active'));
+  
+  document.getElementById(tab + 'Tab').style.display = 'block';
+  event.target.closest('button').classList.add('active');
+
+  // Load respective data
+  if (tab === 'deposits') loadDepositHistory();
+  if (tab === 'activity') loadActivityHistory();
+  if (tab === 'complaints') loadComplaintsHistory();
+}
+
+// Load Deposit History
+function loadDepositHistory() {
+  db.ref('deposits').orderByChild('uid').equalTo(currentUser.uid).on('value', snap => {
+    let html = '';
+    if (!snap.exists()) {
+      html = '<p style="text-align:center; color:#9fc7dc;">No deposits yet</p>';
+    } else {
+      snap.forEach(child => {
+        const d = child.val();
+        const statusColor = d.status === 'Approved' ? '#34d399' : d.status === 'Pending' ? '#f59e0b' : '#ef4444';
+        html += `
+          <div style="background:rgba(18,43,62,0.7); padding:12px; border-radius:14px; margin:8px 0; border-left:4px solid ${statusColor};">
+            <strong>ID:</strong> ${d.depId}<br>
+            <strong>Amount:</strong> ${d.amount} PKR<br>
+            <strong>TID:</strong> ${d.tid}<br>
+            <strong>Status:</strong> <span style="color:${statusColor};">${d.status}</span><br>
+            <small>${d.time}</small>
+          </div>`;
+      });
+    }
+    document.getElementById('depositHistoryList').innerHTML = html;
+  });
+}
+
+// Load Activity / Login History (last 10 logins + actions)
+function loadActivityHistory() {
+  let html = '<p style="text-align:center; color:#9fc7dc;">Activity tracking coming soon!</p>';
+  // Agar chahte ho real login time save karna toh Firebase mein 'lastLogin' field add kar sakte ho
+  document.getElementById('activityHistoryList').innerHTML = html;
+}
+
+// Load Complaints History
+function loadComplaintsHistory() {
+  db.ref('complaints').orderByChild('uid').equalTo(currentUser.uid).on('value', snap => {
+    let html = '';
+    if (!snap.exists()) {
+      html = '<p style="text-align:center; color:#9fc7dc;">No complaints filed</p>';
+    } else {
+      snap.forEach(child => {
+        const c = child.val();
+        html += `
+          <div style="background:rgba(18,43,62,0.7); padding:12px; border-radius:14px; margin:8px 0; border-left:4px solid #ef4444;">
+            <strong>ID:</strong> ${c.compId}<br>
+            <strong>Type:</strong> ${c.type.toUpperCase()}<br>
+            <strong>Status:</strong> <span style="color:${c.status==='Successful'?'#34d399': '#f59e0b'}">${c.status}</span><br>
+            <small>${c.time}</small>
+          </div>`;
+      });
+    }
+    document.getElementById('complaintsHistoryList').innerHTML = html;
+  });
+}
+function startCountdown(elementId, endTime) {
+  clearInterval(countdownIntervals[elementId]);
+  countdownIntervals[elementId] = setInterval(() => {
+    const diff = endTime - Date.now();
+    if (diff <= 0) {
+      clearInterval(countdownIntervals[elementId]);
+      document.getElementById(elementId).innerText = "00:00:00";
+      return;
+    }
+    const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+    const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+    const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+    document.getElementById(elementId).innerText = `${h}:${m}:${s}`;
+  }, 1000);
+}
+
+function loadLatestSimRequest(uid) {
+  db.ref('sim_requests').orderByChild('uid').equalTo(uid).limitToLast(1).on('value', snap => {
+    if (!snap.exists()) return;
+    snap.forEach(child => {
+      const r = child.val();
+      if (r.status === 'Processing') {
+        currentTrackingId = r.trackingId;
+        document.getElementById('simForm').style.display = 'none';
+        document.getElementById('simStatus').style.display = 'block';
+        document.getElementById('trackId').innerText = r.trackingId;
+        document.getElementById('simStatusText').innerText = 'Processing...';
+        startCountdown('simCountdown', r.countdownEnd);
+        if (r.adminMessage) {
+          document.getElementById('adminMessage').innerText = r.adminMessage;
+        }
+      }
+    });
+  });
+}
+
+function submitUnfreezeCheck() {
+  const username = document.getElementById('tiktokUsername').value.trim();
+  if (!username) return alert("Enter TikTok username!");
+
+  db.ref('unfreeze_requests').orderByChild('tiktok_username').equalTo(username).limitToLast(1).once('value', snap => {
+    if (snap.exists()) {
+      const req = Object.values(snap.val())[0];
+      currentUnfreezeId = req.trackingId;
+      showUnfreezeProcessing(req);
+    } else {
+      document.getElementById('unfreezeStatus').style.display = 'block';
+    }
+  });
+}
+
+function startUnfreeze() {
+  const username = document.getElementById('tiktokUsername').value.trim();
+  const trackId = 'UNF_' + Math.random().toString(36).substr(2, 8).toUpperCase();
+  const req = {
+    uid: currentUser.uid,
+    username: document.getElementById('user').innerText,
+    tiktok_username: username,
+    trackingId: trackId, status: "Processing",
+    time: new Date().toLocaleString()
+  };
+
+  db.ref('unfreeze_requests/' + trackId).set(req).then(() => {
+    currentUnfreezeId = trackId;
+    showUnfreezeProcessing(req);
+  });
+}
+
+function showUnfreezeProcessing(req) {
+  document.getElementById('unfreezeStatus').style.display = 'none';
+  document.getElementById('unfreezeProcessing').style.display = 'block';
+  document.getElementById('unfreezeTrackId').innerText = req.trackingId;
+  if (req.adminMessage) {
+    document.getElementById('unfreezeAdminMessage').style.display = 'block';
+    document.getElementById('unfreezeAdminMessage').innerText = req.adminMessage;
+  }
+  if (req.status === 'Approved') {
+    document.getElementById('unfreezeSuccess').style.display = 'block';
+  }
+}
+
+function loadLatestUnfreezeRequest(uid) {
+  db.ref('unfreeze_requests').orderByChild('uid').equalTo(uid).limitToLast(1).on('value', snap => {
+    if (!snap.exists()) return;
+    snap.forEach(child => {
+      const r = child.val();
+      if (r.status === 'Processing' || r.status === 'Approved') {
+        currentUnfreezeId = r.trackingId;
+        showUnfreezeProcessing(r);
+      }
+    });
+  });
+}
+
+function submitFeedback() {
+  const text = document.getElementById('feedbackText').value.trim();
+  if (!text) return alert("Write your feedback!");
+  if (feedbackRating === 0) return alert("Please give a rating!");
+
+  const fid = 'fb_' + Math.random().toString(36).substr(2, 9);
+  const feedback = {
+    uid: currentUser.uid,
+    username: document.getElementById('user').innerText,
+    text, rating: feedbackRating,
+    likes: 0, dislikes: 0,
+    likedBy: {}, time: new Date().toLocaleString()
+  };
+
+  db.ref('feedbacks/' + fid).set(feedback).then(() => {
+    document.getElementById('feedbackText').value = '';
+    feedbackRating = 0;
+    document.querySelectorAll('#feedbackStars .star').forEach(s => s.classList.remove('selected'));
+    alert("Feedback submitted!");
+  });
+}
+
+document.querySelectorAll('#feedbackStars .star').forEach(star => {
+  star.addEventListener('click', () => {
+    feedbackRating = star.dataset.rate;
+    document.querySelectorAll('#feedbackStars .star').forEach(s => s.classList.remove('selected'));
+    for (let i = 0; i < feedbackRating; i++) {
+      document.querySelectorAll('#feedbackStars .star')[i].classList.add('selected');
+    }
+  });
+});
+
+function loadAllFeedbacks(uid) {
+  db.ref('feedbacks').orderByChild('time').on('value', snap => {
+    const list = document.getElementById('feedbackList');
+    if (!snap.exists()) {
+      list.innerHTML = '<p style="text-align:center;color:#64748b;">No feedbacks yet.</p>';
+      return;
+    }
+    let html = '';
+    snap.forEach(child => {
+      const f = child.val();
+      const fid = child.key;
+      const hasLiked = f.likedBy && f.likedBy[uid];
+      const hasDisliked = f.dislikedBy && f.dislikedBy[uid];
+      const likeClass = hasLiked ? 'feedback-liked' : '';
+      const dislikeClass = hasDisliked ? 'feedback-disliked' : '';
+      const ratingStars = '<i class="fas fa-star" style="color:#f59e0b;font-size:10px;"></i>'.repeat(f.rating || 0);
+      html += `<div class="feedback-item">
+        <div class="feedback-user">@${f.username} ${ratingStars}</div>
+        <div class="feedback-text">"${f.text}"</div>
+        ${f.adminReply ? `<div class="admin-reply-box"><strong>Admin:</strong> ${f.adminReply}</div>` : ''}
+        <div class="feedback-actions">
+          <div class="feedback-like ${likeClass}" onclick="toggleLike('${fid}', '${uid}')">
+            <i class="fas fa-thumbs-up"></i> <span class="feedback-count">${f.likes || 0}</span>
+          </div>
+          <div class="feedback-dislike ${dislikeClass}" onclick="toggleDislike('${fid}', '${uid}')">
+            <i class="fas fa-thumbs-down"></i> <span class="feedback-count">${f.dislikes || 0}</span>
+          </div>
+        </div>
+      </div>`;
+    });
+    list.innerHTML = html;
+  });
+}
+
+function toggleLike(fid, uid) {
+  db.ref('feedbacks/' + fid).transaction(f => {
+    if (!f) return f;
+    if (!f.likedBy) f.likedBy = {};
+    if (!f.dislikedBy) f.dislikedBy = {};
+    if (f.likedBy[uid]) {
+      delete f.likedBy[uid];
+      f.likes = (f.likes || 1) - 1;
+    } else {
+      f.likedBy[uid] = true;
+      f.likes = (f.likes || 0) + 1;
+      if (f.dislikedBy[uid]) {
+        delete f.dislikedBy[uid];
+        f.dislikes = (f.dislikes || 1) - 1;
+      }
+    }
+    return f;
+  });
+}
+
+function toggleDislike(fid, uid) {
+  db.ref('feedbacks/' + fid).transaction(f => {
+    if (!f) return f;
+    if (!f.likedBy) f.likedBy = {};
+    if (!f.dislikedBy) f.dislikedBy = {};
+    if (f.dislikedBy[uid]) {
+      delete f.dislikedBy[uid];
+      f.dislikes = (f.dislikes || 1) - 1;
+    } else {
+      f.dislikedBy[uid] = true;
+      f.dislikes = (f.dislikes || 0) + 1;
+      if (f.likedBy[uid]) {
+        delete f.likedBy[uid];
+        f.likes = (f.likes || 1) - 1;
+      }
+    }
+    return f;
+  });
+}
+
+function toggleSection(id) {
+  const el = document.getElementById(id);
+  const header = el.previousElementSibling;
+  if (el.style.display === 'block') {
+    el.style.display = 'none';
+    header.classList.remove('open');
+  } else {
+    el.style.display = 'block';
+    header.classList.add('open');
+  }
+}
+
+function openSupport() {
+  alert("Contact Support:\nWhatsApp: +923257436319");
+}
+
+function logout() {
+  auth.signOut();
+}
+
+// Initialize all sections as closed
+document.querySelectorAll('.card, .profile-section').forEach(el => el.style.display = 'none');
+</script>
+</body>
+  </html>
