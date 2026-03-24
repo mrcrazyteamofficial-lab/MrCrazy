@@ -9,7 +9,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue, set, update } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue, set, update, increment } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCSawO5etjRhGMhvxgWrlgDp05CpBa45Ak",
@@ -30,6 +30,7 @@
     window.onValue = onValue;
     window.set = set;
     window.update = update;
+    window.increment = increment;
   </script>
 
   <style>
@@ -56,21 +57,64 @@
       min-height: 100vh;
     }
 
+    /* ==================== TOP MARQUEE ==================== */
+    .top-marquee {
+      background: linear-gradient(90deg, #6d28d9, #a78bfa, #6d28d9);
+      color: white;
+      padding: 12px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      box-shadow: var(--shadow-md);
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 1.5px;
+    }
+    .marquee-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 28s linear infinite;
+    }
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* ==================== ANIMATED ANNOUNCEMENTS TICKER (Banner ke oper) ==================== */
+    .announcements-ticker {
+      background: linear-gradient(90deg, #d97706, #f59e0b, #d97706);
+      color: white;
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      box-shadow: var(--shadow-md);
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    .ann-ticker-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: ticker 35s linear infinite;
+    }
+    @keyframes ticker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
     header {
       text-align: center;
-      padding: 2.2rem 1rem 1.6rem; /* thora chota header mobile ke liye */
+      padding: 2rem 1rem 1.6rem;
     }
 
     .logo-circle {
-      width: 88px; /* thora chota */
+      width: 88px;
       height: 88px;
-      margin: 0 auto 0.5rem; /* thora oper kiya (margin kam) */
+      margin: 0 auto 0.5rem;
       border-radius: 50%;
       overflow: hidden;
       box-shadow: var(--shadow-md), var(--glow);
       background: linear-gradient(135deg, var(--primary), #a78bfa);
     }
-
     .logo-circle img { width:100%; height:100%; object-fit:cover; }
 
     .brand-container {
@@ -86,7 +130,7 @@
 
     .brand-main {
       font-family: 'Poppins';
-      font-size: 1.65rem; /* thora chota */
+      font-size: 1.65rem;
       font-weight: 800;
       background: linear-gradient(to right, var(--primary), #a78bfa);
       -webkit-background-clip: text;
@@ -95,75 +139,21 @@
     }
 
     .brand-sub {
-      font-size: 0.98rem; /* thora chota */
+      font-size: 0.98rem;
       color: var(--muted);
       font-weight: 500;
     }
 
-   .banner-frame {
-  max-width: 100%;
-  height: 150px; /* same size */
-  margin: 1rem auto;
-  border-radius: var(--radius);
-  overflow: hidden;
-  position: relative;
-
-  /* Fancy gradient border effect */
-  border: 3px solid transparent;
-  background: linear-gradient(#fff, #fff) padding-box,
-              linear-gradient(135deg, #6a11cb, #2575fc, #ff6ec4) border-box;
-
-  /* Soft glow + shadow */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15),
-              0 0 15px rgba(100, 150, 255, 0.4);
-
-  /* Smooth animation */
-  animation: glowMove 4s linear infinite;
-}
-
-/* Animated gradient glow */
-@keyframes glowMove {
-  0% {
-    box-shadow: 0 0 10px rgba(100,150,255,0.3);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(255,110,196,0.6);
-  }
-  100% {
-    box-shadow: 0 0 10px rgba(100,150,255,0.3);
-  }
-}
-
-/* Optional inner shine overlay */
-.banner-frame::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,0.4),
-    transparent
-  );
-  opacity: 0;
-  transition: 0.5s;
-}
-
-/* Hover pe shine effect */
-.banner-frame:hover::before {
-  opacity: 1;
-  animation: shine 1.5s linear;
-}
-
-@keyframes shine {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(100%);
-  }
-}
-
+    .banner-frame {
+      max-width: 92%;
+      height: 115px;
+      margin: 1rem auto;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md), var(--glow);
+      border: 5px solid #f8fafc;
+      background: linear-gradient(135deg, #f0f4ff, #e8ecff);
+    }
     .banner-frame img {
       width: 100%;
       height: 100%;
@@ -174,14 +164,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.95rem; /* thora tight */
+      gap: 0.95rem;
       padding: 0 1.1rem 2rem;
     }
 
     .main-btn {
       width: 100%;
-      max-width: 255px; /* thora chota */
-      padding: 0.9rem 1.6rem; /* professional floppy (pill) style, size small */
+      max-width: 255px;
+      padding: 0.9rem 1.6rem;
       font-size: 1.07rem;
       font-weight: 700;
       border-radius: 60px;
@@ -193,14 +183,16 @@
     }
 
     .my-apps-btn { background: linear-gradient(135deg, var(--primary), #a78bfa); }
+    .updates-btn { background: linear-gradient(135deg, var(--gold), #b45309); }
     .report-btn { background: linear-gradient(135deg, #4b5563, #374151); }
+    .chat-btn { background: linear-gradient(135deg, #10b981, #34d399); }
 
     .main-btn:hover {
       transform: translateY(-4px) scale(1.02);
       box-shadow: var(--shadow-md), var(--glow);
     }
 
-    #apps-page, #detail-page, #report-page {
+    #apps-page, #detail-page, #report-page, #updates-page {
       display: none;
       padding: 1.2rem;
     }
@@ -222,7 +214,6 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
     }
-
     @media (max-width: 480px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
     .app-card {
@@ -233,7 +224,6 @@
       transition: all 0.4s ease;
       border: 1px solid rgba(94,53,177,0.08);
     }
-
     .app-card:hover {
       transform: translateY(-8px);
       box-shadow: var(--shadow-md), var(--glow);
@@ -248,7 +238,6 @@
       justify-content: center;
       padding: 1rem;
     }
-
     .app-icon img {
       max-width: 85%;
       max-height: 85%;
@@ -279,7 +268,6 @@
       font-size: 0.95rem;
       box-shadow: var(--shadow-sm);
     }
-
     .download-now:hover {
       transform: translateY(-4px);
       box-shadow: 0 12px 30px rgba(217,119,6,0.4);
@@ -293,8 +281,8 @@
     }
 
     .detail-icon {
-      width: 150px;
-      height: 150px;
+      width: 220px;
+      height: 220px;
       margin: 0 auto 1.8rem;
       border-radius: var(--radius);
       overflow: hidden;
@@ -341,7 +329,6 @@
       text-decoration: none;
       box-shadow: var(--shadow-md);
     }
-
     .detail-download:hover {
       transform: translateY(-4px);
       box-shadow: 0 12px 32px rgba(217,119,6,0.35);
@@ -394,7 +381,6 @@
       display: block;
       margin: 1.5rem auto;
     }
-
     .submit-feedback:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-md), var(--glow);
@@ -413,18 +399,7 @@
       box-shadow: var(--shadow-sm);
     }
 
-    .feedback-item p {
-      margin: 0.5rem 0;
-      font-size: 0.95rem;
-    }
-
-    .feedback-email {
-      color: var(--muted);
-      font-style: italic;
-    }
-
     .form-group { margin-bottom: 1.5rem; }
-
     label { font-weight: 600; margin-bottom: 0.6rem; display: block; }
 
     input, textarea, select {
@@ -444,7 +419,6 @@
       overflow: hidden;
       background: var(--card);
     }
-
     .prefix {
       background: #f3f4f6;
       padding: 1rem 1.2rem;
@@ -452,7 +426,6 @@
       font-weight: 500;
       border-right: 1px solid var(--border);
     }
-
     .whatsapp-input {
       flex: 1;
       border: none;
@@ -473,7 +446,6 @@
       cursor: pointer;
       box-shadow: var(--shadow-sm);
     }
-
     .submit-btn:hover {
       background: #4527a0;
       transform: translateY(-3px);
@@ -486,7 +458,6 @@
       margin: 1.2rem 0;
       text-align: center;
     }
-
     .success { background: rgba(16,185,129,0.2); color: #34d399; }
     .error { background: rgba(239,68,68,0.2); color: #f87171; }
 
@@ -499,14 +470,12 @@
       margin: 2.5rem 0;
       box-shadow: var(--shadow-md);
     }
-
     .complaint-id {
       font-size: 2.4rem;
       font-weight: 800;
       color: var(--primary);
       margin: 1.2rem 0;
     }
-
     .copy-btn {
       background: var(--primary);
       color: white;
@@ -515,89 +484,235 @@
       border-radius: 999px;
       cursor: pointer;
     }
+
+    /* ==================== LIVE CHAT MODAL (with real-time icons) ==================== */
+    #chat-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.65);
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .chat-box {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 24px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .chat-header {
+      background: linear-gradient(135deg, var(--primary), #a78bfa);
+      color: white;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+    }
+    .chat-body {
+      height: 420px;
+      overflow-y: auto;
+      padding: 1.2rem;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .message {
+      max-width: 82%;
+      padding: 13px 18px;
+      border-radius: 20px;
+      font-size: 1rem;
+      line-height: 1.4;
+      position: relative;
+    }
+    .user-message {
+      align-self: flex-end;
+      background: var(--primary);
+      color: white;
+      border-radius: 20px 20px 4px 20px;
+    }
+    .admin-message {
+      align-self: flex-start;
+      background: #e2e8f0;
+      color: #111827;
+      border-radius: 20px 20px 20px 4px;
+    }
+    .sender-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .chat-footer {
+      padding: 1rem;
+      background: white;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+    }
+    .chat-input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      font-size: 1.05rem;
+      outline: none;
+    }
+    .send-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+    .username-screen {
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+    .close-chat {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Floating Contact */
+    .floating-contact {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 58px;
+      height: 58px;
+      background: linear-gradient(135deg, var(--primary), #a78bfa);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: var(--shadow-md), var(--glow);
+      cursor: pointer;
+      z-index: 9999;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    #contact-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 100000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .contact-box {
+      background: white;
+      max-width: 380px;
+      width: 100%;
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
   </style>
 </head>
 <body>
+
+  <!-- TOP MARQUEE -->
+  <div class="top-marquee">
+    <div class="marquee-content">
+      MrCrazy Digital Company • DevStudio • Best Apps • 24/7 Support • Crazy DevStudio • 
+    </div>
+  </div>
 
   <header>
     <div class="logo-circle">
       <img id="logo-img" src="https://ibb.co/4RqMPZBc" alt="Crazy DevStudio">
     </div>
-    
-    <!-- Brand names ko page ke andar jaise card style mein wrap kiya -->
     <div class="brand-container">
       <div class="brand-main">MrCrazy Digital Company</div>
       <div class="brand-sub">DevStudio</div>
     </div>
   </header>
 
-  <!-- Landscapes banner ko chota + frame type banaya -->
+  <!-- ANIMATED ANNOUNCEMENTS TICKER -->
+  <div class="announcements-ticker" id="announcements-ticker">
+    <div id="ann-ticker-content" class="ann-ticker-content"></div>
+  </div>
+
+  <!-- LANDSCAPES BANNER -->
   <div class="banner-frame">
     <img id="banner-img" src="https://ibb.co/4RqMPZBc" alt="Banner">
   </div>
 
-  <!-- Buttons ko thora small + professional floppy (pill) style mein rakha -->
   <div class="main-buttons" id="home-buttons">
     <button class="main-btn my-apps-btn" onclick="showPage('apps')">My Apps</button>
+    <button class="main-btn updates-btn" onclick="showPage('updates')">Updates</button>
     <button class="main-btn report-btn" onclick="showPage('report')">Report Problem</button>
+    <button class="main-btn chat-btn" onclick="openChatModal()">ہم سے رابطہ کریں</button>
   </div>
 
+  <!-- APPS PAGE -->
   <div id="apps-page">
     <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
     <div class="grid" id="apps-grid"></div>
   </div>
 
+  <!-- DETAIL PAGE -->
   <div id="detail-page">
     <button class="back-btn" onclick="showPage('apps')">← Back to Apps</button>
-
-    <div class="detail-icon">
-      <img id="detail-icon" src="" alt="App Icon">
-    </div>
-
+    <div class="detail-icon"><img id="detail-icon" src="" alt="App Icon"></div>
     <h1 class="detail-name" id="detail-name"></h1>
-
     <div class="detail-meta">
       Size: <strong id="detail-size"></strong><br>
-      Developer: <strong>MrCrazyTeam</strong>
+      Developer: <strong>Crazy DevStudio</strong>
     </div>
-
     <div class="detail-desc" id="detail-desc"></div>
-
     <a id="detail-download" class="detail-download" href="#" target="_blank">Download Now</a>
-
     <div class="upload-date" id="upload-date"></div>
-
     <div class="feedback-section">
       <h3 style="text-align:center; margin-bottom:1.5rem; color:var(--primary);">Feedback</h3>
       <input type="email" id="feedback-email" class="feedback-input" placeholder="Your Gmail/Email (optional)">
       <textarea class="feedback-input" id="feedback-text" rows="4" placeholder="Your feedback..."></textarea>
       <button class="submit-feedback" onclick="submitFeedback()">Submit Feedback</button>
-
       <div class="feedback-list" id="feedback-list"></div>
     </div>
-
-    <div class="report-link" onclick="showPage('report')">Download Error? Report Here</div>
   </div>
 
+  <!-- REPORT PAGE -->
   <div id="report-page">
     <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
-
     <h2 style="text-align:center; margin-bottom:1.8rem; color:var(--primary);">Report a Problem</h2>
-
     <div id="report-msg" class="msg" style="display:none;"></div>
-
     <div class="form-group">
       <label>Select App</label>
-      <select id="report-app">
-        <option value="">Select App</option>
-      </select>
+      <select id="report-app"><option value="">Select App</option></select>
     </div>
-
     <div class="form-group">
       <label>Username</label>
       <input id="report-username" type="text" placeholder="Your username">
     </div>
-
     <div class="form-group">
       <label>WhatsApp Number</label>
       <div class="whatsapp-prefix">
@@ -605,14 +720,11 @@
         <input id="report-whatsapp" class="whatsapp-input" type="tel" placeholder="3XX XXXXXXX" maxlength="10">
       </div>
     </div>
-
     <div class="form-group">
       <label>Describe Your Problem *</label>
       <textarea id="report-desc" placeholder="e.g. App crash ho raha hai..." required></textarea>
     </div>
-
     <button class="submit-btn" onclick="submitReport()">Submit Report</button>
-
     <div id="complaint-id-box" class="complaint-id-box" style="display:none;">
       <h3>Your Complaint ID</h3>
       <div id="complaint-id" class="complaint-id"></div>
@@ -621,13 +733,79 @@
     </div>
   </div>
 
+  <!-- UPDATES PAGE -->
+  <div id="updates-page">
+    <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
+    <div class="updates-top-banner" id="updates-top-banner" style="display:none; max-width:92%; margin:1rem auto 1.5rem; padding:1.1rem 1.4rem; background:linear-gradient(135deg,#6d28d9,#a78bfa); color:white; border-radius:var(--radius); box-shadow:var(--shadow-md); font-size:1.05rem; font-weight:600; text-align:center;">
+      <p id="banner-text" style="margin:0;"></p>
+    </div>
+    <h2 style="text-align:center; margin-bottom:1.8rem; color:var(--primary);">Updates &amp; Announcements</h2>
+    <div id="announcements-list"></div>
+  </div>
+
+  <!-- LIVE CHAT MODAL -->
+  <div id="chat-modal">
+    <div class="chat-box">
+      <div class="chat-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.8rem;">👋</span>
+          <div>
+            <strong>Customer Care (Reply 30-35min)</strong><br>
+            <small id="chat-with-name" style="opacity:0.9;">Live Chat</small>
+          </div>
+        </div>
+        <button onclick="closeChatModal()" class="close-chat">✕</button>
+      </div>
+
+      <div id="username-screen" class="username-screen">
+        <h3 style="margin-bottom:1.2rem; color:var(--primary);">یہاں اپنا نام لکھیں 👇</h3>
+        <input id="chat-username-input" type="text" class="feedback-input" placeholder="Apna naam / username likho..." style="margin-bottom:1rem;">
+        <button onclick="startLiveChat()" class="submit-btn" style="max-width:260px; margin:0 auto;">Chat Start Karo →</button>
+        <p style="margin-top:1rem; color:var(--muted); font-size:0.9rem;">ہر بار اپنا نام لکھیں اور پرانی گفگو دیکھیں</p>
+      </div>
+
+      <div id="live-chat-screen" style="display:none;">
+        <div id="chat-messages" class="chat-body"></div>
+        <div class="chat-footer">
+          <input id="chat-input" type="text" class="chat-input" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendChatMessage();">
+          <button onclick="sendChatMessage()" class="send-btn">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING CONTACT -->
+  <div class="floating-contact" onclick="openContactModal()">📧</div>
+
+  <!-- CONTACT MODAL -->
+  <div id="contact-modal">
+    <div class="contact-box">
+      <h2 style="color:var(--primary); margin-bottom:1.2rem;">📞 Contact Us</h2>
+      <p style="font-size:1.15rem; line-height:1.7; margin-bottom:1.5rem;">
+        
+ہم یہاں ہر وقت آپ کی خدمت کے لیے موجود ہیں۔ ہم واٹس ایپ سروس کو مستقل طور پر بند کر چکے ہیں، لہٰذا اب آپ ہم سے یہیں براہِ راست رابطہ کر سکتے ہیں۔
+
+کسی بھی ہنگامی صورتحال میں براہِ کرم ہمیں جی میل کے ذریعے رابطہ کریں۔
+
+شکریہ۔ 😊<br>
+        OFFICIAL MRCRAZ
+      </p>
+      <a href="mailto:mrcrazyteamofficial@gmail.com" class="submit-btn" style="display:inline-block; text-decoration:none; padding:1rem 2rem;">
+        ✉️ mrcrazyteamofficial@gmail.com
+      </a>
+      <button onclick="closeContactModal()" style="margin-top:1.5rem; background:#ef4444; color:white; border:none; padding:0.8rem 2rem; border-radius:999px; cursor:pointer;">
+        Close
+      </button>
+    </div>
+  </div>
+
   <script type="module">
-    // Page switch
     window.showPage = (page) => {
       document.getElementById('home-buttons').style.display = page === 'home' ? 'flex' : 'none';
       document.getElementById('apps-page').style.display = page === 'apps' ? 'block' : 'none';
       document.getElementById('detail-page').style.display = page === 'detail' ? 'block' : 'none';
       document.getElementById('report-page').style.display = page === 'report' ? 'block' : 'none';
+      document.getElementById('updates-page').style.display = page === 'updates' ? 'block' : 'none';
     };
 
     // Load Logo & Banner
@@ -644,13 +822,42 @@
       if (url) document.getElementById('banner-img').src = url;
     });
 
+    // Updates Top Banner
+    onValue(ref(window.db, 'updatesBannerText'), (snap) => {
+      const text = snap.val();
+      const banner = document.getElementById('updates-top-banner');
+      const bannerText = document.getElementById('banner-text');
+      if (text && text.trim() !== '') {
+        bannerText.textContent = text;
+        banner.style.display = 'block';
+      } else {
+        banner.style.display = 'none';
+      }
+    });
+
+    // ANIMATED ANNOUNCEMENTS TICKER
+    onValue(ref(window.db, 'announcements'), (snap) => {
+      const data = snap.val() || {};
+      const ticker = document.getElementById('ann-ticker-content');
+      let html = '';
+      if (Object.keys(data).length === 0) {
+        html = 'No announcements yet • Admin jaldi add karega ❤️ ';
+      } else {
+        const sorted = Object.values(data).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        sorted.forEach(ann => {
+          const msg = (ann.message || '').replace(/\n/g, ' • ');
+          html += msg + ' • ';
+        });
+      }
+      ticker.innerHTML = html;
+    });
+
     // Load Apps
     onValue(ref(window.db, 'apps'), (snap) => {
       const data = snap.val() || {};
       const grid = document.getElementById('apps-grid');
       const appSelect = document.getElementById('report-app');
       grid.innerHTML = '';
-
       appSelect.innerHTML = '<option value="">Select App</option>';
 
       if (Object.keys(data).length === 0) {
@@ -677,32 +884,54 @@
       });
     });
 
-    // Open Detail Page
+    // Announcements List
+    onValue(ref(window.db, 'announcements'), (snap) => {
+      const data = snap.val() || {};
+      const list = document.getElementById('announcements-list');
+      list.innerHTML = '';
+
+      if (Object.keys(data).length === 0) {
+        list.innerHTML = '<p style="text-align:center; color:var(--muted); padding:4rem 1rem; font-size:1.1rem;">Abhi koi announcement nahi hai.<br>Admin jaldi add kar dega ❤️</p>';
+        return;
+      }
+
+      const sorted = Object.entries(data).sort(([,a], [,b]) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      sorted.forEach(([key, ann]) => {
+        const card = document.createElement('div');
+        card.className = 'feedback-item';
+        card.innerHTML = `
+          <p style="font-size:1.05rem; line-height:1.65; margin-bottom:1.2rem;">${(ann.message || '').replace(/\n/g, '<br>')}</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.95rem; color:var(--muted);">
+            <span>${ann.date || new Date(ann.timestamp || Date.now()).toLocaleDateString('en-GB')}</span>
+            <button onclick="likeAnnouncement('${key}');" style="background:#fef2f2; color:#ef4444; border:none; padding:0.5rem 1.1rem; border-radius:999px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;">
+              ❤️ <span style="color:#111827; font-size:1rem;">${ann.likes || 0}</span>
+            </button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    });
+
+    window.likeAnnouncement = function(key) {
+      update(ref(window.db, 'announcements/' + key), { likes: increment(1) });
+    };
+
     window.openDetail = function(key) {
       onValue(ref(window.db, 'apps/' + key), (snap) => {
         const app = snap.val();
         if (!app) return;
-
         showPage('detail');
-
         document.getElementById('detail-name').textContent = app.name || 'App';
         document.getElementById('detail-icon').src = app.icon || 'https://ibb.co/4RqMPZBc';
         document.getElementById('detail-size').textContent = app.size || '~25 MB';
-
-        document.getElementById('detail-desc').innerHTML = app.description 
-          ? app.description.replace(/\n/g, '<br>') 
-          : 'No description available.';
-
-        const dateStr = app.timestamp 
-          ? new Date(app.timestamp).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })
-          : 'N/A';
+        document.getElementById('detail-desc').innerHTML = app.description ? app.description.replace(/\n/g, '<br>') : 'No description available.';
+        const dateStr = app.timestamp ? new Date(app.timestamp).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : 'N/A';
         document.getElementById('upload-date').textContent = `Uploaded: ${dateStr}`;
-
         document.getElementById('detail-download').href = app.download || '#';
       });
     };
 
-    // Submit Report
     window.submitReport = function() {
       const appName = document.getElementById('report-app').value;
       const username = document.getElementById('report-username').value.trim();
@@ -710,10 +939,11 @@
       const desc = document.getElementById('report-desc').value.trim();
 
       if (!desc || !appName) {
-        document.getElementById('report-msg').textContent = 'App Name aur Problem description zaroori hain';
-        document.getElementById('report-msg').style.background = '#fee2e2';
-        document.getElementById('report-msg').style.color = '#991b1b';
-        document.getElementById('report-msg').style.display = 'block';
+        const msg = document.getElementById('report-msg');
+        msg.textContent = 'App Name aur Problem description zaroori hain';
+        msg.style.background = '#fee2e2';
+        msg.style.color = '#991b1b';
+        msg.style.display = 'block';
         return;
       }
 
@@ -730,16 +960,12 @@
       }).then(() => {
         document.getElementById('complaint-id').textContent = id;
         document.getElementById('complaint-id-box').style.display = 'block';
-
-        setTimeout(() => {
-          document.getElementById('complaint-id-box').style.display = 'none';
-        }, 120000);
-
-        document.getElementById('report-msg').textContent = 'Report submit ho gaya! ID copy kar lo';
-        document.getElementById('report-msg').style.background = '#d1fae5';
-        document.getElementById('report-msg').style.color = '#065f46';
-        document.getElementById('report-msg').style.display = 'block';
-
+        setTimeout(() => document.getElementById('complaint-id-box').style.display = 'none', 120000);
+        const msg = document.getElementById('report-msg');
+        msg.textContent = 'Report submit ho gaya! ID copy kar lo';
+        msg.style.background = '#d1fae5';
+        msg.style.color = '#065f46';
+        msg.style.display = 'block';
         document.getElementById('report-username').value = '';
         document.getElementById('report-whatsapp').value = '';
         document.getElementById('report-desc').value = '';
@@ -752,18 +978,11 @@
       navigator.clipboard.writeText(id).then(() => alert('ID copied!'));
     };
 
-    // Feedback Submit
     window.submitFeedback = function() {
       const email = document.getElementById('feedback-email').value.trim();
       const text = document.getElementById('feedback-text').value.trim();
-
-      if (!text) {
-        alert('Feedback likhna zaroori hai');
-        return;
-      }
-
+      if (!text) return alert('Feedback likhna zaroori hai');
       const appName = document.getElementById('detail-name').textContent;
-
       push(ref(window.db, 'feedback/' + appName), {
         feedback: text,
         email: email || 'Anonymous',
@@ -773,34 +992,106 @@
         alert('Feedback submit ho gaya!');
         document.getElementById('feedback-email').value = '';
         document.getElementById('feedback-text').value = '';
-        loadFeedback(appName);
       });
     };
 
-    function loadFeedback(appName) {
-      onValue(ref(window.db, 'feedback/' + appName), (snap) => {
-        const data = snap.val() || {};
-        const list = document.getElementById('feedback-list');
-        list.innerHTML = '';
+    // ==================== LIVE CHAT WITH REAL-TIME ICONS ====================
+    let currentUsername = '';
+    let chatListener = null;
 
-        if (Object.keys(data).length === 0) {
-          document.getElementById('avg-rating').textContent = 'No feedback yet';
-          return;
-        }
+    function sanitizeKey(str) {
+      return str.toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
+    }
 
-        Object.values(data).forEach(f => {
-          const item = document.createElement('div');
-          item.className = 'feedback-item';
-          item.innerHTML = `
-            <p><strong>${f.email.replace(/(.)(.*)(@.*)/, '$1***$3')}</strong></p>
-            <p>${f.feedback}</p>
-            <p style="color:var(--muted); font-size:0.9rem;">${f.date}</p>
-          `;
-          list.appendChild(item);
+    // Direct image URLs (real i.ibb.co links)
+    function getAdminIcon(name) {
+      if (name === 'Sahrish') return `<img src="https://i.ibb.co/YTy6wYS5/IMG-20260325-024525-200.jpg" width="24" height="24" style="border-radius:50%;">`;
+      if (name === 'Ayesha') return `<img src="https://i.ibb.co/9kWJkV1Q/IMG-20260325-003331-792.jpg" width="40" height="40" style="border-radius:50%;">`;
+      if (name === 'Admin') return `<img src="https://i.ibb.co/zCjnZRH/IMG-20260310-175937-221.jpg" width="34" height="34" style="border-radius:50%;">`;
+      return '';
+    }
+
+    window.openChatModal = function() {
+      document.getElementById('chat-modal').style.display = 'flex';
+      document.getElementById('username-screen').style.display = 'block';
+      document.getElementById('live-chat-screen').style.display = 'none';
+      document.getElementById('chat-username-input').value = '';
+      currentUsername = '';
+    };
+
+    window.closeChatModal = function() {
+      document.getElementById('chat-modal').style.display = 'none';
+      if (chatListener) chatListener();
+      currentUsername = '';
+    };
+
+    window.startLiveChat = function() {
+      const input = document.getElementById('chat-username-input').value.trim();
+      if (!input) return alert('Naam likhna zaroori hai!');
+      currentUsername = input;
+      document.getElementById('username-screen').style.display = 'none';
+      document.getElementById('live-chat-screen').style.display = 'block';
+      document.getElementById('chat-with-name').textContent = currentUsername;
+      loadChatMessages();
+    };
+
+    function loadChatMessages() {
+      const safeKey = sanitizeKey(currentUsername);
+      const chatRef = ref(window.db, `liveChats/${safeKey}`);
+      if (chatListener) chatListener();
+
+      chatListener = onValue(chatRef, (snap) => {
+        const messages = snap.val() || {};
+        const container = document.getElementById('chat-messages');
+        container.innerHTML = '';
+
+        Object.values(messages).sort((a,b) => a.timestamp - b.timestamp).forEach(msg => {
+          const div = document.createElement('div');
+          div.className = `message ${msg.from === 'You' ? 'user-message' : 'admin-message'}`;
+
+          if (msg.from === 'You') {
+            div.innerHTML = `
+              <strong style="font-size:0.8rem; display:block; margin-bottom:4px;">You</strong>
+              ${msg.text}
+              <small style="display:block; text-align:right; margin-top:6px; opacity:0.7;">${new Date(msg.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</small>
+            `;
+          } else {
+            div.innerHTML = `
+              <div class="sender-header">
+                ${getAdminIcon(msg.from)}
+                <span>${msg.from}</span>
+              </div>
+              ${msg.text}
+              <small style="display:block; text-align:right; margin-top:6px; opacity:0.7;">${new Date(msg.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</small>
+            `;
+          }
+          container.appendChild(div);
         });
-
-        document.getElementById('avg-rating').textContent = `Total Feedback: ${Object.keys(data).length}`;
+        container.scrollTop = container.scrollHeight;
       });
+    }
+
+    window.sendChatMessage = function() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text || !currentUsername) return;
+
+      const safeKey = sanitizeKey(currentUsername);
+      push(ref(window.db, `liveChats/${safeKey}`), {
+        from: 'You',
+        text: text,
+        timestamp: Date.now()
+      });
+      input.value = '';
+    };
+
+    // Contact Modal
+    window.openContactModal = function() {
+      document.getElementById('contact-modal').style.display = 'flex';
+    };
+
+    window.closeContactModal = function() {
+      document.getElementById('contact-modal').style.display = 'none';
     };
 
     // Start
