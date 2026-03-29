@@ -55,6 +55,7 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      line-height: 1.5;
     }
 
     /* ==================== TOP MARQUEE ==================== */
@@ -79,7 +80,7 @@
       100% { transform: translateX(-100%); }
     }
 
-    /* ==================== ANIMATED ANNOUNCEMENTS TICKER (Banner ke oper) ==================== */
+    /* ==================== ANIMATED ANNOUNCEMENTS TICKER ==================== */
     .announcements-ticker {
       background: linear-gradient(90deg, #d97706, #f59e0b, #d97706);
       color: white;
@@ -107,8 +108,8 @@
     }
 
     .logo-circle {
-      width: 88px;
-      height: 88px;
+      width: 120px;
+      height: 120px;
       margin: 0 auto 0.5rem;
       border-radius: 50%;
       overflow: hidden;
@@ -144,9 +145,10 @@
       font-weight: 500;
     }
 
+    /* ==================== LANDSCAPES BANNER (Perfect Fit) ==================== */
     .banner-frame {
-      max-width: 92%;
-      height: 115px;
+      max-width: 50%;
+      height: 140px;
       margin: 1rem auto;
       border-radius: var(--radius);
       overflow: hidden;
@@ -157,7 +159,9 @@
     .banner-frame img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
+      background: #f8fafc;
     }
 
     .main-buttons {
@@ -169,7 +173,7 @@
     }
 
     .main-btn {
-      width: 100%;
+      width: 50%;
       max-width: 255px;
       padding: 0.9rem 1.6rem;
       font-size: 1.07rem;
@@ -253,7 +257,6 @@
       font-size: 0.95rem;
       line-height: 1.3;
     }
-
     .download-now {
       display: block;
       width: 90%;
@@ -268,9 +271,37 @@
       font-size: 0.95rem;
       box-shadow: var(--shadow-sm);
     }
+    
     .download-now:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(217,119,6,0.4);
+      box-shadow: 0 12px 30px rgba(217, 119, 6, 0.4);
+    }
+    .app-downloads {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .live-downloads {
+      text-align: center;
+      margin: 1.5rem 0;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+      border-radius: var(--radius);
+      border: 2px solid #10b981;
+      box-shadow: var(--shadow-sm);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #052e16;
+    }
+    .live-downloads strong {
+      font-size: 1.4rem;
+      color: #10b981;
     }
 
     #detail-page {
@@ -281,8 +312,8 @@
     }
 
     .detail-icon {
-      width: 220px;
-      height: 220px;
+      width: 180px;
+      height: 180px;
       margin: 0 auto 1.8rem;
       border-radius: var(--radius);
       overflow: hidden;
@@ -318,7 +349,7 @@
       display: block;
       width: 100%;
       max-width: 380px;
-      margin: 0 auto 2rem;
+      margin: 0 auto 1rem;
       padding: 1.2rem;
       background: linear-gradient(135deg, var(--gold), #b45309);
       color: white;
@@ -328,10 +359,34 @@
       border-radius: 999px;
       text-decoration: none;
       box-shadow: var(--shadow-md);
+      border: none;
+      cursor: pointer;
     }
     .detail-download:hover {
       transform: translateY(-4px);
       box-shadow: 0 12px 32px rgba(217,119,6,0.35);
+    }
+
+    .detail-report {
+      display: block;
+      width: 100%;
+      max-width: 380px;
+      margin: 0 auto 2rem;
+      padding: 0.95rem;
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      color: white;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      border: none;
+      cursor: pointer;
+    }
+    .detail-report:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(239,68,68,0.4);
     }
 
     .upload-date {
@@ -485,7 +540,34 @@
       cursor: pointer;
     }
 
-    /* ==================== LIVE CHAT MODAL (with real-time icons) ==================== */
+    /* ==================== GLOBAL USERNAME MODAL ==================== */
+    #username-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      z-index: 999999;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .username-box {
+      background: white;
+      max-width: 380px;
+      width: 100%;
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
+    .username-box h3 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    /* ==================== LIVE CHAT MODAL ==================== */
     #chat-modal {
       display: none;
       position: fixed;
@@ -513,7 +595,26 @@
       align-items: center;
       justify-content: space-between;
       font-weight: 700;
+      position: relative;
     }
+    .admin-header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .admin-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.6);
+    }
+    .admin-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .chat-body {
       height: 420px;
       overflow-y: auto;
@@ -579,16 +680,40 @@
       font-size: 1.4rem;
       cursor: pointer;
     }
-    .username-screen {
-      padding: 2rem 1.5rem;
-      text-align: center;
-    }
     .close-chat {
       background: none;
       border: none;
       font-size: 1.8rem;
       color: white;
       cursor: pointer;
+    }
+
+    /* FEEDBACK PANEL */
+    #chat-feedback-panel {
+      display: none;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    #chat-feedback-panel p {
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #052e16;
+    }
+    .emoji-list {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+    .emoji-list span {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .emoji-list span:hover {
+      transform: scale(1.3);
     }
 
     /* Floating Contact */
@@ -635,6 +760,19 @@
       text-align: center;
       box-shadow: var(--shadow-md);
     }
+
+    .user-pill {
+      background: var(--primary);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
   </style>
 </head>
 <body>
@@ -653,6 +791,9 @@
     <div class="brand-container">
       <div class="brand-main">MrCrazy Digital Company</div>
       <div class="brand-sub">DevStudio</div>
+      <div id="global-username-pill" class="user-pill" style="display:none;">
+        👤 <span id="display-username"></span>
+      </div>
     </div>
   </header>
 
@@ -686,10 +827,24 @@
     <h1 class="detail-name" id="detail-name"></h1>
     <div class="detail-meta">
       Size: <strong id="detail-size"></strong><br>
-      Developer: <strong>Crazy DevStudio</strong>
+      Developer: <strong>MRCRAZYTEAM</strong>
     </div>
+
+    <div class="live-downloads">
+      📥 <strong id="detail-downloads-count">0</strong> Total Downloads 
+      <span style="font-size:0.95rem; color:#10b981; margin-left:8px;">(Real-time)</span>
+    </div>
+
     <div class="detail-desc" id="detail-desc"></div>
-    <a id="detail-download" class="detail-download" href="#" target="_blank">Download Now</a>
+    
+    <button id="detail-download" class="detail-download" onclick="handleDownload()">
+      Download Now
+    </button>
+
+    <button id="detail-report" class="detail-report" onclick="reportFromDetail()">
+      Report Now
+    </button>
+
     <div class="upload-date" id="upload-date"></div>
     <div class="feedback-section">
       <h3 style="text-align:center; margin-bottom:1.5rem; color:var(--primary);">Feedback</h3>
@@ -711,25 +866,25 @@
     </div>
     <div class="form-group">
       <label>Username</label>
-      <input id="report-username" type="text" placeholder="Your username">
+      <input id="report-username" type="text" placeholder="Your username" readonly>
     </div>
     <div class="form-group">
       <label>WhatsApp Number</label>
       <div class="whatsapp-prefix">
         <span class="prefix">+92</span>
-        <input id="report-whatsapp" class="whatsapp-input" type="tel" placeholder="3XX XXXXXXX" maxlength="10">
+        <input id="report-whatsapp" class="whatsapp-input" type="tel" placeholder="3XX XXXXXXX" maxlength="11">
       </div>
     </div>
     <div class="form-group">
-      <label>Describe Your Problem *</label>
-      <textarea id="report-desc" placeholder="e.g. App crash ho raha hai..." required></textarea>
+      <label>Describe Your Problem * <span style="font-weight:400; color:var(--muted);">(max 1000 characters)</span></label>
+      <textarea id="report-desc" maxlength="1000" placeholder="e.g. App crash ho raha hai..." required></textarea>
+      <div id="char-count" style="text-align:right; font-size:0.85rem; color:var(--muted); margin-top:-8px;">0 / 1000</div>
     </div>
     <button class="submit-btn" onclick="submitReport()">Submit Report</button>
     <div id="complaint-id-box" class="complaint-id-box" style="display:none;">
       <h3>Your Complaint ID</h3>
       <div id="complaint-id" class="complaint-id"></div>
       <button class="copy-btn" onclick="copyComplaintID()">Copy ID</button>
-      <p style="margin-top:1rem; color:var(--muted);">Yeh box 2 minutes baad gayab ho jayega</p>
     </div>
   </div>
 
@@ -747,32 +902,66 @@
   <div id="chat-modal">
     <div class="chat-box">
       <div class="chat-header">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <span style="font-size:1.8rem;">👋</span>
+        <div class="admin-header-info">
+          <div class="admin-avatar">
+            <img src="https://i.ibb.co/zCjnZRH/IMG-20260310-175937-221.jpg" alt="MrCrazyTeam">
+          </div>
           <div>
-            <strong>Customer Care (Reply 30-35min)</strong><br>
-            <small id="chat-with-name" style="opacity:0.9;">Live Chat</small>
+            <strong>MrCrazyTeam</strong><br>
+            <small id="chat-with-name" style="opacity:0.9;"></small>
           </div>
         </div>
         <button onclick="closeChatModal()" class="close-chat">✕</button>
       </div>
 
-      <div id="username-screen" class="username-screen">
-        <h3 style="margin-bottom:1.2rem; color:var(--primary);">یہاں اپنا نام لکھیں 👇</h3>
-        <input id="chat-username-input" type="text" class="feedback-input" placeholder="Apna naam / username likho..." style="margin-bottom:1rem;">
-        <button onclick="startLiveChat()" class="submit-btn" style="max-width:260px; margin:0 auto;">Chat Start Karo →</button>
-        <p style="margin-top:1rem; color:var(--muted); font-size:0.9rem;">ہر بار اپنا نام لکھیں اور پرانی گفگو دیکھیں</p>
+      <div id="chat-messages" class="chat-body"></div>
+
+      <!-- FEEDBACK PANEL -->
+      <div id="chat-feedback-panel">
+        <p>Your Chat has been ended۔<br> Please give your feedback </p>
+        <div class="emoji-list">
+          <span onclick="submitEmojiFeedback('😡')">😡</span>
+          <span onclick="submitEmojiFeedback('😕')">😕</span>
+          <span onclick="submitEmojiFeedback('🙂')">🙂</span>
+          <span onclick="submitEmojiFeedback('😊')">😊</span>
+          <span onclick="submitEmojiFeedback('😍')">😍</span>
+        </div>
+        <p id="feedback-thanks" style="display:none; color:#10b981; font-weight:600;">Thank you for your feedback. We truly appreciate your input. Our team will review it carefully and get back to you if needed<br>“Please note that your chat will be closed within the next 10 minutes. Kindly try again after that if needed</p>
       </div>
 
-      <div id="live-chat-screen" style="display:none;">
-        <div id="chat-messages" class="chat-body"></div>
-        <div class="chat-footer">
-          <input id="chat-input" type="text" class="chat-input" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendChatMessage();">
-          <button onclick="sendChatMessage()" class="send-btn">➤</button>
-        </div>
+      <div id="chat-footer" class="chat-footer">
+        <input id="chat-input" type="text" class="chat-input" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendChatMessage();">
+        <button onclick="sendChatMessage()" class="send-btn">➤</button>
       </div>
     </div>
   </div>
+
+<!-- GLOBAL USERNAME MODAL -->
+<div id="username-modal">
+  <div class="username-box">
+    <h3>👋 Welcome to MrCrazy DevStudio</h3>
+    
+    <p style="margin-bottom:1.5rem; color:var(--muted); line-height:1.6; text-align:center;">
+      
+    </p>
+    
+    <input id="global-username-input" type="text" class="feedback-input" placeholder="اپنا پورا نام لکھیں..." style="margin-bottom:1rem;">
+    
+    <button onclick="saveGlobalUsername()" class="submit-btn" style="max-width:260px; margin:0 auto;">
+      Save & Continue →
+    </button>
+    
+    <p style="margin-top:2rem; font-size:0.95rem; color:var(--muted); text-align:center; line-height:1.5;">
+      معزز صارفین،<br>
+      یہاں اپنا پورا نام لکھیں تاکہ آپ کی پہچان کی جا سکے۔<br>
+      شکریہ ❤️
+    </p>
+    
+    <p style="margin-top:1rem; font-size:0.85rem; color:var(--muted); text-align:center; line-height:1.5;">
+      یہ نام آپ کی پہچان کے لیے لکھا جاتا ہے تاکہ آنے والا مسئلہ حل کیا جا سکے۔
+    </p>
+  </div>
+</div>
 
   <!-- FLOATING CONTACT -->
   <div class="floating-contact" onclick="openContactModal()">📧</div>
@@ -782,12 +971,9 @@
     <div class="contact-box">
       <h2 style="color:var(--primary); margin-bottom:1.2rem;">📞 Contact Us</h2>
       <p style="font-size:1.15rem; line-height:1.7; margin-bottom:1.5rem;">
-        
-ہم یہاں ہر وقت آپ کی خدمت کے لیے موجود ہیں۔ ہم واٹس ایپ سروس کو مستقل طور پر بند کر چکے ہیں، لہٰذا اب آپ ہم سے یہیں براہِ راست رابطہ کر سکتے ہیں۔
-
-کسی بھی ہنگامی صورتحال میں براہِ کرم ہمیں جی میل کے ذریعے رابطہ کریں۔
-
-شکریہ۔ 😊<br>
+        ہم یہاں ہر وقت آپ کی خدمت کے لیے موجود ہیں۔ ہم واٹس ایپ سروس کو مستقل طور پر بند کر چکے ہیں، لہٰذا اب آپ ہم سے یہیں براہِ راست رابطہ کر سکتے ہیں۔<br><br>
+        کسی بھی ہنگامی صورتحال میں براہِ کرم ہمیں جی میل کے ذریعے رابطہ کریں۔<br>
+        شکریہ۔ 😊<br>
         OFFICIAL MRCRAZ
       </p>
       <a href="mailto:mrcrazyteamofficial@gmail.com" class="submit-btn" style="display:inline-block; text-decoration:none; padding:1rem 2rem;">
@@ -800,12 +986,53 @@
   </div>
 
   <script type="module">
+    let currentUsername = localStorage.getItem('crazyUsername') || '';
+    let currentAppKey = null;
+    let currentDownloadUrl = null;
+    let detailDownloadsUnsub = null;
+    let chatListener = null;
+    let endedListener = null;
+    let chatEnded = false;
+    let welcomeSent = false;
+
+    const safeKey = () => currentUsername.toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
+
+    function checkAndShowUsernameModal() {
+      if (!currentUsername) {
+        document.getElementById('username-modal').style.display = 'flex';
+      } else {
+        document.getElementById('display-username').textContent = currentUsername;
+        document.getElementById('global-username-pill').style.display = 'inline-flex';
+      }
+    }
+
+    window.saveGlobalUsername = function() {
+      const input = document.getElementById('global-username-input').value.trim();
+      if (!input) return alert('Naam likhna zaroori hai!');
+      currentUsername = input;
+      localStorage.setItem('crazyUsername', currentUsername);
+      document.getElementById('display-username').textContent = currentUsername;
+      document.getElementById('global-username-pill').style.display = 'inline-flex';
+      document.getElementById('username-modal').style.display = 'none';
+      if (window.pendingChatOpen) {
+        window.pendingChatOpen = false;
+        openChatModal();
+      }
+    };
+
     window.showPage = (page) => {
       document.getElementById('home-buttons').style.display = page === 'home' ? 'flex' : 'none';
       document.getElementById('apps-page').style.display = page === 'apps' ? 'block' : 'none';
       document.getElementById('detail-page').style.display = page === 'detail' ? 'block' : 'none';
       document.getElementById('report-page').style.display = page === 'report' ? 'block' : 'none';
       document.getElementById('updates-page').style.display = page === 'updates' ? 'block' : 'none';
+
+      if (page !== 'detail' && detailDownloadsUnsub) {
+        detailDownloadsUnsub();
+        detailDownloadsUnsub = null;
+        currentAppKey = null;
+        currentDownloadUrl = null;
+      }
     };
 
     // Load Logo & Banner
@@ -873,6 +1100,9 @@
             <img src="${app.icon || 'https://ibb.co/4RqMPZBc'}" alt="${app.name}">
           </div>
           <div class="app-name">${app.name}</div>
+          <div class="app-downloads">
+            📥 <strong>${app.downloads || 0}</strong> Downloads
+          </div>
           <a class="download-now" href="#" onclick="openDetail('${key}'); return false;">Download Now</a>
         `;
         grid.appendChild(card);
@@ -918,6 +1148,13 @@
     };
 
     window.openDetail = function(key) {
+      currentAppKey = key;
+      if (detailDownloadsUnsub) detailDownloadsUnsub();
+      detailDownloadsUnsub = onValue(ref(window.db, `apps/${key}/downloads`), (snap) => {
+        const count = snap.val() || 0;
+        document.getElementById('detail-downloads-count').textContent = count;
+      });
+
       onValue(ref(window.db, 'apps/' + key), (snap) => {
         const app = snap.val();
         if (!app) return;
@@ -928,9 +1165,45 @@
         document.getElementById('detail-desc').innerHTML = app.description ? app.description.replace(/\n/g, '<br>') : 'No description available.';
         const dateStr = app.timestamp ? new Date(app.timestamp).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : 'N/A';
         document.getElementById('upload-date').textContent = `Uploaded: ${dateStr}`;
-        document.getElementById('detail-download').href = app.download || '#';
+        currentDownloadUrl = app.download || '#';
       });
     };
+
+    window.handleDownload = function() {
+      if (!currentAppKey) return;
+      update(ref(window.db, `apps/${currentAppKey}`), { downloads: increment(1) });
+      if (currentDownloadUrl && currentDownloadUrl !== '#') {
+        window.open(currentDownloadUrl, '_blank');
+      } else {
+        alert('Download link abhi available nahi hai. Admin se rabta karein!');
+      }
+    };
+
+    window.reportFromDetail = function() {
+      if (!currentAppKey) return;
+      showPage('report');
+      const appSelect = document.getElementById('report-app');
+      for (let opt of appSelect.options) {
+        if (opt.value === document.getElementById('detail-name').textContent) {
+          opt.selected = true;
+          break;
+        }
+      }
+    };
+
+    // ==================== REPORT PAGE ====================
+    function updateCharCount() {
+      const textarea = document.getElementById('report-desc');
+      const countEl = document.getElementById('char-count');
+      const count = textarea.value.length;
+      countEl.textContent = `${count} / 1000`;
+      countEl.style.color = count > 980 ? '#ef4444' : 'var(--muted)';
+    }
+
+    setTimeout(() => {
+      const reportTextarea = document.getElementById('report-desc');
+      if (reportTextarea) reportTextarea.addEventListener('input', updateCharCount);
+    }, 800);
 
     window.submitReport = function() {
       const appName = document.getElementById('report-app').value;
@@ -966,10 +1239,8 @@
         msg.style.background = '#d1fae5';
         msg.style.color = '#065f46';
         msg.style.display = 'block';
-        document.getElementById('report-username').value = '';
-        document.getElementById('report-whatsapp').value = '';
         document.getElementById('report-desc').value = '';
-        document.getElementById('report-app').value = '';
+        updateCharCount();
       });
     };
 
@@ -995,51 +1266,45 @@
       });
     };
 
-    // ==================== LIVE CHAT WITH REAL-TIME ICONS ====================
-    let currentUsername = '';
-    let chatListener = null;
-
-    function sanitizeKey(str) {
-      return str.toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
-    }
-
-    // Direct image URLs (real i.ibb.co links)
+    // ==================== LIVE CHAT ====================
     function getAdminIcon(name) {
-      if (name === 'Sahrish') return `<img src="https://i.ibb.co/YTy6wYS5/IMG-20260325-024525-200.jpg" width="24" height="24" style="border-radius:50%;">`;
-      if (name === 'Ayesha') return `<img src="https://i.ibb.co/9kWJkV1Q/IMG-20260325-003331-792.jpg" width="40" height="40" style="border-radius:50%;">`;
-      if (name === 'Admin') return `<img src="https://i.ibb.co/zCjnZRH/IMG-20260310-175937-221.jpg" width="34" height="34" style="border-radius:50%;">`;
+      if (name === 'Sehrish') return `<img src="https://i.ibb.co/YTy6wYS5/IMG-20260325-024525-200.jpg" width="24" height="24" style="border-radius:50%;">`;
+      if (name === 'فاطمہ') return `<img src="https://i.ibb.co/9kWJkV1Q/IMG-20260325-003331-792.jpg" width="40" height="40" style="border-radius:50%;">`;
+      if (name === 'MrCrazyTeam') return `<img src="https://i.ibb.co/zCjnZRH/IMG-20260310-175937-221.jpg" width="34" height="34" style="border-radius:50%;">`;
       return '';
     }
 
     window.openChatModal = function() {
+      if (!currentUsername) {
+        window.pendingChatOpen = true;
+        checkAndShowUsernameModal();
+        return;
+      }
+
+      chatEnded = false;
+      welcomeSent = false;
       document.getElementById('chat-modal').style.display = 'flex';
-      document.getElementById('username-screen').style.display = 'block';
-      document.getElementById('live-chat-screen').style.display = 'none';
-      document.getElementById('chat-username-input').value = '';
-      currentUsername = '';
+      document.getElementById('chat-with-name').textContent = currentUsername;
+      document.getElementById('chat-footer').style.display = 'flex';
+      document.getElementById('chat-feedback-panel').style.display = 'none';
+      document.getElementById('feedback-thanks').style.display = 'none';
+
+      loadChatMessages();
     };
 
     window.closeChatModal = function() {
       document.getElementById('chat-modal').style.display = 'none';
       if (chatListener) chatListener();
-      currentUsername = '';
-    };
-
-    window.startLiveChat = function() {
-      const input = document.getElementById('chat-username-input').value.trim();
-      if (!input) return alert('Naam likhna zaroori hai!');
-      currentUsername = input;
-      document.getElementById('username-screen').style.display = 'none';
-      document.getElementById('live-chat-screen').style.display = 'block';
-      document.getElementById('chat-with-name').textContent = currentUsername;
-      loadChatMessages();
+      if (endedListener) endedListener();
+      chatListener = null;
+      endedListener = null;
     };
 
     function loadChatMessages() {
-      const safeKey = sanitizeKey(currentUsername);
-      const chatRef = ref(window.db, `liveChats/${safeKey}`);
-      if (chatListener) chatListener();
+      const key = safeKey();
+      const chatRef = ref(window.db, `liveChats/${key}`);
 
+      if (chatListener) chatListener();
       chatListener = onValue(chatRef, (snap) => {
         const messages = snap.val() || {};
         const container = document.getElementById('chat-messages');
@@ -1069,23 +1334,56 @@
         });
         container.scrollTop = container.scrollHeight;
       });
+
+      const endedRef = ref(window.db, `liveChats/${key}/ended`);
+      if (endedListener) endedListener();
+      endedListener = onValue(endedRef, (snap) => {
+        if (snap.val() === true && !chatEnded) {
+          chatEnded = true;
+          document.getElementById('chat-footer').style.display = 'none';
+          document.getElementById('chat-feedback-panel').style.display = 'block';
+        }
+      });
     }
 
     window.sendChatMessage = function() {
       const input = document.getElementById('chat-input');
       const text = input.value.trim();
-      if (!text || !currentUsername) return;
+      if (!text || !currentUsername || chatEnded) return;
 
-      const safeKey = sanitizeKey(currentUsername);
-      push(ref(window.db, `liveChats/${safeKey}`), {
+      const key = safeKey();
+      push(ref(window.db, `liveChats/${key}`), {
         from: 'You',
         text: text,
         timestamp: Date.now()
+      }).then(() => {
+        input.value = '';
+
+        if (!welcomeSent) {
+          welcomeSent = true;
+          const welcomeText = `Assalam o Alaikum! ${currentUsername} Hum umeed kartay hain ke aap khairiyat se honge. Barah-e-karam apna masla mukammal tafseel ke sath likhein. Hamari support team 20–25 minutes ke andar aap se rabta karegi.
+Shukriya,
+MrCrazyTeam AI`;
+          push(ref(window.db, `liveChats/${key}`), {
+            from: 'MrCrazyTeam',
+            text: welcomeText,
+            timestamp: Date.now() + 600
+          });
+        }
       });
-      input.value = '';
     };
 
-    // Contact Modal
+    window.submitEmojiFeedback = function(emoji) {
+      const key = safeKey();
+      push(ref(window.db, `liveChats/${key}`), {
+        from: 'You',
+        text: `Feedback: ${emoji}`,
+        timestamp: Date.now()
+      }).then(() => {
+        document.getElementById('feedback-thanks').style.display = 'block';
+      });
+    };
+
     window.openContactModal = function() {
       document.getElementById('contact-modal').style.display = 'flex';
     };
@@ -1094,8 +1392,22 @@
       document.getElementById('contact-modal').style.display = 'none';
     };
 
-    // Start
-    document.getElementById('home-buttons').style.display = 'flex';
+    // ==================== START APP ====================
+    window.onload = function() {
+      checkAndShowUsernameModal();
+
+      const fillReportUsername = () => {
+        if (currentUsername) document.getElementById('report-username').value = currentUsername;
+      };
+      fillReportUsername();
+
+      const observer = new MutationObserver(() => {
+        if (document.getElementById('report-page').style.display === 'block') fillReportUsername();
+      });
+      observer.observe(document.getElementById('report-page'), { attributes: true, attributeFilter: ['style'] });
+
+      document.getElementById('home-buttons').style.display = 'flex';
+    };
   </script>
 </body>
 </html>
