@@ -148,7 +148,7 @@
     /* ==================== LANDSCAPES BANNER (Perfect Fit) ==================== */
     .banner-frame {
       max-width: 50%;
-      height: 140px;
+      height: 10px;
       margin: 1rem auto;
       border-radius: var(--radius);
       overflow: hidden;
@@ -171,7 +171,26 @@
       gap: 0.95rem;
       padding: 0 1.1rem 2rem;
     }
+.whatsapp-report-btn {
+  background: linear-gradient(135deg, #25D366, #20C65A);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
 
+.whatsapp-report-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.45);
+}
     .main-btn {
       width: 50%;
       max-width: 255px;
@@ -632,6 +651,46 @@
       line-height: 1.4;
       position: relative;
     }
+    /* ==================== NEW ANIMATED LANDSCAPE BANNER ==================== */
+.landscape-banner {
+  max-width: 92%;
+  margin: 1rem auto;
+  height: 160px;
+  background: linear-gradient(135deg, #6d28d9, #a78bfa, #7c3aed);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md), var(--glow);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 5px solid #f8fafc;
+}
+
+.banner-content {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  animation: bannerScroll 25s linear infinite;
+  min-width: 200%;
+}
+
+@keyframes bannerScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Agar text chhota ho to center mein ruk jaye */
+.banner-content.short {
+  animation: none;
+  white-space: normal;
+  min-width: auto;
+}
     .user-message {
       align-self: flex-end;
       background: var(--primary);
@@ -806,7 +865,10 @@
   <div class="banner-frame">
     <img id="banner-img" src="https://ibb.co/4RqMPZBc" alt="Banner">
   </div>
-
+<!-- ==================== KHUBSURAT ANIMATED LANDSCAPE BANNER ==================== -->
+<div id="landscape-banner" class="landscape-banner">
+  <div id="banner-content" class="banner-content"></div>
+</div>
   <div class="main-buttons" id="home-buttons">
     <button class="main-btn my-apps-btn" onclick="showPage('apps')">My Apps</button>
     <button class="main-btn updates-btn" onclick="showPage('updates')">Updates</button>
@@ -886,6 +948,25 @@
       <div id="complaint-id" class="complaint-id"></div>
       <button class="copy-btn" onclick="copyComplaintID()">Copy ID</button>
     </div>
+    <!-- WhatsApp Contact Button in Report Page -->
+<div style="text-align: center; margin: 1.5rem 0;">
+  <button onclick="openWhatsAppReport()" 
+          style="background: linear-gradient(135deg, #25D366, #20C65A); 
+                 color: white; 
+                 border: none; 
+                 padding: 14px 28px; 
+                 border-radius: 50px; 
+                 font-size: 1.05rem; 
+                 font-weight: 700; 
+                 cursor: pointer; 
+                 box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+                 display: inline-flex; 
+                 align-items: center; 
+                 gap: 10px;">
+    <span style="font-size: 1.4rem;">📲</span> 
+    WhatsApp Pe Rabta Karein
+  </button>
+</div>
   </div>
 
   <!-- UPDATES PAGE -->
@@ -1299,7 +1380,24 @@
       chatListener = null;
       endedListener = null;
     };
+// ==================== LANDSCAPE BANNER (Admin se text) ====================
+function loadLandscapeBanner() {
+  const banner = document.getElementById('landscape-banner');
+  const content = document.getElementById('banner-content');
 
+  onValue(ref(window.db, 'landscapeBanner'), (snap) => {
+    const text = snap.val() || '';
+
+    if (!text.trim()) {
+      content.textContent = " ❤️ Best Apps & Updates Next update coming soon please stay tunned New feature available added WhatsApp number in report section ";
+      content.classList.add('short');
+      return;
+    }
+
+    content.textContent = text + "   •   " + text;   // duplicate for smooth loop
+    content.classList.toggle('short', text.length < 40);
+  });
+}
     function loadChatMessages() {
       const key = safeKey();
       const chatRef = ref(window.db, `liveChats/${key}`);
@@ -1391,11 +1489,31 @@ MrCrazyTeam AI`;
     window.closeContactModal = function() {
       document.getElementById('contact-modal').style.display = 'none';
     };
+// WhatsApp Report Button Function
+window.openWhatsAppReport = function() {
+  const username = document.getElementById('report-username').value.trim() || currentUsername || "User";
+  const problemDesc = document.getElementById('report-desc').value.trim();
 
+  let message = `Assalam o Alaikum!%0A%0A`;
+  message += `Mera naam: ${encodeURIComponent(username)}%0A`;
+  
+  if (problemDesc) {
+    message += `Problem: ${encodeURIComponent(problemDesc)}%0A`;
+  } else {
+    message += `Mujhe app mein koi problem ho rahi hai.%0A`;
+  }
+
+  message += `%0AScreen: Report Page%0A`;
+  message += `Time: ${new Date().toLocaleString('en-GB')}`;
+
+  const whatsappURL = `https://wa.me/9779761970136?text=${message}`;
+
+  window.open(whatsappURL, '_blank');
+};
     // ==================== START APP ====================
     window.onload = function() {
       checkAndShowUsernameModal();
-
+loadLandscapeBanner();
       const fillReportUsername = () => {
         if (currentUsername) document.getElementById('report-username').value = currentUsername;
       };
