@@ -1,3 +1,4 @@
+</html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -475,7 +476,46 @@
 
     .form-group { margin-bottom: 1.5rem; }
     label { font-weight: 600; margin-bottom: 0.6rem; display: block; }
+/* ==================== FIXED LANDSCAPE BANNER - TEXT WRAP + VERTICAL SCROLL ==================== */
+.landscape-banner {
+  max-width: 92%;
+  margin: 1rem auto;
+  height: 170px;                    /* Box height - tum adjust kar sakte ho */
+  background: linear-gradient(135deg, #6d28d9, #a78bfa, #7c3aed);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md), var(--glow);
+  border: 5px solid #f8fafc;
+  position: relative;
+}
 
+.banner-content {
+  color: white;
+  font-size: 1.18rem;
+  font-weight: 700;
+  line-height: 1.6;
+  padding: 20px 25px;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  height: 100%;
+  overflow-y: auto;                 /* Vertical scroll enable */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  word-wrap: break-word;            /* Text wrap fix */
+  white-space: pre-wrap;            /* New lines preserve + wrap */
+}
+
+.banner-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Chhota text center mein vertically align */
+.banner-content.short {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
     input, textarea, select {
       width: 100%;
       padding: 1rem 1.3rem;
@@ -525,7 +565,21 @@
       transform: translateY(-3px);
       box-shadow: var(--shadow-md);
     }
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.28); }
+}
 
+.brand-container {
+  background: var(--card);
+  padding: 1.6rem 1.8rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  max-width: 88%;
+  margin: 0 auto 1.2rem;
+  border: 1px solid var(--border);
+  text-align: center;
+}
     .msg {
       padding: 1.2rem;
       border-radius: var(--radius);
@@ -651,39 +705,6 @@
       line-height: 1.4;
       position: relative;
     }
-    /* ==================== NEW ANIMATED LANDSCAPE BANNER ==================== */
-.landscape-banner {
-  max-width: 92%;
-  margin: 1rem auto;
-  height: 160px;
-  background: linear-gradient(135deg, #6d28d9, #a78bfa, #7c3aed);
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow-md), var(--glow);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 5px solid #f8fafc;
-}
-
-.banner-content {
-  color: white;
-  font-size: 1.25rem;
-  font-weight: 700;
-  text-align: center;
-  padding: 0 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  animation: bannerScroll 25s linear infinite;
-  min-width: 200%;
-}
-
-@keyframes bannerScroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
 
 /* Agar text chhota ho to center mein ruk jaye */
 .banner-content.short {
@@ -843,33 +864,82 @@
     </div>
   </div>
 
-  <header>
-    <div class="logo-circle">
-      <img id="logo-img" src="https://ibb.co/4RqMPZBc" alt="Crazy DevStudio">
-    </div>
-    <div class="brand-container">
-      <div class="brand-main">MrCrazy Digital Company</div>
-      <div class="brand-sub">DevStudio</div>
-      <div id="global-username-pill" class="user-pill" style="display:none;">
-        👤 <span id="display-username"></span>
-      </div>
-    </div>
-  </header>
-
-  <!-- ANIMATED ANNOUNCEMENTS TICKER -->
-  <div class="announcements-ticker" id="announcements-ticker">
-    <div id="ann-ticker-content" class="ann-ticker-content"></div>
+<header>
+  <div class="logo-circle">
+    <img id="logo-img" src="https://ibb.co/4RqMPZBc" alt="Crazy DevStudio">
   </div>
+  
+  <!-- Improved Beautiful Header -->
+  <div class="brand-container">
+    <!-- Top Small Company Name -->
+    <div style="font-size: 0.95rem; color: var(--muted); font-weight: 500; letter-spacing: 1.2px; margin-bottom: 6px;">
+      MrCrazy Digital Company
+    </div>
+    
+    <!-- Welcome Text (Normal Size) -->
+    <div style="font-family: 'Poppins'; font-size: 1.35rem; font-weight: 600; color: #4f46e5; margin-bottom: 4px;">
+      Welcome,
+    </div>
+    
+    <!-- User Name (Bara aur Bold) -->
+    <div id="user-name-display" style="font-family: 'Poppins'; font-size: 1.95rem; font-weight: 800; 
+         background: linear-gradient(to right, #6d28d9, #a78bfa); 
+         -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+         line-height: 1.1; margin-bottom: 8px;">
+      <!-- User name yahan aayega -->
+    </div>
+    
+    <!-- Heart + Join Date -->
+    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 1.02rem; color: var(--muted);">
+      <span style="font-size: 1.45rem; animation: heartBeat 1.6s ease-in-out infinite;">❤️</span>
+      <span>Joined: <strong id="join-date"></strong></span>
+    </div>
+    
+    <!-- Username Pill -->
+    <div id="global-username-pill" class="user-pill" style="display:none; margin-top: 14px;">
+      👤 <span id="display-username"></span>
+    </div>
+  </div>
+</header>
+
+<!-- EMERGENCY HELP BUTTON (Announcements ke jagah) -->
+<div style="text-align:center; margin:1.2rem 0 1.8rem;">
+  <button onclick="openEmergencyHelpModal()" 
+          style="background: linear-gradient(135deg, #ef4444, #f87171); 
+                 color: white; 
+                 border: none; 
+                 padding: 16px 36px; 
+                 border-radius: 50px; 
+                 font-size: 1.12rem; 
+                 font-weight: 700; 
+                 box-shadow: 0 8px 25px rgba(239,68,68,0.35);
+                 display: inline-flex; 
+                 align-items: center; 
+                 gap: 10px;">
+    <span style="font-size:1.4rem;">🚨</span> 
+    ​کیا آپ کو مدد کی ضرورت ہے؟
+  </button>
+</div>
+
+
+
 
   <!-- LANDSCAPES BANNER -->
   <div class="banner-frame">
     <img id="banner-img" src="https://ibb.co/4RqMPZBc" alt="Banner">
   </div>
-<!-- ==================== KHUBSURAT ANIMATED LANDSCAPE BANNER ==================== -->
+<!-- ==================== NEW VERTICAL SCROLL BANNER ==================== -->
 <div id="landscape-banner" class="landscape-banner">
   <div id="banner-content" class="banner-content"></div>
 </div>
   <div class="main-buttons" id="home-buttons">
+    <!-- AVAILABLE SERVICES BUTTON -->
+<div style="text-align:center; margin:1.2rem 0 1.8rem;">
+  <button onclick="showServicesModal()" 
+          style="background:linear-gradient(135deg,#8b5cf6,#a78bfa); color:white; border:none; padding:15px 34px; border-radius:50px; font-size:1.1rem; font-weight:700; box-shadow:0 8px 25px rgba(139,92,246,0.3);">
+    📦 Available Services
+  </button>
+</div>
     <button class="main-btn my-apps-btn" onclick="showPage('apps')">My Apps</button>
     <button class="main-btn updates-btn" onclick="showPage('updates')">Updates</button>
     <button class="main-btn report-btn" onclick="showPage('report')">Report Problem</button>
@@ -878,12 +948,52 @@
 
   <!-- APPS PAGE -->
   <div id="apps-page">
+    
+    <!-- APPS DOWNLOAD TARIQA BUTTON + MODAL -->
+<div style="text-align: center; margin: 1rem 0 1.5rem;">
+  <button onclick="openDownloadGuideModal()" 
+          style="background: linear-gradient(135deg, #10b981, #34d399); 
+                 color: white; 
+                 border: none; 
+                 padding: 14px 32px; 
+                 border-radius: 50px; 
+                 font-size: 1.08rem; 
+                 font-weight: 700; 
+                 cursor: pointer; 
+                 box-shadow: 0 6px 20px rgba(16,185,129,0.3);">
+    📹 Apps Download Karne Ka Tariqa
+  </button>
+</div>
+
+<!-- DOWNLOAD GUIDE MODAL -->
+<div id="download-guide-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; align-items: center; justify-content: center; padding: 1rem;">
+  <div style="background: white; max-width: 520px; width: 100%; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+    
+    <div style="background: linear-gradient(135deg, #10b981, #34d399); color: white; padding: 1.2rem; text-align: center; font-weight: 700; font-size: 1.2rem;">
+      📹 Apps Download Karne Ka Tariqa
+    </div>
+    
+    <div style="padding: 1.5rem;">
+      <div id="youtube-video-container" style="position: relative; padding-top: 56.25%; height: 0; overflow: hidden; border-radius: 12px;">
+        <!-- YouTube iframe yahan dynamically add hoga -->
+      </div>
+    </div>
+    
+    <div style="padding: 1rem 1.5rem 1.5rem; text-align: center;">
+      <button onclick="closeDownloadGuideModal()" 
+              style="background: #ef4444; color: white; border: none; padding: 12px 28px; border-radius: 50px; font-weight: 600; cursor: pointer;">
+        Band Karo
+      </button>
+    </div>
+  </div>
+</div>
     <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
     <div class="grid" id="apps-grid"></div>
   </div>
 
   <!-- DETAIL PAGE -->
   <div id="detail-page">
+    
     <button class="back-btn" onclick="showPage('apps')">← Back to Apps</button>
     <div class="detail-icon"><img id="detail-icon" src="" alt="App Icon"></div>
     <h1 class="detail-name" id="detail-name"></h1>
@@ -916,7 +1026,123 @@
       <div class="feedback-list" id="feedback-list"></div>
     </div>
   </div>
+<!-- SERVICES MODAL + NETFLIX FLOW -->
+<div id="services-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; align-items:center; justify-content:center; padding:15px;">
+  <div style="background:white; max-width:520px; width:100%; border-radius:20px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+    <div style="padding:1.2rem; background:linear-gradient(135deg,#8b5cf6,#a78bfa); color:white; text-align:center; font-weight:700; font-size:1.25rem;">
+      Available Services
+    </div>
+    <div style="padding:1.8rem; display:grid; grid-template-columns:repeat(3,1fr); gap:12px;">
+      <div onclick="showNetflixModal()" style="background:#f8fafc; border:2px solid #8b5cf6; border-radius:16px; padding:1.2rem; text-align:center; cursor:pointer;">
+        <div style="font-size:2.5rem;margin-bottom:10px;">📺</div><strong>Netflix</strong>
+      </div>
+      <div onclick="showUCModal()" style="background:#f8fafc; border:2px solid #10b981; border-radius:16px; padding:1.2rem; text-align:center; cursor:pointer;">
+        <div style="font-size:2.5rem;margin-bottom:10px;">🎮</div><strong>Carding UC</strong>
+      </div>
+      <div onclick="showTikTokModal()" style="background:#f8fafc; border:2px solid #ec4899; border-radius:16px; padding:1.2rem; text-align:center; cursor:pointer;">
+        <div style="font-size:2.5rem;margin-bottom:10px;">🎵</div><strong>TikTok</strong>
+      </div>
+    </div>
+    <div style="text-align:center;padding:1rem;"><button onclick="closeServicesModal()" style="background:#ef4444;color:white;border:none;padding:12px 32px;border-radius:50px;">Close</button></div>
+  </div>
+</div>
 
+<!-- NETFLIX MODAL -->
+<div id="netflix-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100000; align-items:center; justify-content:center; padding:15px;">
+  <div style="background:white; max-width:460px; width:100%; border-radius:20px; padding:2rem; text-align:center;">
+    <h2 style="color:#8b5cf6;">Netflix Premium</h2>
+    <h3 id="netflix-price-show" style="color:#10b981; font-size:1.5rem; margin:1rem 0;"></h3>
+    <p id="netflix-desc-show" style="line-height:1.6;"></p>
+    <button onclick="showPaymentModal()" style="margin-top:2rem; background:linear-gradient(135deg,#10b981,#34d399); color:white; border:none; padding:16px 40px; border-radius:50px; font-size:1.15rem; font-weight:700; width:100%;">Buy Now</button>
+    <button onclick="closeNetflixModal()" style="margin-top:1rem; background:#64748b; color:white; border:none; padding:12px 32px; border-radius:50px; width:100%;">Cancel</button>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div id="payment-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:100001; align-items:center; justify-content:center; padding:15px;">
+  <div style="background:white; max-width:460px; width:100%; border-radius:20px; padding:2rem; text-align:center;">
+    <h3 style="color:#10b981;">JazzCash Payment</h3>
+    <p style="margin:1.5rem 0; font-size:1.1rem;">Muhammad Naeem<br><strong>0325-7436319</strong></p>
+    <p id="payment-amount" style="background:#fefce8; padding:1.2rem; border-radius:12px; margin:1.5rem 0;"></p>
+
+    <p style="margin:1.8rem 0 1rem; font-weight:600;">Kya aap ne paise send kar diye hain?</p>
+    <div style="display:flex; gap:12px;">
+      <button onclick="paymentNo()" style="flex:1; background:#ef4444; color:white; border:none; padding:14px; border-radius:50px;">Nahi</button>
+      <button onclick="paymentYes()" style="flex:1; background:#10b981; color:white; border:none; padding:14px; border-radius:50px;">Haan</button>
+    </div>
+
+    <div id="tid-section" style="display:none; margin-top:2rem;">
+      <label style="display:block; margin-bottom:8px; font-weight:600;">TID / Reference Number</label>
+      <input id="tid-input" type="text" placeholder="TID likhein" style="width:100%; padding:14px; border:2px solid #10b981; border-radius:12px;">
+      <button onclick="submitTID()" style="margin-top:1rem; background:#6d28d9; color:white; border:none; padding:13px; border-radius:50px; width:100%;">Submit TID</button>
+    </div>
+
+    <div id="contact-section" style="display:none; margin-top:2rem;">
+      <label style="display:block; margin-bottom:8px; font-weight:600;">WhatsApp / Call Number</label>
+      <input id="contact-input" type="tel" placeholder="+92 3XX XXXXXXX" style="width:100%; padding:14px; border:2px solid #10b981; border-radius:12px;">
+      <button onclick="submitContact()" style="margin-top:1rem; background:#10b981; color:white; border:none; padding:13px; border-radius:50px; width:100%;">Submit Number</button>
+    </div>
+
+    <button onclick="closePaymentModal()" style="margin-top:2rem; background:#64748b; color:white; border:none; padding:12px 32px; border-radius:50px;">Close</button>
+  </div>
+</div>
+<!-- EMERGENCY HELP MODAL -->
+<div id="emergency-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; align-items:center; justify-content:center; padding:15px;">
+  <div style="background:white; max-width:480px; width:100%; border-radius:20px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+    
+    <!-- Step 1: Welcome Message -->
+    <div id="step-1" class="modal-step">
+      <div style="padding:1.8rem 1.5rem; text-align:center;">
+        <h2 style="color:#ef4444; margin-bottom:1rem;">🚨 Emergency Help</h2>
+        <p style="font-size:1.08rem; line-height:1.7; color:#1f2937;">
+          معزز صارفین! 😊,<br>
+          ہمیں آپ کو ہونے والی تکلیف پر بے حد افسوس ہے اور اس کے لیے ہم تہہ دل سے معذرت خواہ ہیں۔.<br><br>
+          براہِ  کرم، ہمیں درپیش مسئلے کی تفصیلات سے آگاہ کریں تاکہ ہم جلد از جلد اسے حل کر سکیں۔ آپ کا تعاون ہمارے لیے بہت اہمیت رکھتا ہے۔ 🛠️✨
+​آپ کے تعاون کا بہت شکریہ! ❤️.<br>
+          MRCRAZYTEAM OFFICIAL
+        </p>
+      </div>
+      <div style="padding:1rem 1.5rem; display:flex; gap:12px;">
+        <button onclick="closeEmergencyModal()" style="flex:1; background:#64748b; color:white; border:none; padding:14px; border-radius:50px;">Close</button>
+        <button onclick="goToStep(2)" style="flex:1; background:#10b981; color:white; border:none; padding:14px; border-radius:50px;">Next →</button>
+      </div>
+    </div>
+    
+    <!-- Step 2: Number -->
+    <div id="step-2" class="modal-step" style="display:none;">
+      <div style="padding:1.8rem 1.5rem;">
+        <h3 style="text-align:center; color:#1f2937;">Moaziz Customer</h3>
+        <p style="text-align:center; margin:1rem 0;">Please apna WhatsApp ya Call number likhein</p>
+        <input id="help-contact" type="tel" placeholder="+92 3XX XXXXXXX" style="width:100%; padding:14px; border:2px solid #10b981; border-radius:12px; font-size:1.05rem;">
+      </div>
+      <div style="padding:1rem 1.5rem; display:flex; gap:12px;">
+        <button onclick="goToStep(1)" style="flex:1; background:#64748b; color:white; border:none; padding:14px; border-radius:50px;">Back</button>
+        <button onclick="goToStep(3)" style="flex:1; background:#10b981; color:white; border:none; padding:14px; border-radius:50px;">Next →</button>
+      </div>
+    </div>
+    
+    <!-- Step 3: Problem Description -->
+    <div id="step-3" class="modal-step" style="display:none;">
+      <div style="padding:1.8rem 1.5rem;">
+        <h3 style="text-align:center;">اپنا مسئلہ بیان کریں ✨</h3>
+        <textarea id="help-problem" rows="5" placeholder="معزز صارف، براہِ کرم نیچے دیئے گئے آپشنز یا میسج کے ذریعے اپنا مسئلہ بیان کریں تاکہ ہم اسے فوری حل کر سکیں۔ 🛠️ آپ کی پریشانی دور کرنا ہماری ذمہ داری ہے۔ ..." style="width:100%; padding:14px; border:2px solid #10b981; border-radius:12px; margin-top:1rem;"></textarea>
+      </div>
+      <div style="padding:1rem 1.5rem; display:flex; gap:12px;">
+        <button onclick="goToStep(2)" style="flex:1; background:#64748b; color:white; border:none; padding:14px; border-radius:50px;">Back</button>
+        <button onclick="submitHelpRequest()" style="flex:1; background:#ef4444; color:white; border:none; padding:14px; border-radius:50px;">Submit Report</button>
+      </div>
+    </div>
+    
+    <!-- Step 4: Pending / Approved -->
+    <div id="step-4" class="modal-step" style="display:none; padding:2rem; text-align:center;">
+      <div id="status-icon" style="font-size:3rem; margin-bottom:1rem;">⏳</div>
+      <h3 id="status-title">Report Pending</h3>
+      <p id="status-message" style="margin:1.2rem 0; line-height:1.6;"></p>
+      <button onclick="closeEmergencyModal()" style="background:#64748b; color:white; border:none; padding:12px 32px; border-radius:50px;">Close</button>
+    </div>
+    
+  </div>
+</div>
   <!-- REPORT PAGE -->
   <div id="report-page">
     <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
@@ -1271,7 +1497,64 @@
         }
       }
     };
+let currentHelpStep = 1;
+let helpRequestKey = null;
 
+window.openEmergencyHelpModal = function() {
+  document.getElementById('emergency-modal').style.display = 'flex';
+  goToStep(1);
+};
+
+window.closeEmergencyModal = function() {
+  document.getElementById('emergency-modal').style.display = 'none';
+};
+
+window.goToStep = function(step) {
+  currentHelpStep = step;
+  document.querySelectorAll('.modal-step').forEach(s => s.style.display = 'none');
+  document.getElementById('step-' + step).style.display = 'block';
+};
+
+window.submitHelpRequest = function() {
+  const contact = document.getElementById('help-contact').value.trim();
+  const problem = document.getElementById('help-problem').value.trim();
+  const username = currentUsername || "Anonymous";
+  
+  if (!contact || !problem) {
+    alert("Number aur masla likhna zaroori hai!");
+    return;
+  }
+  
+  const newRef = push(ref(window.db, 'emergencyHelp'));
+  helpRequestKey = newRef.key;
+  
+  set(newRef, {
+    username: username,
+    contact: contact,
+    problem: problem,
+    status: "Pending",
+    time: new Date().toLocaleString('en-GB')
+  }).then(() => {
+    goToStep(4);
+    document.getElementById('status-icon').innerHTML = '⏳';
+    document.getElementById('status-title').textContent = 'Report Pending';
+    document.getElementById('status-message').innerHTML = 'Hamari team jaldi aap se rabta karegi.<br>Shukriya ❤️';
+  });
+};
+
+// Admin taraf se status change hone par update (real-time)
+function listenToHelpStatus() {
+  if (!helpRequestKey) return;
+  onValue(ref(window.db, 'emergencyHelp/' + helpRequestKey + '/status'), (snap) => {
+    const status = snap.val();
+    if (status === "Approved") {
+      document.getElementById('status-icon').innerHTML = '✅';
+      document.getElementById('status-title').textContent = 'Masla Hal Ho Gaya';
+      document.getElementById('status-message').innerHTML = 'Moaziz Customer,<br>Apka masla hal ho gaya hai.<br>Ab aap feedback de sakte hain.';
+      // Yahan feedback button add kar sakte hain baad mein
+    }
+  });
+}
     // ==================== REPORT PAGE ====================
     function updateCharCount() {
       const textarea = document.getElementById('report-desc');
@@ -1346,7 +1629,108 @@
         document.getElementById('feedback-text').value = '';
       });
     };
+    // Beautiful Header with Join Date
+function updateWelcomeSection() {
+  const username = currentUsername || "User";
+  
+  // User Name (Bara)
+  document.getElementById('user-name-display').textContent = username;
+  document.getElementById('display-username').textContent = username;
+  document.getElementById('global-username-pill').style.display = 'inline-flex';
+  
+  // Join Date
+  const joinDateEl = document.getElementById('join-date');
+  
+  // Agar pehli baar username save ho raha hai to aaj ki date save kar do
+  let joinDate = localStorage.getItem('userJoinDate');
+  if (!joinDate) {
+    joinDate = new Date().toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+    localStorage.setItem('userJoinDate', joinDate);
+  }
+  
+  joinDateEl.textContent = joinDate;
+}
 
+// window.onload mein call kar do
+window.onload = function() {
+  checkAndShowUsernameModal();
+  updateWelcomeSection(); // ← Yeh line zaroori hai
+  // ... baaki purana code (loadLandscapeBanner(), startBroadcastListener() etc.)
+};
+// Services Modal Functions
+window.showServicesModal = function() { document.getElementById('services-modal').style.display = 'flex'; };
+window.closeServicesModal = function() { document.getElementById('services-modal').style.display = 'none'; };
+
+// Netflix Dynamic
+window.showNetflixModal = function() {
+  closeServicesModal();
+  onValue(ref(window.db, 'netflixPackage'), (snap) => {
+    const data = snap.val() || { price: "Rs. 275", desc: "Monthly Netflix Premium" };
+    document.getElementById('netflix-price-show').textContent = data.price;
+    document.getElementById('netflix-desc-show').innerHTML = data.desc.replace(/\n/g, '<br>');
+    document.getElementById('payment-amount').textContent = data.price + " bhejna hai";
+  }, { onlyOnce: true });
+  document.getElementById('netflix-modal').style.display = 'flex';
+};
+
+window.closeNetflixModal = function() { document.getElementById('netflix-modal').style.display = 'none'; };
+window.showPaymentModal = function() { closeNetflixModal(); document.getElementById('payment-modal').style.display = 'flex'; resetPayment(); };
+
+function resetPayment() {
+  document.getElementById('tid-section').style.display = 'none';
+  document.getElementById('contact-section').style.display = 'none';
+}
+
+// Payment Flow
+window.paymentYes = function() { document.getElementById('tid-section').style.display = 'block'; };
+window.submitTID = function() {
+  const tid = document.getElementById('tid-input').value.trim();
+  if (!tid) return alert("TID likhna zaroori hai!");
+  document.getElementById('tid-section').style.display = 'none';
+  document.getElementById('contact-section').style.display = 'block';
+};
+
+window.submitContact = function() {
+  const contact = document.getElementById('contact-input').value.trim();
+  const tid = document.getElementById('tid-input').value.trim();
+  const username = currentUsername || "Anonymous";
+
+  if (!contact) return alert("Number likhna zaroori hai!");
+
+  // Save to Firebase so admin can see
+  push(ref(window.db, 'netflixRequests'), {
+    username: username,
+    contact: contact,
+    tid: tid,
+    time: new Date().toLocaleString('en-GB'),
+    status: "Pending"
+  }).then(() => {
+    alert("✅ Payment Confirmed! Hamari team jaldi aap se rabta karegi.\nShukriya ❤️");
+    closePaymentModal();
+  });
+};
+
+window.paymentNo = function() { closePaymentModal(); alert("Thanks! Agar paise bhej diye to TID ke saath dobara try karein."); };
+window.closePaymentModal = function() { document.getElementById('payment-modal').style.display = 'none'; resetPayment(); };
+
+// UC & TikTok (Dynamic from Admin)
+window.showUCModal = function() {
+  closeServicesModal();
+  onValue(ref(window.db, 'ucServiceText'), (snap) => {
+    alert(snap.val() || "🎮 Carding UC\nAdmin se rabta karein: 0325-7436319");
+  }, { onlyOnce: true });
+};
+
+window.showTikTokModal = function() {
+  closeServicesModal();
+  onValue(ref(window.db, 'tiktokServiceText'), (snap) => {
+    alert(snap.val() || "🎵 TikTok Likes/Views/Followers\nAdmin se rabta karein: 0325-7436319");
+  }, { onlyOnce: true });
+};
     // ==================== LIVE CHAT ====================
     function getAdminIcon(name) {
       if (name === 'Sehrish') return `<img src="https://i.ibb.co/YTy6wYS5/IMG-20260325-024525-200.jpg" width="24" height="24" style="border-radius:50%;">`;
@@ -1380,22 +1764,21 @@
       chatListener = null;
       endedListener = null;
     };
-// ==================== LANDSCAPE BANNER (Admin se text) ====================
+// ==================== FIXED BANNER WITH PROPER WRAP ====================
 function loadLandscapeBanner() {
-  const banner = document.getElementById('landscape-banner');
   const content = document.getElementById('banner-content');
-
+  
   onValue(ref(window.db, 'landscapeBanner'), (snap) => {
-    const text = snap.val() || '';
-
-    if (!text.trim()) {
-      content.textContent = " ❤️ Best Apps & Updates Next update coming soon please stay tunned New feature available added WhatsApp number in report section ";
+    let text = snap.val() || "Welcome to MrCrazy DevStudio ❤️ Best Apps & Updates";
+    
+    content.innerHTML = text.replace(/\n/g, '<br>');
+    
+    // Agar text chhota hai to center mein rakho
+    if (text.length < 90) {
       content.classList.add('short');
-      return;
+    } else {
+      content.classList.remove('short');
     }
-
-    content.textContent = text + "   •   " + text;   // duplicate for smooth loop
-    content.classList.toggle('short', text.length < 40);
   });
 }
     function loadChatMessages() {
@@ -1489,6 +1872,62 @@ MrCrazyTeam AI`;
     window.closeContactModal = function() {
       document.getElementById('contact-modal').style.display = 'none';
     };
+    // ==================== DOWNLOAD GUIDE MODAL (YouTube Video) ====================
+let currentVideoIframe = null;
+
+window.openDownloadGuideModal = function() {
+  const modal = document.getElementById('download-guide-modal');
+  const container = document.getElementById('youtube-video-container');
+  
+  container.innerHTML = ''; // purana clear karo
+  
+  onValue(ref(window.db, 'downloadGuideVideo'), (snap) => {
+    const url = snap.val() || '';
+    
+    if (!url) {
+      container.innerHTML = `<p style="text-align:center; padding:2rem; color:#64748b;">Abhi koi video nahi daala gaya hai.<br>Admin jaldi add kar dega ❤️</p>`;
+      modal.style.display = 'flex';
+      return;
+    }
+    
+    // YouTube URL ko embed format mein convert karo
+    let videoId = '';
+    if (url.includes('youtu.be/')) {
+      videoId = url.split('youtu.be/')[1].split('?')[0];
+    } else if (url.includes('youtube.com/watch?v=')) {
+      videoId = url.split('v=')[1].split('&')[0];
+    } else if (url.includes('embed/')) {
+      videoId = url.split('embed/')[1].split('?')[0];
+    }
+    
+    if (videoId) {
+      const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0`;
+      
+      container.innerHTML = `
+        <iframe width="100%" height="100%" 
+                style="position:absolute; top:0; left:0; border:none;" 
+                src="${embedUrl}" 
+                title="Download Guide" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+        </iframe>`;
+    } else {
+      container.innerHTML = `<p style="text-align:center; padding:2rem; color:#ef4444;">Invalid YouTube URL. Admin se check karwao.</p>`;
+    }
+    
+    modal.style.display = 'flex';
+  });
+};
+
+window.closeDownloadGuideModal = function() {
+  const modal = document.getElementById('download-guide-modal');
+  modal.style.display = 'none';
+  
+  // Video stop karne ke liye iframe remove kar do
+  const container = document.getElementById('youtube-video-container');
+  container.innerHTML = '';
+};
 // WhatsApp Report Button Function
 window.openWhatsAppReport = function() {
   const username = document.getElementById('report-username').value.trim() || currentUsername || "User";
