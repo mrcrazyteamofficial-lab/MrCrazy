@@ -1,16 +1,15 @@
-</html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Crazy DevStudio</title>
+  <title>Crazy DevStudio | Muhammad Naeem</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue, set, update, increment } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCSawO5etjRhGMhvxgWrlgDp05CpBa45Ak",
@@ -19,7 +18,7 @@
       projectId: "hafizsweets-b651d",
       storageBucket: "hafizsweets-b651d.firebasestorage.app",
       messagingSenderId: "133545092114",
-      appId: "1:133545092114:web:xxxxxxxxxxxxxxxxxxxxxx"
+      appId: "1:133545092114:web:600c06085f67b5e6833c09"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -30,24 +29,20 @@
     window.push = push;
     window.onValue = onValue;
     window.set = set;
-    window.update = update;
-    window.increment = increment;
+
+    window.dispatchEvent(new Event('firebase-ready'));
   </script>
 
   <style>
     :root {
-      --bg: #f9fbfd;
+      --bg: #f3f4f6;
       --card: #ffffff;
-      --border: #e2e8f0;
-      --text: #111827;
-      --muted: #64748b;
+      --text: #1f2937;
+      --muted: #6b7280;
       --primary: #6d28d9;
-      --primary-dark: #5b21b6;
-      --gold: #d97706;
-      --radius: 16px;
-      --shadow-sm: 0 6px 20px rgba(109,40,217,0.08);
-      --shadow-md: 0 12px 40px rgba(109,40,217,0.15);
-      --glow: 0 0 25px rgba(109,40,217,0.2);
+      --radius: 20px;
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+      --shadow-md: 0 10px 25px rgba(109,40,217,0.12);
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -56,1915 +51,784 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      line-height: 1.5;
+      overflow-x: hidden;
     }
 
-    /* ==================== TOP MARQUEE ==================== */
-    .top-marquee {
-      background: linear-gradient(90deg, #6d28d9, #a78bfa, #6d28d9);
-      color: white;
-      padding: 12px 0;
-      overflow: hidden;
-      white-space: nowrap;
-      box-shadow: var(--shadow-md);
-      font-weight: 700;
-      font-size: 1.05rem;
-      letter-spacing: 1.5px;
-    }
-    .marquee-content {
-      display: inline-block;
-      padding-left: 100%;
-      animation: marquee 28s linear infinite;
-    }
-    @keyframes marquee {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
-    /* ==================== ANIMATED ANNOUNCEMENTS TICKER ==================== */
-    .announcements-ticker {
-      background: linear-gradient(90deg, #d97706, #f59e0b, #d97706);
-      color: white;
-      padding: 14px 0;
-      overflow: hidden;
-      white-space: nowrap;
-      box-shadow: var(--shadow-md);
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-    }
-    .ann-ticker-content {
-      display: inline-block;
-      padding-left: 100%;
-      animation: ticker 35s linear infinite;
-    }
-    @keyframes ticker {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
-
-    header {
-      text-align: center;
-      padding: 2rem 1rem 1.6rem;
-    }
-
-    .logo-circle {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 0.5rem;
-      border-radius: 50%;
-      overflow: hidden;
-      box-shadow: var(--shadow-md), var(--glow);
-      background: linear-gradient(135deg, var(--primary), #a78bfa);
-    }
-    .logo-circle img { width:100%; height:100%; object-fit:cover; }
-
-    .brand-container {
-      background: var(--card);
-      padding: 1rem 1.4rem;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      max-width: 88%;
-      margin: 0 auto 1rem;
-      text-align: center;
-      border: 1px solid var(--border);
-    }
-
-    .brand-main {
-      font-family: 'Poppins';
-      font-size: 1.65rem;
-      font-weight: 800;
-      background: linear-gradient(to right, var(--primary), #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 0.2rem;
-    }
-
-    .brand-sub {
-      font-size: 0.98rem;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    /* ==================== LANDSCAPES BANNER (Perfect Fit) ==================== */
-    .banner-frame {
-      max-width: 50%;
-      height: 10px;
-      margin: 1rem auto;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-md), var(--glow);
-      border: 5px solid #f8fafc;
-      background: linear-gradient(135deg, #f0f4ff, #e8ecff);
-    }
-    .banner-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center;
-      background: #f8fafc;
-    }
-
-    .main-buttons {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.95rem;
-      padding: 0 1.1rem 2rem;
-    }
-.whatsapp-report-btn {
-  background: linear-gradient(135deg, #25D366, #20C65A);
-  color: white;
-  border: none;
-  padding: 14px 32px;
-  border-radius: 50px;
-  font-size: 1.08rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.whatsapp-report-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.45);
-}
-    .main-btn {
-      width: 50%;
-      max-width: 255px;
-      padding: 0.9rem 1.6rem;
-      font-size: 1.07rem;
-      font-weight: 700;
-      border-radius: 60px;
-      cursor: pointer;
-      transition: all 0.35s ease;
-      border: none;
-      box-shadow: var(--shadow-sm);
-      color: white;
-    }
-
-    .my-apps-btn { background: linear-gradient(135deg, var(--primary), #a78bfa); }
-    .updates-btn { background: linear-gradient(135deg, var(--gold), #b45309); }
-    .report-btn { background: linear-gradient(135deg, #4b5563, #374151); }
-    .chat-btn { background: linear-gradient(135deg, #10b981, #34d399); }
-
-    .main-btn:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: var(--shadow-md), var(--glow);
-    }
-
-    #apps-page, #detail-page, #report-page, #updates-page {
-      display: none;
-      padding: 1.2rem;
-    }
-
-    .back-btn {
-      background: var(--card);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 0.8rem 1.6rem;
-      border-radius: 50px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-bottom: 1.8rem;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
-    @media (max-width: 480px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-
-    .app-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.4s ease;
-      border: 1px solid rgba(94,53,177,0.08);
-    }
-    .app-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-md), var(--glow);
-      border-color: var(--primary);
-    }
-
-    .app-icon {
-      height: 120px;
-      background: linear-gradient(135deg, #f0f4ff, #e8ecff);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .app-icon img {
-      max-width: 85%;
-      max-height: 85%;
-      object-fit: contain;
-      border-radius: 12px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .app-name {
-      padding: 0.8rem 0.6rem;
-      text-align: center;
-      font-weight: 600;
-      font-size: 0.95rem;
-      line-height: 1.3;
-    }
-    .download-now {
-      display: block;
-      width: 90%;
-      margin: 0.6rem auto 1rem;
-      padding: 0.8rem;
-      background: linear-gradient(135deg, var(--gold), #b45309);
-      color: white;
-      font-weight: 700;
-      text-align: center;
-      border-radius: 999px;
-      text-decoration: none;
-      font-size: 0.95rem;
-      box-shadow: var(--shadow-sm);
-    }
-    
-    .download-now:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(217, 119, 6, 0.4);
-    }
-    .app-downloads {
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 0.6rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    .live-downloads {
-      text-align: center;
-      margin: 1.5rem 0;
-      padding: 1rem 1.5rem;
-      background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
-      border-radius: var(--radius);
-      border: 2px solid #10b981;
-      box-shadow: var(--shadow-sm);
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #052e16;
-    }
-    .live-downloads strong {
-      font-size: 1.4rem;
-      color: #10b981;
-    }
-
-    #detail-page {
-      display: none;
-      padding: 2rem 1.5rem;
-      max-width: 680px;
-      margin: 0 auto;
-    }
-
-    .detail-icon {
-      width: 180px;
+    .header-gradient {
+      background: linear-gradient(135deg, #6d28d9, #4f46e5);
       height: 180px;
-      margin: 0 auto 1.8rem;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-md), var(--glow);
+      position: absolute;
+      top: 0; width: 100%;
+      z-index: -1;
+      border-radius: 0 0 40px 40px;
     }
 
-    .detail-name {
-      font-family: 'Poppins';
-      font-size: 2.4rem;
-      text-align: center;
-      margin-bottom: 0.8rem;
-    }
-
-    .detail-meta {
-      text-align: center;
-      color: var(--muted);
-      font-size: 1.05rem;
-      line-height: 1.7;
-      margin-bottom: 2rem;
-    }
-
-    .detail-desc {
+    .brand-card {
       background: var(--card);
-      padding: 1.8rem;
-      border-radius: var(--radius);
-      line-height: 1.75;
-      margin-bottom: 2rem;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .detail-download {
-      display: block;
-      width: 100%;
-      max-width: 380px;
-      margin: 0 auto 1rem;
-      padding: 1.2rem;
-      background: linear-gradient(135deg, var(--gold), #b45309);
-      color: white;
-      font-size: 1.3rem;
-      font-weight: 700;
-      text-align: center;
-      border-radius: 999px;
-      text-decoration: none;
-      box-shadow: var(--shadow-md);
-      border: none;
-      cursor: pointer;
-    }
-    .detail-download:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(217,119,6,0.35);
-    }
-
-    .detail-report {
-      display: block;
-      width: 100%;
-      max-width: 380px;
-      margin: 0 auto 2rem;
-      padding: 0.95rem;
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
-      color: white;
-      font-size: 1.05rem;
-      font-weight: 600;
-      text-align: center;
-      border-radius: 999px;
-      text-decoration: none;
-      box-shadow: var(--shadow-sm);
-      border: none;
-      cursor: pointer;
-    }
-    .detail-report:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(239,68,68,0.4);
-    }
-
-    .upload-date {
-      text-align: center;
-      color: var(--muted);
-      font-size: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .feedback-section {
-      background: var(--card);
-      padding: 2rem;
+      margin: 60px 20px 20px;
+      padding: 25px;
       border-radius: var(--radius);
       box-shadow: var(--shadow-md);
-      margin: 2.5rem 0;
-      border: 1px solid rgba(94,53,177,0.1);
-    }
-
-    .feedback-section h3 {
       text-align: center;
-      margin-bottom: 1.5rem;
-      color: var(--primary);
-      font-size: 1.6rem;
+      animation: fadeIn 0.5s ease;
     }
 
-    .feedback-input, textarea {
-      width: 100%;
-      padding: 1.1rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 1.3rem;
-      font-size: 1rem;
-      background: #f9fafb;
-    }
-
-    .submit-feedback {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 1.1rem 2.2rem;
-      border-radius: 60px;
-      cursor: pointer;
-      font-weight: 600;
-      box-shadow: var(--shadow-sm);
-      width: 100%;
-      max-width: 300px;
-      display: block;
-      margin: 1.5rem auto;
-    }
-    .submit-feedback:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md), var(--glow);
-    }
-
-    .feedback-list {
-      margin-top: 2rem;
-    }
-
-    .feedback-item {
-      background: #f9fafb;
-      padding: 1.2rem;
-      border-radius: var(--radius);
-      margin-bottom: 1rem;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .form-group { margin-bottom: 1.5rem; }
-    label { font-weight: 600; margin-bottom: 0.6rem; display: block; }
-/* ==================== FIXED LANDSCAPE BANNER - TEXT WRAP + VERTICAL SCROLL ==================== */
-.landscape-banner {
-  max-width: 92%;
-  margin: 1rem auto;
-  height: 170px;                    /* Box height - tum adjust kar sakte ho */
-  background: linear-gradient(135deg, #6d28d9, #a78bfa, #7c3aed);
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow-md), var(--glow);
-  border: 5px solid #f8fafc;
-  position: relative;
-}
-
-.banner-content {
-  color: white;
-  font-size: 1.18rem;
-  font-weight: 700;
-  line-height: 1.6;
-  padding: 20px 25px;
-  text-align: center;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  height: 100%;
-  overflow-y: auto;                 /* Vertical scroll enable */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  word-wrap: break-word;            /* Text wrap fix */
-  white-space: pre-wrap;            /* New lines preserve + wrap */
-}
-
-.banner-content::-webkit-scrollbar {
-  display: none;
-}
-
-/* Chhota text center mein vertically align */
-.banner-content.short {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-    input, textarea, select {
-      width: 100%;
-      padding: 1rem 1.3rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 1rem;
-      background: var(--card);
-    }
-
-    .whatsapp-prefix {
-      display: flex;
-      align-items: center;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: var(--card);
-    }
-    .prefix {
-      background: #f3f4f6;
-      padding: 1rem 1.2rem;
-      color: var(--muted);
-      font-weight: 500;
-      border-right: 1px solid var(--border);
-    }
-    .whatsapp-input {
-      flex: 1;
-      border: none;
-      outline: none;
-      padding: 1rem;
-      font-size: 1rem;
-      background: transparent;
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 1.1rem;
-      background: var(--primary);
-      color: white;
-      font-weight: 600;
-      border: none;
-      border-radius: 999px;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-    }
-    .submit-btn:hover {
-      background: #4527a0;
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-    }
-@keyframes heartBeat {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.28); }
-}
-
-.brand-container {
-  background: var(--card);
-  padding: 1.6rem 1.8rem;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  max-width: 88%;
-  margin: 0 auto 1.2rem;
-  border: 1px solid var(--border);
-  text-align: center;
-}
-    .msg {
-      padding: 1.2rem;
-      border-radius: var(--radius);
-      margin: 1.2rem 0;
-      text-align: center;
-    }
-    .success { background: rgba(16,185,129,0.2); color: #34d399; }
-    .error { background: rgba(239,68,68,0.2); color: #f87171; }
-
-    .complaint-id-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.8rem;
-      text-align: center;
-      margin: 2.5rem 0;
-      box-shadow: var(--shadow-md);
-    }
-    .complaint-id {
-      font-size: 2.4rem;
-      font-weight: 800;
-      color: var(--primary);
-      margin: 1.2rem 0;
-    }
-    .copy-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 0.9rem 1.8rem;
-      border-radius: 999px;
-      cursor: pointer;
-    }
-
-    /* ==================== GLOBAL USERNAME MODAL ==================== */
-    #username-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.75);
-      z-index: 999999;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .username-box {
-      background: white;
-      max-width: 380px;
-      width: 100%;
-      border-radius: 24px;
-      padding: 2.5rem 2rem;
-      text-align: center;
-      box-shadow: var(--shadow-md);
-    }
-    .username-box h3 {
-      color: var(--primary);
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-    }
-
-    /* ==================== LIVE CHAT MODAL ==================== */
-    #chat-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.65);
-      z-index: 99999;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .chat-box {
-      background: white;
-      width: 100%;
-      max-width: 420px;
-      border-radius: 24px;
-      box-shadow: 0 15px 50px rgba(0,0,0,0.25);
-      overflow: hidden;
-    }
-    .chat-header {
-      background: linear-gradient(135deg, var(--primary), #a78bfa);
-      color: white;
-      padding: 1.2rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-weight: 700;
-      position: relative;
-    }
-    .admin-header-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .admin-avatar {
-      width: 38px;
-      height: 38px;
+    .logo-img {
+      width: 90px; height: 90px;
       border-radius: 50%;
-      overflow: hidden;
-      border: 2px solid rgba(255,255,255,0.6);
-    }
-    .admin-avatar img {
-      width: 100%;
-      height: 100%;
+      margin: -70px auto 15px;
+      border: 4px solid white;
+      box-shadow: var(--shadow-md);
       object-fit: cover;
     }
 
-    .chat-body {
-      height: 420px;
-      overflow-y: auto;
-      padding: 1.2rem;
-      background: #f8fafc;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .marquee-box {
+      background: #111827;
+      color: #fbbf24;
+      padding: 10px 0;
+      font-weight: 600;
+      font-size: 0.85rem;
     }
-    .message {
-      max-width: 82%;
-      padding: 13px 18px;
+
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center; justify-content: center;
+      z-index: 10000;
+      backdrop-filter: blur(5px);
+    }
+
+    .popup-card {
+      background: white;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 30px;
+      overflow: hidden;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .popup-header {
+      background: linear-gradient(135deg, #6d28d9, #4f46e5);
+      padding: 15px;
+      position: relative;
+      text-align: center;
+    }
+
+    .highlight-tag {
+      background: #fbbf24;
+      color: #000;
+      padding: 4px 12px;
       border-radius: 20px;
-      font-size: 1rem;
-      line-height: 1.4;
+      font-size: 0.7rem;
+      font-weight: 800;
+    }
+
+    .close-popup {
+      position: absolute;
+      right: 15px; top: 12px;
+      background: rgba(255,255,255,0.2);
+      border: none; color: white;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      font-size: 20px; font-weight: bold;
+    }
+
+    .popup-body {
+      padding: 30px 25px;
+      text-align: center;
+    }
+
+    .popup-body h2 {
+      font-family: 'Poppins';
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: #1f2937;
+    }
+
+    .popup-body p {
+      color: #6b7280;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .offer-timer-box {
+      background: #111827;
+      color: #fbbf24;
+      padding: 15px;
+      border-radius: 20px;
+      margin-bottom: 25px;
+    }
+
+    .timer-display {
+      font-family: 'Poppins';
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .popup-btn {
+      width: 100%;
+      padding: 15px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-weight: 700;
+      box-shadow: 0 10px 20px rgba(109,40,217,0.3);
+    }
+
+    .landscape-banner {
+      width: calc(100% - 40px); 
+      margin: 15px auto;
+      min-height: 120px;
+      background: #1e1b4b;
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      color: white; padding: 20px; text-align: center;
+      box-shadow: var(--shadow-md);
+      border: 3px solid white;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .status-card {
+      background: white;
+      padding: 18px;
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 15px;
+      border-left: 6px solid #d1d5db;
+      position: relative;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .status-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 5px 12px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .status-pending { border-left-color: #f59e0b; }
+    .status-pending .status-badge { background: #fef3c7; color: #d97706; }
+    .status-approve { border-left-color: #10b981; }
+    .status-approve .status-badge { background: #dcfce7; color: #15803d; }
+    .status-reject { border-left-color: #ef4444; }
+    .status-reject .status-badge { background: #fee2e2; color: #b91c1c; }
+
+    .admin-reply-box {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px dashed #cbd5e1;
+    }
+
+    .admin-reply-box strong { font-size: 0.8rem; color: var(--primary); display: block; margin-bottom: 4px; }
+    .admin-reply-box p { font-size: 0.85rem; color: #475569; margin: 0; line-height: 1.4; }
+
+    .report-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 10px;
+      display: block;
+    }
+
+    .action-btn {
+      padding: 20px 10px;
+      border-radius: 18px;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: var(--shadow-sm);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      transition: transform 0.2s;
       position: relative;
     }
+    .action-btn:active { transform: scale(0.95); }
+    .action-btn.blink { animation: blink 1.2s infinite; }
 
-/* Agar text chhota ho to center mein ruk jaye */
-.banner-content.short {
-  animation: none;
-  white-space: normal;
-  min-width: auto;
-}
-    .user-message {
-      align-self: flex-end;
-      background: var(--primary);
-      color: white;
-      border-radius: 20px 20px 4px 20px;
+    .page { display: none; padding: 20px; animation: fadeIn 0.4s ease-out; }
+    .active-page { display: block; }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
     }
-    .admin-message {
-      align-self: flex-start;
-      background: #e2e8f0;
-      color: #111827;
-      border-radius: 20px 20px 20px 4px;
-    }
-    .sender-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-    .chat-footer {
-      padding: 1rem;
+    .app-item {
       background: white;
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 8px;
-    }
-    .chat-input {
-      flex: 1;
-      padding: 14px 18px;
-      border: 1px solid var(--border);
-      border-radius: 9999px;
-      font-size: 1.05rem;
-      outline: none;
-    }
-    .send-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      cursor: pointer;
-    }
-    .close-chat {
-      background: none;
-      border: none;
-      font-size: 1.8rem;
-      color: white;
-      cursor: pointer;
-    }
-
-    /* FEEDBACK PANEL */
-    #chat-feedback-panel {
-      display: none;
-      padding: 1.5rem;
-      background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+      padding: 15px;
+      border-radius: 18px;
       text-align: center;
-      border-top: 1px solid var(--border);
-    }
-    #chat-feedback-panel p {
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #052e16;
-    }
-    .emoji-list {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      font-size: 2.8rem;
-      margin-bottom: 1rem;
-    }
-    .emoji-list span {
+      box-shadow: var(--shadow-sm);
       cursor: pointer;
-      transition: transform 0.2s;
     }
-    .emoji-list span:hover {
-      transform: scale(1.3);
-    }
+    .app-item img { width: 70px; height: 70px; border-radius: 15px; margin-bottom: 10px; object-fit: cover; }
 
-    /* Floating Contact */
-    .floating-contact {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 58px;
-      height: 58px;
-      background: linear-gradient(135deg, var(--primary), #a78bfa);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      box-shadow: var(--shadow-md), var(--glow);
-      cursor: pointer;
-      z-index: 9999;
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    #contact-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      z-index: 100000;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .contact-box {
+    .feedback-card {
       background: white;
-      max-width: 380px;
-      width: 100%;
-      border-radius: var(--radius);
-      padding: 2rem;
-      text-align: center;
+      padding: 18px;
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 15px;
+    }
+
+    .main-contact-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);
+        border: none;
+        padding: 18px 25px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 12px 24px rgba(67, 56, 202, 0.3);
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .main-contact-btn:active { transform: scale(0.96); }
+    .btn-content { display: flex; align-items: center; gap: 15px; }
+    .btn-icon-box {
+        width: 50px; height: 50px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 16px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.8rem;
+    }
+
+    .chat-pulse { animation: pulse 2s infinite; display: inline-block; }
+    @keyframes pulse { 
+        0% { transform: scale(1); } 
+        50% { transform: scale(1.1); } 
+        100% { transform: scale(1); } 
+    }
+
+    .btn-text { text-align: left; color: white; }
+    .btn-title { display: block; font-size: 1.15rem; font-weight: 800; letter-spacing: 0.5px; }
+    .btn-subtitle { font-size: 0.7rem; font-weight: 600; opacity: 0.8; text-transform: uppercase; }
+    .btn-arrow { color: rgba(255,255,255,0.5); font-size: 1.2rem; }
+
+    .chat-screen {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: #f8fafc; z-index: 20000; display: none; flex-direction: column;
+    }
+
+    .chat-header {
+        background: #1e1b4b; padding: 20px; color: white;
+        display: flex; align-items: center; justify-content: space-between;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .header-info { display: flex; align-items: center; gap: 12px; }
+    .avatar-wrapper { position: relative; }
+    .admin-avatar {
+        width: 45px; height: 45px;
+        background: linear-gradient(135deg, #6d28d9, #4f46e5);
+        border-radius: 14px; display: flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 1.3rem;
+    }
+
+    .status-dot {
+        position: absolute; bottom: -2px; right: -2px;
+        width: 12px; height: 12px; background: #10b981;
+        border: 3px solid #1e1b4b; border-radius: 50%;
+    }
+
+    .team-name { display: block; font-size: 1rem; letter-spacing: 0.5px; }
+    .member-name { font-size: 0.75rem; color: #a5b4fc; }
+
+    .close-chat-btn { background: none; border: none; color: white; font-size: 2rem; cursor: pointer; }
+    .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+
+    .msg-bubble {
+        max-width: 80%; padding: 12px 16px; border-radius: 20px;
+        font-size: 0.95rem; line-height: 1.4; position: relative;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+
+    .admin-msg { background: white; align-self: flex-start; border-bottom-left-radius: 4px; color: #1f2937; }
+    .user-msg { background: #4338ca; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .msg-time { font-size: 0.65rem; display: block; margin-top: 5px; opacity: 0.6; text-align: right; }
+
+    .faq-container { padding: 25px 20px; background: white; border-radius: 30px 30px 0 0; border-top: 1px solid #f1f5f9; }
+    .faq-label { font-size: 0.75rem; font-weight: 800; color: #64748b; margin-bottom: 12px; text-align: center; }
+    .faq-item {
+        width: 100%; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0;
+        border-radius: 16px; text-align: left; font-weight: 600; font-size: 0.9rem;
+        margin-bottom: 10px; cursor: pointer;
+    }
+
+    .chat-footer { padding: 15px 20px; background: white; display: flex; align-items: center; gap: 10px; border-top: 1px solid #f1f5f9; }
+    .chat-footer input { flex: 1; border: none; padding: 12px; font-size: 1rem; background: #f1f5f9; border-radius: 15px; outline: none; }
+    .voice-btn, .send-btn { width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.2rem; }
+    .voice-btn { background: #f1f5f9; }
+    .send-btn { background: #4338ca; color: white; }
+
+    .update-card {
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
       box-shadow: var(--shadow-md);
-    }
-
-    .user-pill {
-      background: var(--primary);
-      color: white;
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-top: 8px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      margin-bottom: 15px;
+      border-left: 5px solid #10b981;
     }
   </style>
 </head>
 <body>
 
-  <!-- TOP MARQUEE -->
-  <div class="top-marquee">
-    <div class="marquee-content">
-      MrCrazy Digital Company • DevStudio • Best Apps • 24/7 Support • Crazy DevStudio • 
+  <div id="maintenance-screen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:99999; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px;">
+    <div style="background:#fee2e2; color:#ef4444; padding:10px 20px; border-radius:30px; font-weight:800; font-size:0.8rem; margin-bottom:20px; animation: blink 1s infinite;">
+        ⚠️ SYSTEM UNDER PROCESSING
+    </div>
+    <img src="https://i.ibb.co/q3qCckcD/Pics-Art-05-22-10-08-32.jpg" style="width:100px; height:100px; border-radius:20px; margin-bottom:20px;">
+    <h1 style="font-family:'Poppins'; font-size:1.5rem; color:#111827;">App is Updating...</h1>
+    <p id="maintenance-msg" style="color:#6b7280; margin:10px 0 30px; max-width:300px; line-height:1.5;">Hum app ko behtar bana rahe hain. Kuch hi der mein wapis aayein.</p>
+    <div style="background:#111827; color:#fbbf24; padding:20px; border-radius:24px; min-width:200px;">
+        <p style="font-size:0.7rem; margin-bottom:5px; text-transform:uppercase; letter-spacing:1px;">Expected Back In:</p>
+        <div id="m-timer" style="font-family:'Poppins'; font-size:2rem; font-weight:800;">00:00:00</div>
     </div>
   </div>
 
-<header>
-  <div class="logo-circle">
-    <img id="logo-img" src="https://ibb.co/4RqMPZBc" alt="Crazy DevStudio">
-  </div>
-  
-  <!-- Improved Beautiful Header -->
-  <div class="brand-container">
-    <!-- Top Small Company Name -->
-    <div style="font-size: 0.95rem; color: var(--muted); font-weight: 500; letter-spacing: 1.2px; margin-bottom: 6px;">
-      MrCrazy Digital Company
-    </div>
-    
-    <!-- Welcome Text (Normal Size) -->
-    <div style="font-family: 'Poppins'; font-size: 1.35rem; font-weight: 600; color: #4f46e5; margin-bottom: 4px;">
-      Welcome,
-    </div>
-    
-    <!-- User Name (Bara aur Bold) -->
-    <div id="user-name-display" style="font-family: 'Poppins'; font-size: 1.95rem; font-weight: 800; 
-         background: linear-gradient(to right, #6d28d9, #a78bfa); 
-         -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-         line-height: 1.1; margin-bottom: 8px;">
-      <!-- User name yahan aayega -->
-    </div>
-    
-    <!-- Heart + Join Date -->
-    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 1.02rem; color: var(--muted);">
-      <span style="font-size: 1.45rem; animation: heartBeat 1.6s ease-in-out infinite;">❤️</span>
-      <span>Joined: <strong id="join-date"></strong></span>
-    </div>
-    
-    <!-- Username Pill -->
-    <div id="global-username-pill" class="user-pill" style="display:none; margin-top: 14px;">
-      👤 <span id="display-username"></span>
-    </div>
-  </div>
-</header>
-
-<!-- EMERGENCY HELP BUTTON (Announcements ke jagah) -->
-<div style="text-align:center; margin:1.2rem 0 1.8rem;">
-  <button onclick="openEmergencyHelpModal()" 
-          style="background: linear-gradient(135deg, #ef4444, #f87171); 
-                 color: white; 
-                 border: none; 
-                 padding: 16px 36px; 
-                 border-radius: 50px; 
-                 font-size: 1.12rem; 
-                 font-weight: 700; 
-                 box-shadow: 0 8px 25px rgba(239,68,68,0.35);
-                 display: inline-flex; 
-                 align-items: center; 
-                 gap: 10px;">
-    <span style="font-size:1.4rem;">🚨</span> 
-    ​کیا آپ کو مدد کی ضرورت ہے؟
-  </button>
-</div>
-
-
-
-
-  <!-- LANDSCAPES BANNER -->
-  <div class="banner-frame">
-    <img id="banner-img" src="https://ibb.co/4RqMPZBc" alt="Banner">
-  </div>
-<!-- ==================== NEW VERTICAL SCROLL BANNER ==================== -->
-<div id="landscape-banner" class="landscape-banner">
-  <div id="banner-content" class="banner-content"></div>
-</div>
-  <div class="main-buttons" id="home-buttons">
-    <!-- AVAILABLE SERVICES BUTTON -->
-<div style="text-align:center; margin:1.2rem 0 1.8rem;">
-  <button onclick="showServicesModal()" 
-          style="background:linear-gradient(135deg,#8b5cf6,#a78bfa); color:white; border:none; padding:15px 34px; border-radius:50px; font-size:1.1rem; font-weight:700; box-shadow:0 8px 25px rgba(139,92,246,0.3);">
-    📦 Available Services
-  </button>
-</div>
-    <button class="main-btn my-apps-btn" onclick="showPage('apps')">My Apps</button>
-    <button class="main-btn updates-btn" onclick="showPage('updates')">Updates</button>
-    <button class="main-btn report-btn" onclick="showPage('report')">Report Problem</button>
-    <button class="main-btn chat-btn" onclick="openChatModal()">ہم سے رابطہ کریں</button>
-  </div>
-
-  <!-- APPS PAGE -->
-  <div id="apps-page">
-    
-    <!-- APPS DOWNLOAD TARIQA BUTTON + MODAL -->
-<div style="text-align: center; margin: 1rem 0 1.5rem;">
-  <button onclick="openDownloadGuideModal()" 
-          style="background: linear-gradient(135deg, #10b981, #34d399); 
-                 color: white; 
-                 border: none; 
-                 padding: 14px 32px; 
-                 border-radius: 50px; 
-                 font-size: 1.08rem; 
-                 font-weight: 700; 
-                 cursor: pointer; 
-                 box-shadow: 0 6px 20px rgba(16,185,129,0.3);">
-    📹 Apps Download Karne Ka Tariqa
-  </button>
-</div>
-
-<!-- DOWNLOAD GUIDE MODAL -->
-<div id="download-guide-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; align-items: center; justify-content: center; padding: 1rem;">
-  <div style="background: white; max-width: 520px; width: 100%; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
-    
-    <div style="background: linear-gradient(135deg, #10b981, #34d399); color: white; padding: 1.2rem; text-align: center; font-weight: 700; font-size: 1.2rem;">
-      📹 Apps Download Karne Ka Tariqa
-    </div>
-    
-    <div style="padding: 1.5rem;">
-      <div id="youtube-video-container" style="position: relative; padding-top: 56.25%; height: 0; overflow: hidden; border-radius: 12px;">
-        <!-- YouTube iframe yahan dynamically add hoga -->
+  <div id="special-popup" class="popup-overlay">
+    <div class="popup-card">
+      <div class="popup-header">
+        <span class="highlight-tag">SPECIAL ANNOUNCEMENT</span>
+        <button class="close-popup" onclick="closeSpecialPopup()">×</button>
+      </div>
+      <div class="popup-body">
+        <h2 id="popup-welcome">Hello, User!</h2>
+        <p id="popup-message">Loading special message...</p>
+        <div class="offer-timer-box">
+          <p style="font-size: 0.75rem; margin-bottom: 5px; opacity: 0.9;">OFFER EXPIRES IN:</p>
+          <div id="countdown-timer" class="timer-display">00:00:00</div>
+        </div>
+        <button class="popup-btn" onclick="closeSpecialPopup()">GET STARTED</button>
       </div>
     </div>
-    
-    <div style="padding: 1rem 1.5rem 1.5rem; text-align: center;">
-      <button onclick="closeDownloadGuideModal()" 
-              style="background: #ef4444; color: white; border: none; padding: 12px 28px; border-radius: 50px; font-weight: 600; cursor: pointer;">
-        Band Karo
+  </div>
+
+  <div class="header-gradient"></div>
+
+  <div class="brand-card">
+    <img id="main-logo" src="https://i.ibb.co/q3qCckcD/Pics-Art-05-22-10-08-32.jpg" class="logo-img" alt="Logo">
+    <h3 style="color: var(--muted); font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase;">MrCrazy Digital Company</h3>
+    <h1 id="welcome-text" style="font-family: 'Poppins'; font-size: 1.6rem; margin: 5px 0;">Welcome, User</h1>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 0.85rem;">
+       <span style="color: #ef4444; animation: heartBeat 1.5s infinite;">❤️</span> 
+       Member Since: <span id="member-date" style="font-weight: 700; color: var(--text);">...</span>
+    </div>
+  </div>
+
+  <div class="marquee-box">
+    <marquee scrollamount="5">🚀 MrCrazy DevStudio • Premium Android Apps • 24/7 Live Support</marquee>
+  </div>
+
+  <div class="landscape-banner">
+    <div id="banner-text" style="font-weight: 700; font-size: 1.1rem; line-height: 1.4;">
+      Loading latest announcements...
+    </div>
+  </div>
+
+  <div id="home-page" class="page active-page">
+    <div class="btn-grid">
+      <button class="action-btn" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);" onclick="navigateTo('apps')">
+        <span style="font-size: 1.8rem;">📥</span> Apps Store
+      </button>
+      <button class="action-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="navigateTo('updates')">
+        <span style="font-size: 1.8rem;">🔔</span> Updates
+      </button>
+      <button class="action-btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="navigateTo('feedback')">
+        <span style="font-size: 1.8rem;">⭐</span> Feedback
+      </button>
+      <button class="action-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);" onclick="navigateTo('report')">
+        <span style="font-size: 1.8rem;">⚠️</span> Report
       </button>
     </div>
-  </div>
-</div>
-    <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
-    <div class="grid" id="apps-grid"></div>
-  </div>
-
-  <!-- DETAIL PAGE -->
-  <div id="detail-page">
-    
-    <button class="back-btn" onclick="showPage('apps')">← Back to Apps</button>
-    <div class="detail-icon"><img id="detail-icon" src="" alt="App Icon"></div>
-    <h1 class="detail-name" id="detail-name"></h1>
-    <div class="detail-meta">
-      Size: <strong id="detail-size"></strong><br>
-      Developer: <strong>MRCRAZYTEAM</strong>
-    </div>
-
-    <div class="live-downloads">
-      📥 <strong id="detail-downloads-count">0</strong> Total Downloads 
-      <span style="font-size:0.95rem; color:#10b981; margin-left:8px;">(Real-time)</span>
-    </div>
-
-    <div class="detail-desc" id="detail-desc"></div>
-    
-    <button id="detail-download" class="detail-download" onclick="handleDownload()">
-      Download Now
-    </button>
-
-    <button id="detail-report" class="detail-report" onclick="reportFromDetail()">
-      Report Now
-    </button>
-
-    <div class="upload-date" id="upload-date"></div>
-    <div class="feedback-section">
-      <h3 style="text-align:center; margin-bottom:1.5rem; color:var(--primary);">Feedback</h3>
-      <input type="email" id="feedback-email" class="feedback-input" placeholder="Your Gmail/Email (optional)">
-      <textarea class="feedback-input" id="feedback-text" rows="4" placeholder="Your feedback..."></textarea>
-      <button class="submit-feedback" onclick="submitFeedback()">Submit Feedback</button>
-      <div class="feedback-list" id="feedback-list"></div>
+    <div style="padding: 0 15px;">
+        <button onclick="openLiveChat()" class="main-contact-btn">
+            <div class="btn-content">
+                <div class="btn-icon-box"><span class="chat-pulse">💬</span></div>
+                <div class="btn-text">
+                    <span class="btn-title">Contact Support</span>
+                    <span class="btn-subtitle">ONLINE 24/7 • LIVE CHAT TEAM</span>
+                </div>
+            </div>
+            <div class="btn-arrow">➜</div>
+        </button>
     </div>
   </div>
-<!-- SERVICES MODAL + NETFLIX FLOW -->
-<div id="services-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; align-items:center; justify-content:center; padding:15px;">
-  <div style="background:white; max-width:520px; width:100%; border-radius:20px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4);">
-    <div style="padding:1.2rem; background:linear-gradient(135deg,#8b5cf6,#a78bfa); color:white; text-align:center; font-weight:700; font-size:1.25rem;">
-      Available Services
-    </div>
-    <div style="padding:1.8rem; display:grid; grid-template-columns:repeat(3,1fr); gap:12px;">
-      <div onclick="showNetflixModal()" style="background:#f8fafc; border:2px solid #8b5cf6; border-radius:16px; padding:1.2rem; text-align:center; cursor:pointer;">
-        <div style="font-size:2.5rem;margin-bottom:10px;">📺</div><strong>Netflix</strong>
-      </div>
-      <div onclick="showUCModal()" style="background:#f8fafc; border:2px solid #10b981; border-radius:16px; padding:1.2rem; text-align:center; cursor:pointer;">
-        <div style="font-size:2.5rem;margin-bottom:10px;">🎮</div><strong>Carding UC</strong>
-      </div>
-      <div onclick="showTikTokModal()" style="background:#f8fafc; border:2px solid #ec4899; border-radius:16px; padding:1.2rem; text-align:center; cursor:pointer;">
-        <div style="font-size:2.5rem;margin-bottom:10px;">🎵</div><strong>TikTok</strong>
-      </div>
-    </div>
-    <div style="text-align:center;padding:1rem;"><button onclick="closeServicesModal()" style="background:#ef4444;color:white;border:none;padding:12px 32px;border-radius:50px;">Close</button></div>
-  </div>
-</div>
 
-<!-- NETFLIX MODAL -->
-<div id="netflix-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100000; align-items:center; justify-content:center; padding:15px;">
-  <div style="background:white; max-width:460px; width:100%; border-radius:20px; padding:2rem; text-align:center;">
-    <h2 style="color:#8b5cf6;">Netflix Premium</h2>
-    <h3 id="netflix-price-show" style="color:#10b981; font-size:1.5rem; margin:1rem 0;"></h3>
-    <p id="netflix-desc-show" style="line-height:1.6;"></p>
-    <button onclick="showPaymentModal()" style="margin-top:2rem; background:linear-gradient(135deg,#10b981,#34d399); color:white; border:none; padding:16px 40px; border-radius:50px; font-size:1.15rem; font-weight:700; width:100%;">Buy Now</button>
-    <button onclick="closeNetflixModal()" style="margin-top:1rem; background:#64748b; color:white; border:none; padding:12px 32px; border-radius:50px; width:100%;">Cancel</button>
-  </div>
-</div>
-
-<!-- PAYMENT MODAL -->
-<div id="payment-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:100001; align-items:center; justify-content:center; padding:15px;">
-  <div style="background:white; max-width:460px; width:100%; border-radius:20px; padding:2rem; text-align:center;">
-    <h3 style="color:#10b981;">JazzCash Payment</h3>
-    <p style="margin:1.5rem 0; font-size:1.1rem;">Muhammad Naeem<br><strong>0325-7436319</strong></p>
-    <p id="payment-amount" style="background:#fefce8; padding:1.2rem; border-radius:12px; margin:1.5rem 0;"></p>
-
-    <p style="margin:1.8rem 0 1rem; font-weight:600;">Kya aap ne paise send kar diye hain?</p>
-    <div style="display:flex; gap:12px;">
-      <button onclick="paymentNo()" style="flex:1; background:#ef4444; color:white; border:none; padding:14px; border-radius:50px;">Nahi</button>
-      <button onclick="paymentYes()" style="flex:1; background:#10b981; color:white; border:none; padding:14px; border-radius:50px;">Haan</button>
-    </div>
-
-    <div id="tid-section" style="display:none; margin-top:2rem;">
-      <label style="display:block; margin-bottom:8px; font-weight:600;">TID / Reference Number</label>
-      <input id="tid-input" type="text" placeholder="TID likhein" style="width:100%; padding:14px; border:2px solid #10b981; border-radius:12px;">
-      <button onclick="submitTID()" style="margin-top:1rem; background:#6d28d9; color:white; border:none; padding:13px; border-radius:50px; width:100%;">Submit TID</button>
-    </div>
-
-    <div id="contact-section" style="display:none; margin-top:2rem;">
-      <label style="display:block; margin-bottom:8px; font-weight:600;">WhatsApp / Call Number</label>
-      <input id="contact-input" type="tel" placeholder="+92 3XX XXXXXXX" style="width:100%; padding:14px; border:2px solid #10b981; border-radius:12px;">
-      <button onclick="submitContact()" style="margin-top:1rem; background:#10b981; color:white; border:none; padding:13px; border-radius:50px; width:100%;">Submit Number</button>
-    </div>
-
-    <button onclick="closePaymentModal()" style="margin-top:2rem; background:#64748b; color:white; border:none; padding:12px 32px; border-radius:50px;">Close</button>
-  </div>
-</div>
-<!-- EMERGENCY HELP MODAL -->
-<div id="emergency-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; align-items:center; justify-content:center; padding:15px;">
-  <div style="background:white; max-width:480px; width:100%; border-radius:20px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4);">
-    
-    <!-- Step 1: Welcome Message -->
-    <div id="step-1" class="modal-step">
-      <div style="padding:1.8rem 1.5rem; text-align:center;">
-        <h2 style="color:#ef4444; margin-bottom:1rem;">🚨 Emergency Help</h2>
-        <p style="font-size:1.08rem; line-height:1.7; color:#1f2937;">
-          معزز صارفین! 😊,<br>
-          ہمیں آپ کو ہونے والی تکلیف پر بے حد افسوس ہے اور اس کے لیے ہم تہہ دل سے معذرت خواہ ہیں۔.<br><br>
-          براہِ  کرم، ہمیں درپیش مسئلے کی تفصیلات سے آگاہ کریں تاکہ ہم جلد از جلد اسے حل کر سکیں۔ آپ کا تعاون ہمارے لیے بہت اہمیت رکھتا ہے۔ 🛠️✨
-​آپ کے تعاون کا بہت شکریہ! ❤️.<br>
-          MRCRAZYTEAM OFFICIAL
-        </p>
-      </div>
-      <div style="padding:1rem 1.5rem; display:flex; gap:12px;">
-        <button onclick="closeEmergencyModal()" style="flex:1; background:#64748b; color:white; border:none; padding:14px; border-radius:50px;">Close</button>
-        <button onclick="goToStep(2)" style="flex:1; background:#10b981; color:white; border:none; padding:14px; border-radius:50px;">Next →</button>
-      </div>
-    </div>
-    
-    <!-- Step 2: Number -->
-    <div id="step-2" class="modal-step" style="display:none;">
-      <div style="padding:1.8rem 1.5rem;">
-        <h3 style="text-align:center; color:#1f2937;">Moaziz Customer</h3>
-        <p style="text-align:center; margin:1rem 0;">Please apna WhatsApp ya Call number likhein</p>
-        <input id="help-contact" type="tel" placeholder="+92 3XX XXXXXXX" style="width:100%; padding:14px; border:2px solid #10b981; border-radius:12px; font-size:1.05rem;">
-      </div>
-      <div style="padding:1rem 1.5rem; display:flex; gap:12px;">
-        <button onclick="goToStep(1)" style="flex:1; background:#64748b; color:white; border:none; padding:14px; border-radius:50px;">Back</button>
-        <button onclick="goToStep(3)" style="flex:1; background:#10b981; color:white; border:none; padding:14px; border-radius:50px;">Next →</button>
-      </div>
-    </div>
-    
-    <!-- Step 3: Problem Description -->
-    <div id="step-3" class="modal-step" style="display:none;">
-      <div style="padding:1.8rem 1.5rem;">
-        <h3 style="text-align:center;">اپنا مسئلہ بیان کریں ✨</h3>
-        <textarea id="help-problem" rows="5" placeholder="معزز صارف، براہِ کرم نیچے دیئے گئے آپشنز یا میسج کے ذریعے اپنا مسئلہ بیان کریں تاکہ ہم اسے فوری حل کر سکیں۔ 🛠️ آپ کی پریشانی دور کرنا ہماری ذمہ داری ہے۔ ..." style="width:100%; padding:14px; border:2px solid #10b981; border-radius:12px; margin-top:1rem;"></textarea>
-      </div>
-      <div style="padding:1rem 1.5rem; display:flex; gap:12px;">
-        <button onclick="goToStep(2)" style="flex:1; background:#64748b; color:white; border:none; padding:14px; border-radius:50px;">Back</button>
-        <button onclick="submitHelpRequest()" style="flex:1; background:#ef4444; color:white; border:none; padding:14px; border-radius:50px;">Submit Report</button>
-      </div>
-    </div>
-    
-    <!-- Step 4: Pending / Approved -->
-    <div id="step-4" class="modal-step" style="display:none; padding:2rem; text-align:center;">
-      <div id="status-icon" style="font-size:3rem; margin-bottom:1rem;">⏳</div>
-      <h3 id="status-title">Report Pending</h3>
-      <p id="status-message" style="margin:1.2rem 0; line-height:1.6;"></p>
-      <button onclick="closeEmergencyModal()" style="background:#64748b; color:white; border:none; padding:12px 32px; border-radius:50px;">Close</button>
-    </div>
-    
-  </div>
-</div>
-  <!-- REPORT PAGE -->
-  <div id="report-page">
-    <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
-    <h2 style="text-align:center; margin-bottom:1.8rem; color:var(--primary);">Report a Problem</h2>
-    <div id="report-msg" class="msg" style="display:none;"></div>
-    <div class="form-group">
-      <label>Select App</label>
-      <select id="report-app"><option value="">Select App</option></select>
-    </div>
-    <div class="form-group">
-      <label>Username</label>
-      <input id="report-username" type="text" placeholder="Your username" readonly>
-    </div>
-    <div class="form-group">
-      <label>WhatsApp Number</label>
-      <div class="whatsapp-prefix">
-        <span class="prefix">+92</span>
-        <input id="report-whatsapp" class="whatsapp-input" type="tel" placeholder="3XX XXXXXXX" maxlength="11">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Describe Your Problem * <span style="font-weight:400; color:var(--muted);">(max 1000 characters)</span></label>
-      <textarea id="report-desc" maxlength="1000" placeholder="e.g. App crash ho raha hai..." required></textarea>
-      <div id="char-count" style="text-align:right; font-size:0.85rem; color:var(--muted); margin-top:-8px;">0 / 1000</div>
-    </div>
-    <button class="submit-btn" onclick="submitReport()">Submit Report</button>
-    <div id="complaint-id-box" class="complaint-id-box" style="display:none;">
-      <h3>Your Complaint ID</h3>
-      <div id="complaint-id" class="complaint-id"></div>
-      <button class="copy-btn" onclick="copyComplaintID()">Copy ID</button>
-    </div>
-    <!-- WhatsApp Contact Button in Report Page -->
-<div style="text-align: center; margin: 1.5rem 0;">
-  <button onclick="openWhatsAppReport()" 
-          style="background: linear-gradient(135deg, #25D366, #20C65A); 
-                 color: white; 
-                 border: none; 
-                 padding: 14px 28px; 
-                 border-radius: 50px; 
-                 font-size: 1.05rem; 
-                 font-weight: 700; 
-                 cursor: pointer; 
-                 box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
-                 display: inline-flex; 
-                 align-items: center; 
-                 gap: 10px;">
-    <span style="font-size: 1.4rem;">📲</span> 
-    WhatsApp Pe Rabta Karein
-  </button>
-</div>
+  <div id="updates-page" class="page">
+    <button onclick="navigateTo('home')" style="background:none;border:none;color:var(--primary);font-weight:700;margin-bottom:20px;">← Back</button>
+    <h2>App Updates</h2>
+    <div id="updates-list"></div>
   </div>
 
-  <!-- UPDATES PAGE -->
-  <div id="updates-page">
-    <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
-    <div class="updates-top-banner" id="updates-top-banner" style="display:none; max-width:92%; margin:1rem auto 1.5rem; padding:1.1rem 1.4rem; background:linear-gradient(135deg,#6d28d9,#a78bfa); color:white; border-radius:var(--radius); box-shadow:var(--shadow-md); font-size:1.05rem; font-weight:600; text-align:center;">
-      <p id="banner-text" style="margin:0;"></p>
+  <div id="feedback-page" class="page">
+    <button onclick="navigateTo('home')" style="background:none;border:none;color:var(--primary);font-weight:700;margin-bottom:20px;">← Back</button>
+    <h2>Public Feedback</h2>
+    <div style="background:white; padding:20px; border-radius:20px; box-shadow:var(--shadow-md); margin-bottom:25px;">
+      <input type="email" id="feedback-email" placeholder="Your Gmail / Email" style="width:100%; padding:14px; margin-bottom:12px; border:1px solid #ddd; border-radius:12px;">
+      <textarea id="feedback-text" placeholder="Apna feedback yahan likhein..." style="width:100%; height:130px; padding:14px; border:1px solid #ddd; border-radius:12px; resize:none;"></textarea>
+      <button onclick="submitFeedback()" style="width:100%; padding:16px; background:var(--primary); color:white; border:none; border-radius:14px; font-weight:700; margin-top:12px;">Submit Feedback</button>
     </div>
-    <h2 style="text-align:center; margin-bottom:1.8rem; color:var(--primary);">Updates &amp; Announcements</h2>
-    <div id="announcements-list"></div>
+    <h3>All Feedbacks</h3>
+    <div id="all-feedbacks"></div>
   </div>
 
-  <!-- LIVE CHAT MODAL -->
-  <div id="chat-modal">
-    <div class="chat-box">
+  <div id="apps-page" class="page">
+    <button onclick="navigateTo('home')" style="background:none;border:none;color:var(--primary);font-weight:700;margin-bottom:20px;">← Back to Home</button>
+    <h2>Available Apps</h2>
+    <div id="apps-list" class="app-grid"></div>
+  </div>
+
+  <div id="app-detail-page" class="page">
+    <button onclick="navigateTo('apps')" style="background:none;border:none;color:var(--primary);font-weight:700;margin:10px 0 20px;">← Back</button>
+    <div style="background:white; border-radius:24px; padding:24px; box-shadow:var(--shadow-md);">
+      <div style="display:flex; align-items:center; gap:18px; margin-bottom:28px;">
+        <img id="detail-icon" src="" style="width:80px;height:80px;border-radius:18px;object-fit:cover;">
+        <div>
+          <h1 id="detail-name" style="font-size:1.5rem;margin-bottom:4px;"></h1>
+          <p id="detail-developer" style="color:var(--muted);"></p>
+          <p id="detail-version" style="color:var(--primary);font-weight:700;"></p>
+        </div>
+      </div>
+      <h3>What's New</h3>
+      <div id="detail-whatsnew" style="background:#f8fafc;padding:18px;border-radius:16px;margin-bottom:25px;line-height:1.6;"></div>
+      <button id="download-btn" onclick="startDownload()" style="width:100%;padding:18px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:18px;font-weight:800;font-size:1.1rem;">📥 DOWNLOAD NOW</button>
+      <div style="display: flex; gap: 12px; margin-top: 16px;">
+        <button onclick="showFeedbackModal()" style="flex: 1; padding: 14px; background: #f3e8ff; color: #6d28d9; border: none; border-radius: 14px; font-weight: 600;">⭐ Feedback</button>
+        <button onclick="showReportModal()" style="flex: 1; padding: 14px; background: #fee2e2; color: #ef4444; border: none; border-radius: 14px; font-weight: 600;">⚠️ Report</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="report-page" class="page">
+    <button onclick="navigateTo('home')" style="background:none;border:none;color:var(--primary);font-weight:700;margin-bottom:15px;">← Back</button>
+    <h2>Submit Report</h2>
+    <div style="background:white; padding:20px; border-radius:20px; box-shadow:var(--shadow-md); margin-bottom: 25px;">
+      <input type="text" id="report-username" readonly style="width:100%;padding:12px;margin-bottom:12px;border:1px solid #ddd;border-radius:10px; background:#f9fafb;">
+      <select id="report-app-select" style="width:100%;padding:12px;margin-bottom:12px;border:1px solid #ddd;border-radius:10px;"><option>Select App</option></select>
+      <textarea id="report-desc" placeholder="Describe the issue..." style="width:100%;height:110px;padding:12px;border:1px solid #ddd;border-radius:10px;resize:none;"></textarea>
+      <button id="submit-report-btn" onclick="submitReport()" style="width:100%;padding:16px;background:var(--primary);color:white;border:none;border-radius:14px;font-weight:700;">SUBMIT REPORT</button>
+    </div>
+    <h3>My Report History</h3>
+    <div id="reports-status-list"></div>
+  </div>
+
+  <div id="chat-overlay" class="chat-screen">
       <div class="chat-header">
-        <div class="admin-header-info">
-          <div class="admin-avatar">
-            <img src="https://i.ibb.co/zCjnZRH/IMG-20260310-175937-221.jpg" alt="MrCrazyTeam">
+          <div class="header-info">
+              <div class="avatar-wrapper"><div class="admin-avatar" id="team-avatar">M</div><span class="status-dot"></span></div>
+              <div><strong class="team-name">MrCrazyTeam</strong><span id="random-team-name" class="member-name">Connecting...</span></div>
           </div>
-          <div>
-            <strong>MrCrazyTeam</strong><br>
-            <small id="chat-with-name" style="opacity:0.9;"></small>
-          </div>
-        </div>
-        <button onclick="closeChatModal()" class="close-chat">✕</button>
+          <button onclick="closeChat()" class="close-chat-btn">×</button>
       </div>
-
-      <div id="chat-messages" class="chat-body"></div>
-
-      <!-- FEEDBACK PANEL -->
-      <div id="chat-feedback-panel">
-        <p>Your Chat has been ended۔<br> Please give your feedback </p>
-        <div class="emoji-list">
-          <span onclick="submitEmojiFeedback('😡')">😡</span>
-          <span onclick="submitEmojiFeedback('😕')">😕</span>
-          <span onclick="submitEmojiFeedback('🙂')">🙂</span>
-          <span onclick="submitEmojiFeedback('😊')">😊</span>
-          <span onclick="submitEmojiFeedback('😍')">😍</span>
-        </div>
-        <p id="feedback-thanks" style="display:none; color:#10b981; font-weight:600;">Thank you for your feedback. We truly appreciate your input. Our team will review it carefully and get back to you if needed<br>“Please note that your chat will be closed within the next 10 minutes. Kindly try again after that if needed</p>
+      <div id="chat-body" class="chat-messages"></div>
+      <div id="faq-box" class="faq-container">
+          <p class="faq-label">HAMEIN BATAEIN AAPKO KYA MASLA HAI:</p>
+          <button class="faq-item" onclick="handleFAQ('Apps not downloading')">📥 Apps not downloading</button>
+          <button class="faq-item" onclick="handleFAQ('App not installed')">🚫 App not installed</button>
+          <button class="faq-item" onclick="handleFAQ('WhatsApp Contact')">🟢 WhatsApp Contact</button>
       </div>
+      <div id="chat-input-area" class="chat-footer" style="display:none;">
+          <input type="text" id="user-msg-input" placeholder="Type a message...">
+          <button onclick="sendUserMsg()" class="send-btn">➤</button>
+      </div>
+  </div>
 
-      <div id="chat-footer" class="chat-footer">
-        <input id="chat-input" type="text" class="chat-input" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendChatMessage();">
-        <button onclick="sendChatMessage()" class="send-btn">➤</button>
+  <div id="feedback-modal" class="popup-overlay" style="background:rgba(0,0,0,0.7); display:none;">
+    <div style="background:white; width:90%; max-width:420px; border-radius:20px; padding:24px;">
+      <h2 style="margin-bottom:20px; color:var(--primary);">Give Feedback</h2>
+      <input type="text" id="modal-app-name" readonly style="width:100%; padding:12px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd;">
+      <textarea id="modal-feedback-text" placeholder="App feedback..." style="width:100%; height:140px; padding:14px; border-radius:12px; border:1px solid #ddd; resize:none;"></textarea>
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button onclick="closeFeedbackModal()" style="flex:1; padding:14px; background:#e5e7eb; border:none; border-radius:12px;">Cancel</button>
+        <button onclick="submitAppFeedback()" style="flex:1; padding:14px; background:var(--primary); color:white; border:none; border-radius:12px;">Submit</button>
       </div>
     </div>
   </div>
 
-<!-- GLOBAL USERNAME MODAL -->
-<div id="username-modal">
-  <div class="username-box">
-    <h3>👋 Welcome to MrCrazy DevStudio</h3>
-    
-    <p style="margin-bottom:1.5rem; color:var(--muted); line-height:1.6; text-align:center;">
-      
-    </p>
-    
-    <input id="global-username-input" type="text" class="feedback-input" placeholder="اپنا پورا نام لکھیں..." style="margin-bottom:1rem;">
-    
-    <button onclick="saveGlobalUsername()" class="submit-btn" style="max-width:260px; margin:0 auto;">
-      Save & Continue →
-    </button>
-    
-    <p style="margin-top:2rem; font-size:0.95rem; color:var(--muted); text-align:center; line-height:1.5;">
-      معزز صارفین،<br>
-      یہاں اپنا پورا نام لکھیں تاکہ آپ کی پہچان کی جا سکے۔<br>
-      شکریہ ❤️
-    </p>
-    
-    <p style="margin-top:1rem; font-size:0.85rem; color:var(--muted); text-align:center; line-height:1.5;">
-      یہ نام آپ کی پہچان کے لیے لکھا جاتا ہے تاکہ آنے والا مسئلہ حل کیا جا سکے۔
-    </p>
-  </div>
-</div>
-
-  <!-- FLOATING CONTACT -->
-  <div class="floating-contact" onclick="openContactModal()">📧</div>
-
-  <!-- CONTACT MODAL -->
-  <div id="contact-modal">
-    <div class="contact-box">
-      <h2 style="color:var(--primary); margin-bottom:1.2rem;">📞 Contact Us</h2>
-      <p style="font-size:1.15rem; line-height:1.7; margin-bottom:1.5rem;">
-        ہم یہاں ہر وقت آپ کی خدمت کے لیے موجود ہیں۔ ہم واٹس ایپ سروس کو مستقل طور پر بند کر چکے ہیں، لہٰذا اب آپ ہم سے یہیں براہِ راست رابطہ کر سکتے ہیں۔<br><br>
-        کسی بھی ہنگامی صورتحال میں براہِ کرم ہمیں جی میل کے ذریعے رابطہ کریں۔<br>
-        شکریہ۔ 😊<br>
-        OFFICIAL MRCRAZ
-      </p>
-      <a href="mailto:mrcrazyteamofficial@gmail.com" class="submit-btn" style="display:inline-block; text-decoration:none; padding:1rem 2rem;">
-        ✉️ mrcrazyteamofficial@gmail.com
-      </a>
-      <button onclick="closeContactModal()" style="margin-top:1.5rem; background:#ef4444; color:white; border:none; padding:0.8rem 2rem; border-radius:999px; cursor:pointer;">
-        Close
-      </button>
+  <div id="report-modal" class="popup-overlay" style="background:rgba(0,0,0,0.7); display:none;">
+    <div style="background:white; width:90%; max-width:420px; border-radius:20px; padding:24px;">
+      <h2 style="margin-bottom:20px; color:#ef4444;">Report Issue</h2>
+      <input type="text" id="modal-report-app" readonly style="width:100%; padding:12px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd;">
+      <textarea id="modal-report-text" placeholder="What's the problem?..." style="width:100%; height:140px; padding:14px; border-radius:12px; border:1px solid #ddd; resize:none;"></textarea>
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button onclick="closeReportModal()" style="flex:1; padding:14px; background:#e5e7eb; border:none; border-radius:12px;">Cancel</button>
+        <button onclick="submitAppReport()" style="flex:1; padding:14px; background:#ef4444; color:white; border:none; border-radius:12px;">Submit</button>
+      </div>
     </div>
   </div>
 
-  <script type="module">
-    let currentUsername = localStorage.getItem('crazyUsername') || '';
-    let currentAppKey = null;
-    let currentDownloadUrl = null;
-    let detailDownloadsUnsub = null;
-    let chatListener = null;
-    let endedListener = null;
-    let chatEnded = false;
-    let welcomeSent = false;
+  <script>
+    let user = localStorage.getItem('crazyName') || prompt("Enter your name:") || "Guest User";
+    localStorage.setItem('crazyName', user);
 
-    const safeKey = () => currentUsername.toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
+    document.getElementById('welcome-text').textContent = user;
+    document.getElementById('member-date').textContent = new Date().toLocaleDateString('en-GB');
+    document.getElementById('report-username').value = user;
 
-    function checkAndShowUsernameModal() {
-      if (!currentUsername) {
-        document.getElementById('username-modal').style.display = 'flex';
-      } else {
-        document.getElementById('display-username').textContent = currentUsername;
-        document.getElementById('global-username-pill').style.display = 'inline-flex';
-      }
-    }
+    let currentApp = null;
+    const supportTeam = [
+        {name: "Ayesha (Support)"}, {name: "Zoya (Dev)"}, {name: "Hamza (Tech)"}, {name: "Zain (Admin)"}
+    ];
 
-    window.saveGlobalUsername = function() {
-      const input = document.getElementById('global-username-input').value.trim();
-      if (!input) return alert('Naam likhna zaroori hai!');
-      currentUsername = input;
-      localStorage.setItem('crazyUsername', currentUsername);
-      document.getElementById('display-username').textContent = currentUsername;
-      document.getElementById('global-username-pill').style.display = 'inline-flex';
-      document.getElementById('username-modal').style.display = 'none';
-      if (window.pendingChatOpen) {
-        window.pendingChatOpen = false;
-        openChatModal();
-      }
+    window.navigateTo = (page) => {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+      document.getElementById(page + '-page').classList.add('active-page');
     };
 
-    window.showPage = (page) => {
-      document.getElementById('home-buttons').style.display = page === 'home' ? 'flex' : 'none';
-      document.getElementById('apps-page').style.display = page === 'apps' ? 'block' : 'none';
-      document.getElementById('detail-page').style.display = page === 'detail' ? 'block' : 'none';
-      document.getElementById('report-page').style.display = page === 'report' ? 'block' : 'none';
-      document.getElementById('updates-page').style.display = page === 'updates' ? 'block' : 'none';
+    // Firebase Data Initializer
+    function initFirebaseData() {
+      onValue(ref(db, 'mainLogo'), snap => { if (snap.exists()) document.getElementById('main-logo').src = snap.val(); });
+      onValue(ref(db, 'landscapeBanner'), snap => { if (snap.exists()) document.getElementById('banner-text').innerHTML = snap.val(); });
 
-      if (page !== 'detail' && detailDownloadsUnsub) {
-        detailDownloadsUnsub();
-        detailDownloadsUnsub = null;
-        currentAppKey = null;
-        currentDownloadUrl = null;
-      }
-    };
-
-    // Load Logo & Banner
-    document.getElementById('logo-img').src = "https://ibb.co/4RqMPZBc";
-    document.getElementById('banner-img').src = "https://ibb.co/4RqMPZBc";
-
-    onValue(ref(window.db, 'logo'), (snap) => {
-      const url = snap.val();
-      if (url) document.getElementById('logo-img').src = url;
-    });
-
-    onValue(ref(window.db, 'banner'), (snap) => {
-      const url = snap.val();
-      if (url) document.getElementById('banner-img').src = url;
-    });
-
-    // Updates Top Banner
-    onValue(ref(window.db, 'updatesBannerText'), (snap) => {
-      const text = snap.val();
-      const banner = document.getElementById('updates-top-banner');
-      const bannerText = document.getElementById('banner-text');
-      if (text && text.trim() !== '') {
-        bannerText.textContent = text;
-        banner.style.display = 'block';
-      } else {
-        banner.style.display = 'none';
-      }
-    });
-
-    // ANIMATED ANNOUNCEMENTS TICKER
-    onValue(ref(window.db, 'announcements'), (snap) => {
-      const data = snap.val() || {};
-      const ticker = document.getElementById('ann-ticker-content');
-      let html = '';
-      if (Object.keys(data).length === 0) {
-        html = 'No announcements yet • Admin jaldi add karega ❤️ ';
-      } else {
-        const sorted = Object.values(data).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        sorted.forEach(ann => {
-          const msg = (ann.message || '').replace(/\n/g, ' • ');
-          html += msg + ' • ';
-        });
-      }
-      ticker.innerHTML = html;
-    });
-
-    // Load Apps
-    onValue(ref(window.db, 'apps'), (snap) => {
-      const data = snap.val() || {};
-      const grid = document.getElementById('apps-grid');
-      const appSelect = document.getElementById('report-app');
-      grid.innerHTML = '';
-      appSelect.innerHTML = '<option value="">Select App</option>';
-
-      if (Object.keys(data).length === 0) {
-        grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:6rem 0;">No apps available yet.</p>';
-        return;
-      }
-
-      Object.entries(data).forEach(([key, app]) => {
-        const card = document.createElement('div');
-        card.className = 'app-card';
-        card.innerHTML = `
-          <div class="app-icon">
-            <img src="${app.icon || 'https://ibb.co/4RqMPZBc'}" alt="${app.name}">
-          </div>
-          <div class="app-name">${app.name}</div>
-          <div class="app-downloads">
-            📥 <strong>${app.downloads || 0}</strong> Downloads
-          </div>
-          <a class="download-now" href="#" onclick="openDetail('${key}'); return false;">Download Now</a>
-        `;
-        grid.appendChild(card);
-
-        const option = document.createElement('option');
-        option.value = app.name;
-        option.textContent = app.name;
-        appSelect.appendChild(option);
-      });
-    });
-
-    // Announcements List
-    onValue(ref(window.db, 'announcements'), (snap) => {
-      const data = snap.val() || {};
-      const list = document.getElementById('announcements-list');
-      list.innerHTML = '';
-
-      if (Object.keys(data).length === 0) {
-        list.innerHTML = '<p style="text-align:center; color:var(--muted); padding:4rem 1rem; font-size:1.1rem;">Abhi koi announcement nahi hai.<br>Admin jaldi add kar dega ❤️</p>';
-        return;
-      }
-
-      const sorted = Object.entries(data).sort(([,a], [,b]) => (b.timestamp || 0) - (a.timestamp || 0));
-
-      sorted.forEach(([key, ann]) => {
-        const card = document.createElement('div');
-        card.className = 'feedback-item';
-        card.innerHTML = `
-          <p style="font-size:1.05rem; line-height:1.65; margin-bottom:1.2rem;">${(ann.message || '').replace(/\n/g, '<br>')}</p>
-          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.95rem; color:var(--muted);">
-            <span>${ann.date || new Date(ann.timestamp || Date.now()).toLocaleDateString('en-GB')}</span>
-            <button onclick="likeAnnouncement('${key}');" style="background:#fef2f2; color:#ef4444; border:none; padding:0.5rem 1.1rem; border-radius:999px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;">
-              ❤️ <span style="color:#111827; font-size:1rem;">${ann.likes || 0}</span>
-            </button>
-          </div>
-        `;
-        list.appendChild(card);
-      });
-    });
-
-    window.likeAnnouncement = function(key) {
-      update(ref(window.db, 'announcements/' + key), { likes: increment(1) });
-    };
-
-    window.openDetail = function(key) {
-      currentAppKey = key;
-      if (detailDownloadsUnsub) detailDownloadsUnsub();
-      detailDownloadsUnsub = onValue(ref(window.db, `apps/${key}/downloads`), (snap) => {
-        const count = snap.val() || 0;
-        document.getElementById('detail-downloads-count').textContent = count;
-      });
-
-      onValue(ref(window.db, 'apps/' + key), (snap) => {
-        const app = snap.val();
-        if (!app) return;
-        showPage('detail');
-        document.getElementById('detail-name').textContent = app.name || 'App';
-        document.getElementById('detail-icon').src = app.icon || 'https://ibb.co/4RqMPZBc';
-        document.getElementById('detail-size').textContent = app.size || '~25 MB';
-        document.getElementById('detail-desc').innerHTML = app.description ? app.description.replace(/\n/g, '<br>') : 'No description available.';
-        const dateStr = app.timestamp ? new Date(app.timestamp).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : 'N/A';
-        document.getElementById('upload-date').textContent = `Uploaded: ${dateStr}`;
-        currentDownloadUrl = app.download || '#';
-      });
-    };
-
-    window.handleDownload = function() {
-      if (!currentAppKey) return;
-      update(ref(window.db, `apps/${currentAppKey}`), { downloads: increment(1) });
-      if (currentDownloadUrl && currentDownloadUrl !== '#') {
-        window.open(currentDownloadUrl, '_blank');
-      } else {
-        alert('Download link abhi available nahi hai. Admin se rabta karein!');
-      }
-    };
-
-    window.reportFromDetail = function() {
-      if (!currentAppKey) return;
-      showPage('report');
-      const appSelect = document.getElementById('report-app');
-      for (let opt of appSelect.options) {
-        if (opt.value === document.getElementById('detail-name').textContent) {
-          opt.selected = true;
-          break;
-        }
-      }
-    };
-let currentHelpStep = 1;
-let helpRequestKey = null;
-
-window.openEmergencyHelpModal = function() {
-  document.getElementById('emergency-modal').style.display = 'flex';
-  goToStep(1);
-};
-
-window.closeEmergencyModal = function() {
-  document.getElementById('emergency-modal').style.display = 'none';
-};
-
-window.goToStep = function(step) {
-  currentHelpStep = step;
-  document.querySelectorAll('.modal-step').forEach(s => s.style.display = 'none');
-  document.getElementById('step-' + step).style.display = 'block';
-};
-
-window.submitHelpRequest = function() {
-  const contact = document.getElementById('help-contact').value.trim();
-  const problem = document.getElementById('help-problem').value.trim();
-  const username = currentUsername || "Anonymous";
-  
-  if (!contact || !problem) {
-    alert("Number aur masla likhna zaroori hai!");
-    return;
-  }
-  
-  const newRef = push(ref(window.db, 'emergencyHelp'));
-  helpRequestKey = newRef.key;
-  
-  set(newRef, {
-    username: username,
-    contact: contact,
-    problem: problem,
-    status: "Pending",
-    time: new Date().toLocaleString('en-GB')
-  }).then(() => {
-    goToStep(4);
-    document.getElementById('status-icon').innerHTML = '⏳';
-    document.getElementById('status-title').textContent = 'Report Pending';
-    document.getElementById('status-message').innerHTML = 'Hamari team jaldi aap se rabta karegi.<br>Shukriya ❤️';
-  });
-};
-
-// Admin taraf se status change hone par update (real-time)
-function listenToHelpStatus() {
-  if (!helpRequestKey) return;
-  onValue(ref(window.db, 'emergencyHelp/' + helpRequestKey + '/status'), (snap) => {
-    const status = snap.val();
-    if (status === "Approved") {
-      document.getElementById('status-icon').innerHTML = '✅';
-      document.getElementById('status-title').textContent = 'Masla Hal Ho Gaya';
-      document.getElementById('status-message').innerHTML = 'Moaziz Customer,<br>Apka masla hal ho gaya hai.<br>Ab aap feedback de sakte hain.';
-      // Yahan feedback button add kar sakte hain baad mein
-    }
-  });
-}
-    // ==================== REPORT PAGE ====================
-    function updateCharCount() {
-      const textarea = document.getElementById('report-desc');
-      const countEl = document.getElementById('char-count');
-      const count = textarea.value.length;
-      countEl.textContent = `${count} / 1000`;
-      countEl.style.color = count > 980 ? '#ef4444' : 'var(--muted)';
-    }
-
-    setTimeout(() => {
-      const reportTextarea = document.getElementById('report-desc');
-      if (reportTextarea) reportTextarea.addEventListener('input', updateCharCount);
-    }, 800);
-
-    window.submitReport = function() {
-      const appName = document.getElementById('report-app').value;
-      const username = document.getElementById('report-username').value.trim();
-      const whatsapp = document.getElementById('report-whatsapp').value.trim();
-      const desc = document.getElementById('report-desc').value.trim();
-
-      if (!desc || !appName) {
-        const msg = document.getElementById('report-msg');
-        msg.textContent = 'App Name aur Problem description zaroori hain';
-        msg.style.background = '#fee2e2';
-        msg.style.color = '#991b1b';
-        msg.style.display = 'block';
-        return;
-      }
-
-      const newRef = push(ref(window.db, 'complaints'));
-      const id = 'Crazy-' + newRef.key.substring(0,8);
-
-      set(newRef, {
-        complaintId: id,
-        appName,
-        username: username || 'Anonymous',
-        whatsapp: whatsapp ? '+92' + whatsapp : 'N/A',
-        description: desc,
-        date: new Date().toLocaleString('en-GB')
-      }).then(() => {
-        document.getElementById('complaint-id').textContent = id;
-        document.getElementById('complaint-id-box').style.display = 'block';
-        setTimeout(() => document.getElementById('complaint-id-box').style.display = 'none', 120000);
-        const msg = document.getElementById('report-msg');
-        msg.textContent = 'Report submit ho gaya! ID copy kar lo';
-        msg.style.background = '#d1fae5';
-        msg.style.color = '#065f46';
-        msg.style.display = 'block';
-        document.getElementById('report-desc').value = '';
-        updateCharCount();
-      });
-    };
-
-    window.copyComplaintID = function() {
-      const id = document.getElementById('complaint-id').textContent;
-      navigator.clipboard.writeText(id).then(() => alert('ID copied!'));
-    };
-
-    window.submitFeedback = function() {
-      const email = document.getElementById('feedback-email').value.trim();
-      const text = document.getElementById('feedback-text').value.trim();
-      if (!text) return alert('Feedback likhna zaroori hai');
-      const appName = document.getElementById('detail-name').textContent;
-      push(ref(window.db, 'feedback/' + appName), {
-        feedback: text,
-        email: email || 'Anonymous',
-        timestamp: Date.now(),
-        date: new Date().toLocaleString('en-GB')
-      }).then(() => {
-        alert('Feedback submit ho gaya!');
-        document.getElementById('feedback-email').value = '';
-        document.getElementById('feedback-text').value = '';
-      });
-    };
-    // Beautiful Header with Join Date
-function updateWelcomeSection() {
-  const username = currentUsername || "User";
-  
-  // User Name (Bara)
-  document.getElementById('user-name-display').textContent = username;
-  document.getElementById('display-username').textContent = username;
-  document.getElementById('global-username-pill').style.display = 'inline-flex';
-  
-  // Join Date
-  const joinDateEl = document.getElementById('join-date');
-  
-  // Agar pehli baar username save ho raha hai to aaj ki date save kar do
-  let joinDate = localStorage.getItem('userJoinDate');
-  if (!joinDate) {
-    joinDate = new Date().toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric'
-    });
-    localStorage.setItem('userJoinDate', joinDate);
-  }
-  
-  joinDateEl.textContent = joinDate;
-}
-
-// window.onload mein call kar do
-window.onload = function() {
-  checkAndShowUsernameModal();
-  updateWelcomeSection(); // ← Yeh line zaroori hai
-  // ... baaki purana code (loadLandscapeBanner(), startBroadcastListener() etc.)
-};
-// Services Modal Functions
-window.showServicesModal = function() { document.getElementById('services-modal').style.display = 'flex'; };
-window.closeServicesModal = function() { document.getElementById('services-modal').style.display = 'none'; };
-
-// Netflix Dynamic
-window.showNetflixModal = function() {
-  closeServicesModal();
-  onValue(ref(window.db, 'netflixPackage'), (snap) => {
-    const data = snap.val() || { price: "Rs. 275", desc: "Monthly Netflix Premium" };
-    document.getElementById('netflix-price-show').textContent = data.price;
-    document.getElementById('netflix-desc-show').innerHTML = data.desc.replace(/\n/g, '<br>');
-    document.getElementById('payment-amount').textContent = data.price + " bhejna hai";
-  }, { onlyOnce: true });
-  document.getElementById('netflix-modal').style.display = 'flex';
-};
-
-window.closeNetflixModal = function() { document.getElementById('netflix-modal').style.display = 'none'; };
-window.showPaymentModal = function() { closeNetflixModal(); document.getElementById('payment-modal').style.display = 'flex'; resetPayment(); };
-
-function resetPayment() {
-  document.getElementById('tid-section').style.display = 'none';
-  document.getElementById('contact-section').style.display = 'none';
-}
-
-// Payment Flow
-window.paymentYes = function() { document.getElementById('tid-section').style.display = 'block'; };
-window.submitTID = function() {
-  const tid = document.getElementById('tid-input').value.trim();
-  if (!tid) return alert("TID likhna zaroori hai!");
-  document.getElementById('tid-section').style.display = 'none';
-  document.getElementById('contact-section').style.display = 'block';
-};
-
-window.submitContact = function() {
-  const contact = document.getElementById('contact-input').value.trim();
-  const tid = document.getElementById('tid-input').value.trim();
-  const username = currentUsername || "Anonymous";
-
-  if (!contact) return alert("Number likhna zaroori hai!");
-
-  // Save to Firebase so admin can see
-  push(ref(window.db, 'netflixRequests'), {
-    username: username,
-    contact: contact,
-    tid: tid,
-    time: new Date().toLocaleString('en-GB'),
-    status: "Pending"
-  }).then(() => {
-    alert("✅ Payment Confirmed! Hamari team jaldi aap se rabta karegi.\nShukriya ❤️");
-    closePaymentModal();
-  });
-};
-
-window.paymentNo = function() { closePaymentModal(); alert("Thanks! Agar paise bhej diye to TID ke saath dobara try karein."); };
-window.closePaymentModal = function() { document.getElementById('payment-modal').style.display = 'none'; resetPayment(); };
-
-// UC & TikTok (Dynamic from Admin)
-window.showUCModal = function() {
-  closeServicesModal();
-  onValue(ref(window.db, 'ucServiceText'), (snap) => {
-    alert(snap.val() || "🎮 Carding UC\nAdmin se rabta karein: 0325-7436319");
-  }, { onlyOnce: true });
-};
-
-window.showTikTokModal = function() {
-  closeServicesModal();
-  onValue(ref(window.db, 'tiktokServiceText'), (snap) => {
-    alert(snap.val() || "🎵 TikTok Likes/Views/Followers\nAdmin se rabta karein: 0325-7436319");
-  }, { onlyOnce: true });
-};
-    // ==================== LIVE CHAT ====================
-    function getAdminIcon(name) {
-      if (name === 'Sehrish') return `<img src="https://i.ibb.co/YTy6wYS5/IMG-20260325-024525-200.jpg" width="24" height="24" style="border-radius:50%;">`;
-      if (name === 'فاطمہ') return `<img src="https://i.ibb.co/9kWJkV1Q/IMG-20260325-003331-792.jpg" width="40" height="40" style="border-radius:50%;">`;
-      if (name === 'MrCrazyTeam') return `<img src="https://i.ibb.co/zCjnZRH/IMG-20260310-175937-221.jpg" width="34" height="34" style="border-radius:50%;">`;
-      return '';
-    }
-
-    window.openChatModal = function() {
-      if (!currentUsername) {
-        window.pendingChatOpen = true;
-        checkAndShowUsernameModal();
-        return;
-      }
-
-      chatEnded = false;
-      welcomeSent = false;
-      document.getElementById('chat-modal').style.display = 'flex';
-      document.getElementById('chat-with-name').textContent = currentUsername;
-      document.getElementById('chat-footer').style.display = 'flex';
-      document.getElementById('chat-feedback-panel').style.display = 'none';
-      document.getElementById('feedback-thanks').style.display = 'none';
-
-      loadChatMessages();
-    };
-
-    window.closeChatModal = function() {
-      document.getElementById('chat-modal').style.display = 'none';
-      if (chatListener) chatListener();
-      if (endedListener) endedListener();
-      chatListener = null;
-      endedListener = null;
-    };
-// ==================== FIXED BANNER WITH PROPER WRAP ====================
-function loadLandscapeBanner() {
-  const content = document.getElementById('banner-content');
-  
-  onValue(ref(window.db, 'landscapeBanner'), (snap) => {
-    let text = snap.val() || "Welcome to MrCrazy DevStudio ❤️ Best Apps & Updates";
-    
-    content.innerHTML = text.replace(/\n/g, '<br>');
-    
-    // Agar text chhota hai to center mein rakho
-    if (text.length < 90) {
-      content.classList.add('short');
-    } else {
-      content.classList.remove('short');
-    }
-  });
-}
-    function loadChatMessages() {
-      const key = safeKey();
-      const chatRef = ref(window.db, `liveChats/${key}`);
-
-      if (chatListener) chatListener();
-      chatListener = onValue(chatRef, (snap) => {
-        const messages = snap.val() || {};
-        const container = document.getElementById('chat-messages');
+      onValue(ref(db, 'apps'), snap => {
+        const apps = snap.val() || {};
+        const container = document.getElementById('apps-list');
+        const select = document.getElementById('report-app-select');
         container.innerHTML = '';
+        select.innerHTML = '<option>Select App</option>';
 
-        Object.values(messages).sort((a,b) => a.timestamp - b.timestamp).forEach(msg => {
-          const div = document.createElement('div');
-          div.className = `message ${msg.from === 'You' ? 'user-message' : 'admin-message'}`;
-
-          if (msg.from === 'You') {
-            div.innerHTML = `
-              <strong style="font-size:0.8rem; display:block; margin-bottom:4px;">You</strong>
-              ${msg.text}
-              <small style="display:block; text-align:right; margin-top:6px; opacity:0.7;">${new Date(msg.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</small>
-            `;
-          } else {
-            div.innerHTML = `
-              <div class="sender-header">
-                ${getAdminIcon(msg.from)}
-                <span>${msg.from}</span>
-              </div>
-              ${msg.text}
-              <small style="display:block; text-align:right; margin-top:6px; opacity:0.7;">${new Date(msg.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</small>
-            `;
-          }
-          container.appendChild(div);
+        Object.entries(apps).forEach(([id, app]) => {
+          const appItem = document.createElement('div');
+          appItem.className = 'app-item';
+          appItem.onclick = () => showAppDetail(id, app);
+          appItem.innerHTML = `<img src="${app.icon || 'https://via.placeholder.com/70'}"><h4>${app.name}</h4><small style="color:var(--primary)">v${app.version || '1.0'}</small>`;
+          container.appendChild(appItem);
+          select.innerHTML += `<option>${app.name}</option>`;
         });
-        container.scrollTop = container.scrollHeight;
       });
 
-      const endedRef = ref(window.db, `liveChats/${key}/ended`);
-      if (endedListener) endedListener();
-      endedListener = onValue(endedRef, (snap) => {
-        if (snap.val() === true && !chatEnded) {
-          chatEnded = true;
-          document.getElementById('chat-footer').style.display = 'none';
-          document.getElementById('chat-feedback-panel').style.display = 'block';
+      checkMaintenance();
+      checkSpecialMessage();
+      loadUpdates();
+      loadAllFeedbacks();
+      loadMyReports();
+    }
+
+    function checkMaintenance() {
+      onValue(ref(db, 'maintenance'), snap => {
+        if (snap.exists()) {
+          const data = snap.val();
+          const screen = document.getElementById('maintenance-screen');
+          if (data.active === true) {
+            screen.style.display = 'flex';
+            document.getElementById('maintenance-msg').innerText = data.message;
+            startMaintenanceTimer(data.reopenTime);
+          } else { screen.style.display = 'none'; }
         }
       });
     }
 
-    window.sendChatMessage = function() {
-      const input = document.getElementById('chat-input');
-      const text = input.value.trim();
-      if (!text || !currentUsername || chatEnded) return;
+    function startMaintenanceTimer(endTime) {
+      const timerEl = document.getElementById('m-timer');
+      const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = new Date(endTime).getTime() - now;
+        if (distance < 0) { clearInterval(interval); timerEl.innerHTML = "SOON"; return; }
+        const h = Math.floor((distance % (24*60*60*1000)) / (60*60*1000));
+        const m = Math.floor((distance % (60*60*1000)) / (60*1000));
+        const s = Math.floor((distance % (1000*60)) / 1000);
+        timerEl.innerHTML = `${h}:${m}:${s}`;
+      }, 1000);
+    }
 
-      const key = safeKey();
-      push(ref(window.db, `liveChats/${key}`), {
-        from: 'You',
-        text: text,
-        timestamp: Date.now()
-      }).then(() => {
-        input.value = '';
-
-        if (!welcomeSent) {
-          welcomeSent = true;
-          const welcomeText = `Assalam o Alaikum! ${currentUsername} Hum umeed kartay hain ke aap khairiyat se honge. Barah-e-karam apna masla mukammal tafseel ke sath likhein. Hamari support team 20–25 minutes ke andar aap se rabta karegi.
-Shukriya,
-MrCrazyTeam AI`;
-          push(ref(window.db, `liveChats/${key}`), {
-            from: 'MrCrazyTeam',
-            text: welcomeText,
-            timestamp: Date.now() + 600
-          });
+    function checkSpecialMessage() {
+      onValue(ref(db, 'specialPopup'), snap => {
+        if (snap.exists() && snap.val().active === true) {
+          const data = snap.val();
+          document.getElementById('special-popup').style.display = 'flex';
+          document.getElementById('popup-welcome').textContent = "Hello, " + user + "!";
+          document.getElementById('popup-message').textContent = data.message;
+          if (data.expiryDate) startCountdown(data.expiryDate);
         }
       });
-    };
-
-    window.submitEmojiFeedback = function(emoji) {
-      const key = safeKey();
-      push(ref(window.db, `liveChats/${key}`), {
-        from: 'You',
-        text: `Feedback: ${emoji}`,
-        timestamp: Date.now()
-      }).then(() => {
-        document.getElementById('feedback-thanks').style.display = 'block';
-      });
-    };
-
-    window.openContactModal = function() {
-      document.getElementById('contact-modal').style.display = 'flex';
-    };
-
-    window.closeContactModal = function() {
-      document.getElementById('contact-modal').style.display = 'none';
-    };
-    // ==================== DOWNLOAD GUIDE MODAL (YouTube Video) ====================
-let currentVideoIframe = null;
-
-window.openDownloadGuideModal = function() {
-  const modal = document.getElementById('download-guide-modal');
-  const container = document.getElementById('youtube-video-container');
-  
-  container.innerHTML = ''; // purana clear karo
-  
-  onValue(ref(window.db, 'downloadGuideVideo'), (snap) => {
-    const url = snap.val() || '';
-    
-    if (!url) {
-      container.innerHTML = `<p style="text-align:center; padding:2rem; color:#64748b;">Abhi koi video nahi daala gaya hai.<br>Admin jaldi add kar dega ❤️</p>`;
-      modal.style.display = 'flex';
-      return;
     }
-    
-    // YouTube URL ko embed format mein convert karo
-    let videoId = '';
-    if (url.includes('youtu.be/')) {
-      videoId = url.split('youtu.be/')[1].split('?')[0];
-    } else if (url.includes('youtube.com/watch?v=')) {
-      videoId = url.split('v=')[1].split('&')[0];
-    } else if (url.includes('embed/')) {
-      videoId = url.split('embed/')[1].split('?')[0];
+
+    function startCountdown(endTime) {
+      const timerEl = document.getElementById('countdown-timer');
+      const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const dist = new Date(endTime).getTime() - now;
+        if (dist < 0) { clearInterval(interval); timerEl.innerHTML = "EXPIRED"; return; }
+        const h = Math.floor((dist / (1000 * 60 * 60)));
+        const m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((dist % (1000 * 60)) / 1000);
+        timerEl.innerHTML = `${h}:${m}:${s}`;
+      }, 1000);
     }
-    
-    if (videoId) {
-      const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0`;
+
+    window.closeSpecialPopup = () => { document.getElementById('special-popup').style.display = 'none'; };
+
+    window.showAppDetail = (id, app) => {
+      currentApp = app;
+      navigateTo('app-detail');
+      document.getElementById('detail-icon').src = app.icon || '';
+      document.getElementById('detail-name').textContent = app.name;
+      document.getElementById('detail-developer').textContent = app.developer || 'MrCrazy DevStudio';
+      document.getElementById('detail-version').textContent = `Version ${app.version || '1.0'}`;
+      document.getElementById('detail-whatsnew').innerHTML = app.whatsnew || 'No updates available.';
+    };
+
+    window.startDownload = () => {
+      if (currentApp?.download) window.open(currentApp.download, '_blank');
+      else alert("Link not available");
+    };
+
+    // Modal Controls
+    window.showFeedbackModal = () => { document.getElementById('modal-app-name').value = currentApp?.name; document.getElementById('feedback-modal').style.display = 'flex'; };
+    window.closeFeedbackModal = () => { document.getElementById('feedback-modal').style.display = 'none'; };
+    window.showReportModal = () => { document.getElementById('modal-report-app').value = currentApp?.name; document.getElementById('report-modal').style.display = 'flex'; };
+    window.closeReportModal = () => { document.getElementById('report-modal').style.display = 'none'; };
+
+    window.submitAppFeedback = () => {
+      const msg = document.getElementById('modal-feedback-text').value;
+      if (!msg) return;
+      push(ref(db, 'appFeedbacks'), { appName: currentApp.name, user, message: msg, time: new Date().toLocaleString() })
+      .then(() => { alert("Thanks!"); closeFeedbackModal(); });
+    };
+
+    window.submitAppReport = () => {
+      const msg = document.getElementById('modal-report-text').value;
+      if (!msg) return;
+      push(ref(db, 'appReports'), { appName: currentApp.name, user, desc: msg, time: new Date().toLocaleString() })
+      .then(() => { alert("Reported!"); closeReportModal(); });
+    };
+
+    window.submitReport = () => {
+      const app = document.getElementById('report-app-select').value;
+      const desc = document.getElementById('report-desc').value.trim();
+      if(app === "Select App" || !desc) return alert("Fill all fields");
       
-      container.innerHTML = `
-        <iframe width="100%" height="100%" 
-                style="position:absolute; top:0; left:0; border:none;" 
-                src="${embedUrl}" 
-                title="Download Guide" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-        </iframe>`;
-    } else {
-      container.innerHTML = `<p style="text-align:center; padding:2rem; color:#ef4444;">Invalid YouTube URL. Admin se check karwao.</p>`;
-    }
-    
-    modal.style.display = 'flex';
-  });
-};
-
-window.closeDownloadGuideModal = function() {
-  const modal = document.getElementById('download-guide-modal');
-  modal.style.display = 'none';
-  
-  // Video stop karne ke liye iframe remove kar do
-  const container = document.getElementById('youtube-video-container');
-  container.innerHTML = '';
-};
-// WhatsApp Report Button Function
-window.openWhatsAppReport = function() {
-  const username = document.getElementById('report-username').value.trim() || currentUsername || "User";
-  const problemDesc = document.getElementById('report-desc').value.trim();
-
-  let message = `Assalam o Alaikum!%0A%0A`;
-  message += `Mera naam: ${encodeURIComponent(username)}%0A`;
-  
-  if (problemDesc) {
-    message += `Problem: ${encodeURIComponent(problemDesc)}%0A`;
-  } else {
-    message += `Mujhe app mein koi problem ho rahi hai.%0A`;
-  }
-
-  message += `%0AScreen: Report Page%0A`;
-  message += `Time: ${new Date().toLocaleString('en-GB')}`;
-
-  const whatsappURL = `https://wa.me/9779761970136?text=${message}`;
-
-  window.open(whatsappURL, '_blank');
-};
-    // ==================== START APP ====================
-    window.onload = function() {
-      checkAndShowUsernameModal();
-loadLandscapeBanner();
-      const fillReportUsername = () => {
-        if (currentUsername) document.getElementById('report-username').value = currentUsername;
+      const reportData = {
+        user, app, desc, 
+        status: "pending", 
+        adminReply: "Under Review",
+        date: new Date().toLocaleDateString('en-GB'),
+        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+        timestamp: Date.now()
       };
-      fillReportUsername();
-
-      const observer = new MutationObserver(() => {
-        if (document.getElementById('report-page').style.display === 'block') fillReportUsername();
-      });
-      observer.observe(document.getElementById('report-page'), { attributes: true, attributeFilter: ['style'] });
-
-      document.getElementById('home-buttons').style.display = 'flex';
+      push(ref(db, 'reports'), reportData).then(() => { alert("Sent!"); document.getElementById('report-desc').value = ""; });
     };
+
+    function loadMyReports() {
+      onValue(ref(db, 'reports'), snap => {
+        const container = document.getElementById('reports-status-list');
+        container.innerHTML = '';
+        const data = snap.val() || {};
+        const myReports = Object.values(data).filter(r => r.user === user).sort((a,b) => b.timestamp - a.timestamp);
+        myReports.forEach(r => {
+          container.innerHTML += `<div class="status-card status-${r.status}"><span class="status-badge">${r.status}</span><h4>${r.app}</h4><p>${r.desc}</p><div class="admin-reply-box"><strong>Reply:</strong><p>${r.adminReply}</p></div><small class="report-meta">${r.date} | ${r.time}</small></div>`;
+        });
+      });
+    }
+
+    // Live Chat Functions
+    window.openLiveChat = () => {
+        document.getElementById('chat-overlay').style.display = 'flex';
+        if (!localStorage.getItem('assignedMember')) {
+            localStorage.setItem('assignedMember', supportTeam[Math.floor(Math.random()*supportTeam.length)].name);
+        }
+        const assigned = localStorage.getItem('assignedMember');
+        document.getElementById('random-team-name').innerText = assigned;
+        document.getElementById('team-avatar').innerText = assigned.charAt(0);
+        loadChatMessages();
+    };
+
+    function loadChatMessages() {
+        onValue(ref(db, `liveChats/${user}/messages`), (snap) => {
+            const body = document.getElementById('chat-body');
+            const faq = document.getElementById('faq-box');
+            const input = document.getElementById('chat-input-area');
+            body.innerHTML = '';
+            if (snap.exists()) {
+                faq.style.display = 'none';
+                input.style.display = 'flex';
+                snap.forEach(c => {
+                    const d = c.val();
+                    body.innerHTML += `<div class="msg-bubble ${d.sender}-msg">${d.text}<span class="msg-time">${d.time}</span></div>`;
+                });
+            } else {
+                faq.style.display = 'block';
+                input.style.display = 'none';
+                body.innerHTML = `<div class="msg-bubble admin-msg">Hello! How can we help you?</div>`;
+            }
+            body.scrollTop = body.scrollHeight;
+        });
+    }
+
+    window.handleFAQ = (opt) => {
+        const time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        push(ref(db, `liveChats/${user}/messages`), { sender: 'user', text: opt, time });
+        setTimeout(() => {
+            push(ref(db, `liveChats/${user}/messages`), { sender: 'admin', text: "Hum jald hi aap se raabta karenge.", time });
+        }, 1000);
+    };
+
+    window.sendUserMsg = () => {
+        const inp = document.getElementById('user-msg-input');
+        if (!inp.value.trim()) return;
+        push(ref(db, `liveChats/${user}/messages`), { sender: 'user', text: inp.value, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
+        inp.value = '';
+    };
+
+    window.closeChat = () => { document.getElementById('chat-overlay').style.display = 'none'; };
+
+    function loadUpdates() {
+      onValue(ref(db, 'globalUpdates'), snap => {
+        const container = document.getElementById('updates-list');
+        container.innerHTML = '';
+        Object.values(snap.val() || {}).reverse().forEach(u => {
+          container.innerHTML += `<div class="update-card"><small>${u.date}</small><h3>${u.title}</h3><p>${u.message}</p></div>`;
+        });
+      });
+    }
+
+    window.submitFeedback = () => {
+      const email = document.getElementById('feedback-email').value;
+      const text = document.getElementById('feedback-text').value;
+      if (email && text) {
+        push(ref(db, 'publicFeedbacks'), { name: user, email, message: text, time: new Date().toLocaleString() })
+        .then(() => { alert("Feedback Sent!"); document.getElementById('feedback-text').value = ''; });
+      }
+    };
+
+    function loadAllFeedbacks() {
+      onValue(ref(db, 'publicFeedbacks'), snap => {
+        const container = document.getElementById('all-feedbacks');
+        container.innerHTML = '';
+        Object.values(snap.val() || {}).reverse().forEach(f => {
+          container.innerHTML += `<div class="feedback-card"><strong>${f.name}</strong><p>${f.message}</p></div>`;
+        });
+      });
+    }
+
+    window.addEventListener('firebase-ready', initFirebaseData);
   </script>
 </body>
 </html>
