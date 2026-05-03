@@ -429,6 +429,15 @@
       </div>
     </div>
   </div>
+<div id="login-screen" style="display:none; position:fixed; width:100%; height:100%; background:white; z-index:10000; flex-direction:column; align-items:center; justify-content:center;">
+    <img src="your-logo.png" style="width:100px; margin-bottom:20px;">
+    <h2>Welcome to MrCrazy</h2>
+    <input type="text" id="user-name-input" placeholder="Enter your name" style="padding:15px; width:80%; border-radius:15px; border:1px solid #ddd; margin-bottom:15px;">
+    <button onclick="submitName()" style="padding:15px 40px; background:#4338ca; color:white; border:none; border-radius:15px; font-weight:bold;">GET STARTED</button>
+</div>
+
+<div id="main-app-content" style="display:none;">
+    </div>
 
   <div class="header-gradient"></div>
 
@@ -808,7 +817,56 @@
         });
       });
     }
+// --- 1. Permanent Login Check ---
+window.addEventListener('load', () => {
+    const savedName = localStorage.getItem('crazyName');
+    
+    if (savedName) {
+        // Agar naam pehle se save hai, to login screen hide karo aur home dikhao
+        window.user = savedName; // Global variable set karein
+        showHomePage(savedName);
+    } else {
+        // Agar naam nahi hai, to login screen dikhao
+        document.getElementById('login-screen').style.display = 'flex';
+    }
+});
 
+// --- 2. Login Function (Jab user Button dabaye) ---
+window.submitName = () => {
+    const nameInput = document.getElementById('user-name-input');
+    const name = nameInput.value.trim();
+
+    if (name.length < 3) {
+        alert("Please enter a valid name!");
+        return;
+    }
+
+    // Naam ko permanent save karein
+    localStorage.setItem('crazyName', name);
+    window.user = name;
+
+    // UI Update karein
+    showHomePage(name);
+};
+
+// Home Page dikhane ka function
+function showHomePage(name) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main-app-content').style.display = 'block';
+    
+    // User ka naam display karein (agar kahin text rakha hai)
+    if(document.getElementById('display-user-name')){
+        document.getElementById('display-user-name').innerText = name;
+    }
+}
+
+// --- 3. Logout (Optional: Agar aap reset karna chahein) ---
+window.logoutUser = () => {
+    if(confirm("Are you sure you want to logout?")){
+        localStorage.removeItem('crazyName');
+        location.reload(); // Page reload hote hi login mangega
+    }
+};
     window.submitFeedback = () => {
       const email = document.getElementById('feedback-email').value;
       const text = document.getElementById('feedback-text').value;
