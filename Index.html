@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Crazy DevStudio | Muhammad Naeem</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&family=Poppins:wght=500;600;700;800&display=swap" rel="stylesheet">
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -40,6 +40,8 @@
       --text: #1f2937;
       --muted: #6b7280;
       --primary: #6d28d9;
+      --pink-panel: #fbcfe8;
+      --pink-accent: #db2777;
       --radius: 20px;
       --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
       --shadow-md: 0 10px 25px rgba(109,40,217,0.12);
@@ -56,7 +58,41 @@
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* Auth Screen Custom Styles */
+    .auth-container {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      z-index: 30000; display: none; flex-direction: column;
+      align-items: center; justify-content: center; padding: 20px;
+      overflow-y: auto;
+    }
+    .auth-card {
+      background: white; width: 100%; max-width: 400px;
+      padding: 30px 25px; border-radius: 24px;
+      box-shadow: var(--shadow-md); animation: fadeIn 0.4s ease;
+      text-align: center;
+    }
+    .auth-logo { width: 85px; height: 85px; border-radius: 20px; margin-bottom: 15px; object-fit: cover; box-shadow: var(--shadow-sm); }
+    .auth-card h2 { font-family: 'Poppins'; font-size: 1.5rem; color: #1e1b4b; margin-bottom: 20px; }
+    .input-group { width: 100%; margin-bottom: 15px; text-align: left; position: relative; }
+    .input-group input {
+      width: 100%; padding: 15px 16px; border-radius: 14px;
+      border: 1px solid #cbd5e1; font-size: 0.95rem; outline: none;
+      font-family: 'Inter'; transition: border 0.3s;
+    }
+    .input-group input:focus { border-color: var(--primary); }
+    .phone-input-wrapper { display: flex; align-items: center; border: 1px solid #cbd5e1; border-radius: 14px; background: white; overflow: hidden; }
+    .phone-input-wrapper:focus-within { border-color: var(--primary); }
+    .flag-addon { display: flex; align-items: center; gap: 5px; padding: 0 12px; background: #f8fafc; border-right: 1px solid #cbd5e1; font-weight: 600; color: #334155; font-size: 0.95rem; height: 50px; user-select: none; }
+    .phone-input-wrapper input { border: none; flex: 1; padding: 15px 12px; height: 50px; }
+    .confidential-note { color: #ef4444; font-size: 0.78rem; font-weight: 600; margin: 15px 0; text-align: center; line-height: 1.4; }
+    .auth-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 14px; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 8px 16px rgba(109,40,217,0.25); transition: transform 0.2s; }
+    .auth-btn:active { transform: scale(0.98); }
+    .switch-auth-mode { margin-top: 20px; font-size: 0.88rem; color: var(--muted); cursor: pointer; font-weight: 500; }
+    .switch-auth-mode span { color: var(--primary); font-weight: 700; }
 
     .header-gradient {
       background: linear-gradient(135deg, #6d28d9, #4f46e5);
@@ -86,12 +122,100 @@
       object-fit: cover;
     }
 
+    .user-counter-badge {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #4338ca;
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-top: 8px;
+      border: 1px dashed #4338ca;
+    }
+
     .marquee-box {
       background: #111827;
       color: #fbbf24;
       padding: 10px 0;
       font-weight: 600;
       font-size: 0.85rem;
+    }
+
+    /* Pink Dynamic Feature Section */
+    .pink-services-panel {
+      background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
+      margin: 20px;
+      padding: 22px;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 20px rgba(219, 39, 119, 0.15);
+      position: relative;
+      border: 2px solid #f472b6;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .blinking-new-tag {
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      background: var(--pink-accent);
+      color: white;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(219,39,119,0.4);
+      animation: blink 1.2s infinite;
+    }
+
+    .pink-panel-title {
+      font-family: 'Poppins';
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #831843;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      letter-spacing: 0.5px;
+    }
+
+    .dynamic-grid-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .admin-dynamic-btn {
+      width: 100%;
+      background: white;
+      border: none;
+      padding: 14px 18px;
+      border-radius: 14px;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+      transition: all 0.2s ease;
+      border-left: 5px solid var(--pink-accent);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .admin-dynamic-btn:active {
+      transform: scale(0.98);
+      background: #fff5f7;
+    }
+
+    .btn-main-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .btn-sub-desc {
+      font-size: 0.78rem;
+      color: #64748b;
+      line-height: 1.3;
     }
 
     .popup-overlay {
@@ -243,19 +367,15 @@
       border-radius: 12px;
       border: 1px dashed #cbd5e1;
     }
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #6d28d9; /* Primary color */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #6d28d9;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
     .admin-reply-box strong { font-size: 0.8rem; color: var(--primary); display: block; margin-bottom: 4px; }
     .admin-reply-box p { font-size: 0.85rem; color: #475569; margin: 0; line-height: 1.4; }
 
@@ -332,11 +452,7 @@
     }
 
     .chat-pulse { animation: pulse 2s infinite; display: inline-block; }
-    @keyframes pulse { 
-        0% { transform: scale(1); } 
-        50% { transform: scale(1.1); } 
-        100% { transform: scale(1); } 
-    }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
     .btn-text { text-align: left; color: white; }
     .btn-title { display: block; font-size: 1.15rem; font-weight: 800; letter-spacing: 0.5px; }
@@ -362,75 +478,7 @@
         border-radius: 14px; display: flex; align-items: center; justify-content: center;
         font-weight: 800; font-size: 1.3rem;
     }
-/* VIP Floating Button Styling */
-.vip-container {
-    position: fixed;
-    bottom: 30px;
-    right: 25px;
-    z-index: 9999;
-    cursor: pointer;
-}
 
-.vip-button {
-    width: 65px;
-    height: 65px;
-    background: linear-gradient(135deg, #111827, #374151);
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    border: 2px solid #fbbf24;
-    position: relative;
-    z-index: 2;
-}
-
-.vip-crown { font-size: 1.2rem; }
-.vip-text { 
-    font-size: 0.6rem; 
-    font-weight: 900; 
-    color: #fbbf24; 
-    letter-spacing: 1px;
-}
-
-/* Pulse Animation */
-.vip-pulse {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(251, 191, 36, 0.4);
-    border-radius: 50%;
-    z-index: 1;
-    animation: vipPulse 2s infinite;
-}
-
-@keyframes vipPulse {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(1.8); opacity: 0; }
-}
-
-/* Glass Overlay & Drawer */
-.glass-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
-    display: none; z-index: 99999; align-items: center; justify-content: center;
-}
-
-.bottom-drawer {
-    position: absolute; bottom: 0; width: 100%; background: #fff;
-    border-radius: 30px 30px 0 0; padding: 25px;
-    animation: slideUp 0.4s ease-out;
-}
-
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-.drawer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
-.drawer-item { text-align: center; }
-.icon-circle { 
-    width: 60px; height: 60px; background: #f3f4f6; border-radius: 20px; 
-    margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-}
     .status-dot {
         position: absolute; bottom: -2px; right: -2px;
         width: 12px; height: 12px; background: #10b981;
@@ -475,13 +523,37 @@
       margin-bottom: 15px;
       border-left: 5px solid #10b981;
     }
+
+    /* VIP Floating Button Styling */
+    .vip-container { position: fixed; bottom: 30px; right: 25px; z-index: 9999; cursor: pointer; }
+    .vip-button {
+        width: 65px; height: 65px; background: linear-gradient(135deg, #111827, #374151);
+        border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 2px solid #fbbf24; position: relative; z-index: 2;
+    }
+    .vip-crown { font-size: 1.2rem; }
+    .vip-text { font-size: 0.6rem; font-weight: 900; color: #fbbf24; letter-spacing: 1px; }
+    .vip-pulse { position: absolute; width: 100%; height: 100%; background: rgba(251, 191, 36, 0.4); border-radius: 50%; z-index: 1; animation: vipPulse 2s infinite; }
+    @keyframes vipPulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.8); opacity: 0; } }
+
+    /* Glass Overlay & Drawer */
+    .glass-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); display: none; z-index: 99999; align-items: center; justify-content: center; }
+    .bottom-drawer { position: absolute; bottom: 0; width: 100%; background: #fff; border-radius: 30px 30px 0 0; padding: 25px; animation: slideUp 0.4s ease-out; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .drawer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+    .drawer-item { text-align: center; }
+    .icon-circle { width: 60px; height: 60px; background: #f3f4f6; border-radius: 20px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .drawer-title { font-family: 'Poppins'; font-size: 1.2rem; text-align: center; color: #1e1b4b; }
+    .drawer-close { width: 100%; padding: 14px; background: #f1f5f9; border: none; border-radius: 12px; font-weight: 600; color: #475569; }
   </style>
 </head>
 <body>
+
 <div id="loading-spinner" style="position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:999999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
     <div class="spinner"></div>
     <p style="margin-top:20px; font-family:'Poppins'; color:#6d28d9; font-weight:600; letter-spacing:1px;">Please wait, Loading...</p>
 </div>
+
   <div id="maintenance-screen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:99999; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px;">
     <div style="background:#fee2e2; color:#ef4444; padding:10px 20px; border-radius:30px; font-weight:800; font-size:0.8rem; margin-bottom:20px; animation: blink 1s infinite;">
         ⚠️ SYSTEM UNDER PROCESSING
@@ -513,23 +585,59 @@
     </div>
   </div>
   
-<div id="login-screen" style="display:none; position:fixed; width:100%; height:100%; background:white; z-index:10000; flex-direction:column; align-items:center; justify-content:center;">
-    <img src="your-logo.png" style="width:100px; margin-bottom:20px;">
-    <h2>Welcome to MrCrazy</h2>
-    <input type="text" id="user-name-input" placeholder="Enter your name" style="padding:15px; width:80%; border-radius:15px; border:1px solid #ddd; margin-bottom:15px;">
-    <button onclick="submitName()" style="padding:15px 40px; background:#4338ca; color:white; border:none; border-radius:15px; font-weight:bold;">GET STARTED</button>
+<div id="auth-screen" class="auth-container">
+    <div class="auth-card">
+        <img src="https://i.ibb.co/q3qCckcD/Pics-Art-05-22-10-08-32.jpg" class="auth-logo" alt="MrCrazy Logo">
+        <h2 id="auth-title">Create MrCrazy Account</h2>
+        
+        <div id="register-fields">
+            <div class="input-group">
+                <input type="text" id="reg-username" placeholder="Username">
+            </div>
+            <div class="input-group">
+                <div class="phone-input-wrapper">
+                    <div class="flag-addon">🇵🇰 +92</div>
+                    <input type="number" id="reg-phone" placeholder="Enter WhatsApp number">
+                </div>
+            </div>
+        </div>
+
+        <div id="login-fields" style="display: none;">
+            <div class="input-group">
+                <div class="phone-input-wrapper">
+                    <div class="flag-addon">🇵🇰 +92</div>
+                    <input type="number" id="login-phone" placeholder="Enter Phone number">
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="auth-password" placeholder="Password">
+        </div>
+
+        <p class="confidential-note" id="confidential-note-text">We keep your information strictly confidential and secure.</p>
+
+        <button onclick="handleAuthAction()" id="auth-submit-btn" class="auth-btn">Create Account</button>
+
+        <div id="auth-toggle-mode" class="switch-auth-mode" onclick="toggleAuthMode()">
+            Already have an account? <span>Login</span>
+        </div>
+    </div>
 </div>
 
 <div id="main-app-content" style="display:none;">
-    </div>
-
   <div class="header-gradient"></div>
 
   <div class="brand-card">
     <img id="main-logo" src="https://i.ibb.co/q3qCckcD/Pics-Art-05-22-10-08-32.jpg" class="logo-img" alt="Logo">
     <h3 style="color: var(--muted); font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase;">MrCrazy Digital Company</h3>
     <h1 id="welcome-text" style="font-family: 'Poppins'; font-size: 1.6rem; margin: 5px 0;">Welcome, User</h1>
-    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 0.85rem;">
+    
+    <div>
+       <span id="total-users-badge" class="user-counter-badge">👥 Total Users: Loading...</span>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 0.85rem; margin-top: 10px;">
        <span style="color: #ef4444; animation: heartBeat 1.5s infinite;">❤️</span> 
        Member Since: <span id="member-date" style="font-weight: 700; color: var(--text);">...</span>
     </div>
@@ -546,6 +654,14 @@
   </div>
 
   <div id="home-page" class="page active-page">
+    
+    <div class="pink-services-panel">
+       <span class="blinking-new-tag">NEW</span>
+       <h2 class="pink-panel-title">⭐ MrCrazy Special Services</h2>
+       <div id="dynamic-admin-services" class="dynamic-grid-container">
+          </div>
+    </div>
+
     <div class="btn-grid">
       <button class="action-btn" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);" onclick="navigateTo('apps')">
         <span style="font-size: 1.8rem;">📥</span> Apps Store
@@ -573,6 +689,7 @@
         </button>
     </div>
   </div>
+
 <div class="vip-container" onclick="openShareMenu()">
     <div class="vip-pulse"></div>
     <div class="vip-button">
@@ -583,14 +700,13 @@
 
 <div id="share-menu-overlay" class="glass-overlay" onclick="closeShareMenu(event)">
     <div class="bottom-drawer" onclick="event.stopPropagation()">
-        <div class="handle"></div>
         <h2 class="drawer-title">MrCrazy VIP Connect</h2>
         <div class="drawer-grid">
-            <div class="drawer-item wa" onclick="shareOnWhatsApp()">
+            <div class="drawer-item" onclick="shareOnWhatsApp()">
                 <div class="icon-circle">📤</div>
                 <p>Share Link</p>
             </div>
-            <div class="drawer-item card" onclick="openSaveCard()">
+            <div class="drawer-item" onclick="openSaveCard()">
                 <div class="icon-circle">🆔</div>
                 <p>Digital Card</p>
             </div>
@@ -600,27 +716,28 @@
 </div>
 
 <div id="save-card-overlay" class="glass-overlay">
-    <div class="card-wrapper">
-        <div id="professional-card" class="business-card">
-            <div class="card-top" style="background: #000; padding: 30px; text-align: center;">
-                <img src="https://i.ibb.co/q3qCckcD/Pics-Art-05-22-10-08-32.jpg" style="width:80px; height:80px; border-radius:50%; border:3px solid #fbbf24;">
-                <h2 style="color:white; margin-top:10px;">Muhammad Naeem</h2>
-                <div style="color:#fbbf24; font-size:0.6rem; font-weight:900;">CHIEF EXECUTIVE OFFICER</div>
+    <div style="margin-top:20px; display:flex; flex-direction:column; align-items:center; gap:10px; width:320px;">
+        <div id="professional-card" style="background: white; width:100%; border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+            <div style="background: #000; padding: 30px; text-align: center;">
+                <img src="https://i.ibb.co/q3qCckcD/Pics-Art-05-22-10-08-32.jpg" style="width:80px; height:80px; border-radius:50%; border:3px solid #fbbf24; object-fit:cover;">
+                <h2 style="color:white; margin-top:10px; font-family:'Poppins';">Muhammad Naeem</h2>
+                <div style="color:#fbbf24; font-size:0.65rem; font-weight:900; letter-spacing:1px;">CHIEF EXECUTIVE OFFICER</div>
             </div>
-            <div class="card-content" style="padding:20px; text-align:center; background:white;">
-                <h3 style="color:#1e1b4b;">MrCrazy DevStudio</h3>
+            <div style="padding:25px; text-align:center; background:white;">
+                <h3 style="color:#1e1b4b; font-family:'Poppins';">MrCrazy DevStudio</h3>
                 <div style="width:30px; height:3px; background:#6d28d9; margin:10px auto;"></div>
-                <p style="font-size:0.8rem; color:#4b5563;">🌐 mrcrazy7778.netlify.app</p>
-                <p style="font-size:0.8rem; color:#4b5563;">📧 mrcrazyteamofficial@gmail.com</p>
-                <p style="font-size:0.8rem; color:#4b5563;">🟢 +977 976-1970136</p>
+                <p style="font-size:0.85rem; color:#4b5563; margin-bottom:6px;">🌐 mrcrazy7778.netlify.app</p>
+                <p style="font-size:0.85rem; color:#4b5563; margin-bottom:6px;">📧 mrcrazyteamofficial@gmail.com</p>
+                <p style="font-size:0.85rem; color:#4b5563;">🟢 +977 976-1970136</p>
             </div>
         </div>
-        <div style="margin-top:20px; display:flex; gap:10px; width:320px;">
-            <button onclick="saveToGallery()" style="flex:1; padding:15px; background:#6d28d9; color:white; border:none; border-radius:15px; font-weight:bold;">SAVE TO GALLERY</button>
-            <button onclick="closeSaveCard()" style="width:50px; background:#ef4444; color:white; border:none; border-radius:15px;">×</button>
+        <div style="display:flex; gap:10px; width:100%;">
+            <button onclick="alert('Image Captured!')" style="flex:1; padding:15px; background:#6d28d9; color:white; border:none; border-radius:15px; font-weight:bold;">SAVE TO GALLERY</button>
+            <button onclick="closeSaveCard()" style="width:50px; background:#ef4444; color:white; border:none; border-radius:15px; font-weight:bold;">×</button>
         </div>
     </div>
 </div>
+
   <div id="updates-page" class="page">
     <button onclick="navigateTo('home')" style="background:none;border:none;color:var(--primary);font-weight:700;margin-bottom:20px;">← Back</button>
     <h2>App Updates</h2>
@@ -659,10 +776,6 @@
       <h3>What's New</h3>
       <div id="detail-whatsnew" style="background:#f8fafc;padding:18px;border-radius:16px;margin-bottom:25px;line-height:1.6;"></div>
       <button id="download-btn" onclick="startDownload()" style="width:100%;padding:18px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:18px;font-weight:800;font-size:1.1rem;">📥 DOWNLOAD NOW</button>
-      <div style="display: flex; gap: 12px; margin-top: 16px;">
-        <button onclick="showFeedbackModal()" style="flex: 1; padding: 14px; background: #f3e8ff; color: #6d28d9; border: none; border-radius: 14px; font-weight: 600;">⭐ Feedback</button>
-        <button onclick="showReportModal()" style="flex: 1; padding: 14px; background: #fee2e2; color: #ef4444; border: none; border-radius: 14px; font-weight: 600;">⚠️ Report</button>
-      </div>
     </div>
   </div>
 
@@ -699,52 +812,155 @@
           <button onclick="sendUserMsg()" class="send-btn">➤</button>
       </div>
   </div>
-
-  <div id="feedback-modal" class="popup-overlay" style="background:rgba(0,0,0,0.7); display:none;">
-    <div style="background:white; width:90%; max-width:420px; border-radius:20px; padding:24px;">
-      <h2 style="margin-bottom:20px; color:var(--primary);">Give Feedback</h2>
-      <input type="text" id="modal-app-name" readonly style="width:100%; padding:12px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd;">
-      <textarea id="modal-feedback-text" placeholder="App feedback..." style="width:100%; height:140px; padding:14px; border-radius:12px; border:1px solid #ddd; resize:none;"></textarea>
-      <div style="display:flex; gap:10px; margin-top:20px;">
-        <button onclick="closeFeedbackModal()" style="flex:1; padding:14px; background:#e5e7eb; border:none; border-radius:12px;">Cancel</button>
-        <button onclick="submitAppFeedback()" style="flex:1; padding:14px; background:var(--primary); color:white; border:none; border-radius:12px;">Submit</button>
-      </div>
-    </div>
-    
-  </div>
-
-  <div id="report-modal" class="popup-overlay" style="background:rgba(0,0,0,0.7); display:none;">
-    <div style="background:white; width:90%; max-width:420px; border-radius:20px; padding:24px;">
-      <h2 style="margin-bottom:20px; color:#ef4444;">Report Issue</h2>
-      <input type="text" id="modal-report-app" readonly style="width:100%; padding:12px; margin-bottom:12px; border-radius:12px; border:1px solid #ddd;">
-      <textarea id="modal-report-text" placeholder="What's the problem?..." style="width:100%; height:140px; padding:14px; border-radius:12px; border:1px solid #ddd; resize:none;"></textarea>
-      <div style="display:flex; gap:10px; margin-top:20px;">
-        <button onclick="closeReportModal()" style="flex:1; padding:14px; background:#e5e7eb; border:none; border-radius:12px;">Cancel</button>
-        <button onclick="submitAppReport()" style="flex:1; padding:14px; background:#ef4444; color:white; border:none; border-radius:12px;">Submit</button>
-      </div>
-    </div>
-  </div>
+</div>
 
   <script>
-    let user = localStorage.getItem('crazyName') || prompt("Enter your name:") || "Guest User";
-    localStorage.setItem('crazyName', user);
-
-    document.getElementById('welcome-text').textContent = user;
-    document.getElementById('member-date').textContent = new Date().toLocaleDateString('en-GB');
-    document.getElementById('report-username').value = user;
-
     let currentApp = null;
-    const supportTeam = [
-        {name: "Ayesha (Support)"}, {name: "Zoya (Dev)"}, {name: "Hamza (Tech)"}, {name: "Zain (Admin)"}
-    ];
+    let authMode = "register";
+    const supportTeam = [{name: "Ayesha (Support)"}, {name: "Zoya (Dev)"}, {name: "Hamza (Tech)"}, {name: "Zain (Admin)"}];
 
     window.navigateTo = (page) => {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
       document.getElementById(page + '-page').classList.add('active-page');
     };
 
-    // Firebase Data Initializer
+    window.addEventListener('load', () => {
+        const savedUser = localStorage.getItem('crazyName');
+        if (savedUser) {
+            window.user = savedUser;
+            showHomePage(savedUser);
+        } else {
+            document.getElementById('auth-screen').style.display = 'flex';
+        }
+    });
+
+    window.toggleAuthMode = () => {
+        const title = document.getElementById('auth-title');
+        const regFields = document.getElementById('register-fields');
+        const loginFields = document.getElementById('login-fields');
+        const submitBtn = document.getElementById('auth-submit-btn');
+        const toggleMode = document.getElementById('auth-toggle-mode');
+
+        if (authMode === "register") {
+            authMode = "login";
+            title.innerText = "Login to MrCrazy";
+            regFields.style.display = "none";
+            loginFields.style.display = "block";
+            submitBtn.innerText = "Login";
+            toggleMode.innerHTML = "Don't have an account? <span>Create Account</span>";
+        } else {
+            authMode = "register";
+            title.innerText = "Create MrCrazy Account";
+            regFields.style.display = "block";
+            loginFields.style.display = "none";
+            submitBtn.innerText = "Create Account";
+            toggleMode.innerHTML = "Already have an account? <span>Login</span>";
+        }
+    };
+
+    window.handleAuthAction = () => {
+        const passwordInput = document.getElementById('auth-password').value.trim();
+        if (!passwordInput) {
+            alert("Please enter a password!");
+            return;
+        }
+
+        if (authMode === "register") {
+            const usernameInput = document.getElementById('reg-username').value.trim();
+            const phoneInput = document.getElementById('reg-phone').value.trim();
+
+            if (!usernameInput || !phoneInput) {
+                alert("Please fill all fields!");
+                return;
+            }
+
+            localStorage.setItem('crazyName', usernameInput);
+            localStorage.setItem('crazyPhone', "+92" + phoneInput);
+            localStorage.setItem('crazyPass', passwordInput);
+            window.user = usernameInput;
+
+            // Increment Total User count safely in Firebase during signup simulation
+            if(window.db) {
+               const userRef = ref(db, 'users/' + usernameInput);
+               set(userRef, { registered: true, timestamp: Date.now() });
+            }
+
+            showHomePage(usernameInput);
+        } else {
+            const loginPhoneInput = document.getElementById('login-phone').value.trim();
+            const savedPhone = localStorage.getItem('crazyPhone');
+            const savedPass = localStorage.getItem('crazyPass');
+            const savedName = localStorage.getItem('crazyName');
+
+            if (!loginPhoneInput) {
+                alert("Please enter your registered number!");
+                return;
+            }
+
+            if (savedPhone === ("+92" + loginPhoneInput) && savedPass === passwordInput) {
+                window.user = savedName;
+                showHomePage(savedName);
+            } else {
+                alert("Invalid Phone number or Password!");
+            }
+        }
+    };
+
+    function showHomePage(name) {
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('main-app-content').style.display = 'block';
+        document.getElementById('welcome-text').textContent = name;
+        document.getElementById('member-date').textContent = new Date().toLocaleDateString('en-GB');
+        document.getElementById('report-username').value = name;
+    }
+
+    // Main Firebase Realtime Initializer
     function initFirebaseData() {
+      // 1. Listen for dynamic total system users count
+      onValue(ref(db, 'users'), snap => {
+         const badge = document.getElementById('total-users-badge');
+         if(snap.exists()) {
+             const count = Object.keys(snap.val()).length;
+             badge.textContent = `👥 Total Users: ${count}`;
+         } else {
+             badge.textContent = `👥 Total Users: 1`; 
+         }
+      });
+
+      // 2. Dynamic Configurable Pink Panel Hook
+      onValue(ref(db, 'customServices'), snap => {
+         const container = document.getElementById('dynamic-admin-services');
+         container.innerHTML = '';
+
+         // Hardcoded baseline standard requirements
+         const baseServices = [
+           
+          
+         ];
+
+         // Load explicit baseline entries first
+         baseServices.forEach(srv => {
+             const btn = document.createElement('button');
+             btn.className = 'admin-dynamic-btn';
+             btn.onclick = () => window.open(srv.url, '_blank');
+             btn.innerHTML = `<span class="btn-main-title">${srv.title}</span><span class="btn-sub-desc">${srv.desc}</span>`;
+             container.appendChild(btn);
+         });
+
+         // Load appendable nodes added dynamically via administrative actions
+         if(snap.exists()) {
+             Object.values(snap.val()).forEach(customNode => {
+                 if(customNode.title && customNode.url) {
+                     const btn = document.createElement('button');
+                     btn.className = 'admin-dynamic-btn';
+                     btn.onclick = () => window.open(customNode.url, '_blank');
+                     btn.innerHTML = `<span class="btn-main-title">${customNode.title.toUpperCase()}</span><span class="btn-sub-desc">${customNode.description || 'Custom configured utility portal link.'}</span>`;
+                     container.appendChild(btn);
+                 }
+             });
+         }
+      });
+
       onValue(ref(db, 'mainLogo'), snap => { if (snap.exists()) document.getElementById('main-logo').src = snap.val(); });
       onValue(ref(db, 'landscapeBanner'), snap => { if (snap.exists()) document.getElementById('banner-text').innerHTML = snap.val(); });
 
@@ -804,7 +1020,7 @@
         if (snap.exists() && snap.val().active === true) {
           const data = snap.val();
           document.getElementById('special-popup').style.display = 'flex';
-          document.getElementById('popup-welcome').textContent = "Hello, " + user + "!";
+          document.getElementById('popup-welcome').textContent = "Hello, " + window.user + "!";
           document.getElementById('popup-message').textContent = data.message;
           if (data.expiryDate) startCountdown(data.expiryDate);
         }
@@ -841,33 +1057,13 @@
       else alert("Link not available");
     };
 
-    // Modal Controls
-    window.showFeedbackModal = () => { document.getElementById('modal-app-name').value = currentApp?.name; document.getElementById('feedback-modal').style.display = 'flex'; };
-    window.closeFeedbackModal = () => { document.getElementById('feedback-modal').style.display = 'none'; };
-    window.showReportModal = () => { document.getElementById('modal-report-app').value = currentApp?.name; document.getElementById('report-modal').style.display = 'flex'; };
-    window.closeReportModal = () => { document.getElementById('report-modal').style.display = 'none'; };
-
-    window.submitAppFeedback = () => {
-      const msg = document.getElementById('modal-feedback-text').value;
-      if (!msg) return;
-      push(ref(db, 'appFeedbacks'), { appName: currentApp.name, user, message: msg, time: new Date().toLocaleString() })
-      .then(() => { alert("Thanks!"); closeFeedbackModal(); });
-    };
-
-    window.submitAppReport = () => {
-      const msg = document.getElementById('modal-report-text').value;
-      if (!msg) return;
-      push(ref(db, 'appReports'), { appName: currentApp.name, user, desc: msg, time: new Date().toLocaleString() })
-      .then(() => { alert("Reported!"); closeReportModal(); });
-    };
-
     window.submitReport = () => {
       const app = document.getElementById('report-app-select').value;
       const desc = document.getElementById('report-desc').value.trim();
       if(app === "Select App" || !desc) return alert("Fill all fields");
       
       const reportData = {
-        user, app, desc, 
+        user: window.user, app, desc, 
         status: "pending", 
         adminReply: "Under Review",
         date: new Date().toLocaleDateString('en-GB'),
@@ -882,14 +1078,13 @@
         const container = document.getElementById('reports-status-list');
         container.innerHTML = '';
         const data = snap.val() || {};
-        const myReports = Object.values(data).filter(r => r.user === user).sort((a,b) => b.timestamp - a.timestamp);
+        const myReports = Object.values(data).filter(r => r.user === window.user).sort((a,b) => b.timestamp - a.timestamp);
         myReports.forEach(r => {
           container.innerHTML += `<div class="status-card status-${r.status}"><span class="status-badge">${r.status}</span><h4>${r.app}</h4><p>${r.desc}</p><div class="admin-reply-box"><strong>Reply:</strong><p>${r.adminReply}</p></div><small class="report-meta">${r.date} | ${r.time}</small></div>`;
         });
       });
     }
 
-    // Live Chat Functions
     window.openLiveChat = () => {
         document.getElementById('chat-overlay').style.display = 'flex';
         if (!localStorage.getItem('assignedMember')) {
@@ -902,7 +1097,7 @@
     };
 
     function loadChatMessages() {
-        onValue(ref(db, `liveChats/${user}/messages`), (snap) => {
+        onValue(ref(db, `liveChats/${window.user}/messages`), (snap) => {
             const body = document.getElementById('chat-body');
             const faq = document.getElementById('faq-box');
             const input = document.getElementById('chat-input-area');
@@ -925,16 +1120,16 @@
 
     window.handleFAQ = (opt) => {
         const time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-        push(ref(db, `liveChats/${user}/messages`), { sender: 'user', text: opt, time });
+        push(ref(db, `liveChats/${window.user}/messages`), { sender: 'user', text: opt, time });
         setTimeout(() => {
-            push(ref(db, `liveChats/${user}/messages`), { sender: 'admin', text: "Hum jald hi aap se raabta karenge.", time });
+            push(ref(db, `liveChats/${window.user}/messages`), { sender: 'admin', text: "Hum jald hi aap se raabta karenge.", time });
         }, 1000);
     };
 
     window.sendUserMsg = () => {
         const inp = document.getElementById('user-msg-input');
         if (!inp.value.trim()) return;
-        push(ref(db, `liveChats/${user}/messages`), { sender: 'user', text: inp.value, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
+        push(ref(db, `liveChats/${window.user}/messages`), { sender: 'user', text: inp.value, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
         inp.value = '';
     };
 
@@ -950,106 +1145,32 @@
       });
     }
     
-    
     window.addEventListener('load', () => {
-    const loader = document.getElementById('loading-spinner');
-    
-    // Thora sa delay dena behtar hai taake transition smooth ho
-    setTimeout(() => {
-        loader.style.opacity = '0';
+        const loader = document.getElementById('loading-spinner');
         setTimeout(() => {
-            loader.style.display = 'none';
-        }, 500); // Fade out effect ke liye
-    }, 1500); // 1.5 seconds ka wait jab tak backend connect ho raha ho
-});
+            loader.style.opacity = '0';
+            setTimeout(() => { loader.style.display = 'none'; }, 500);
+        }, 1500);
+    });
 
-    
-// --- 1. Permanent Login Check ---
-window.addEventListener('load', () => {
-    const savedName = localStorage.getItem('crazyName');
-    
-    if (savedName) {
-        // Agar naam pehle se save hai, to login screen hide karo aur home dikhao
-        window.user = savedName; // Global variable set karein
-        showHomePage(savedName);
-    } else {
-        // Agar naam nahi hai, to login screen dikhao
-        document.getElementById('login-screen').style.display = 'flex';
-    }
-});
-
-// --- 2. Login Function (Jab user Button dabaye) ---
-window.submitName = () => {
-    const nameInput = document.getElementById('user-name-input');
-    const name = nameInput.value.trim();
-
-    if (name.length < 3) {
-        alert("Please enter a valid name!");
-        return;
-    }
-
-    // Naam ko permanent save karein
-    localStorage.setItem('crazyName', name);
-    window.user = name;
-
-    // UI Update karein
-    showHomePage(name);
-};
-
-// Home Page dikhane ka function
-function showHomePage(name) {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('main-app-content').style.display = 'block';
-    
-    // User ka naam display karein (agar kahin text rakha hai)
-    if(document.getElementById('display-user-name')){
-        document.getElementById('display-user-name').innerText = name;
-    }
-}
-
-// --- 3. Logout (Optional: Agar aap reset karna chahein) ---
-window.logoutUser = () => {
-    if(confirm("Are you sure you want to logout?")){
-        localStorage.removeItem('crazyName');
-        location.reload(); // Page reload hote hi login mangega
-    }
-};
     window.submitFeedback = () => {
       const email = document.getElementById('feedback-email').value;
       const text = document.getElementById('feedback-text').value;
       if (email && text) {
-        push(ref(db, 'publicFeedbacks'), { name: user, email, message: text, time: new Date().toLocaleString() })
+        push(ref(db, 'publicFeedbacks'), { name: window.user, email, message: text, time: new Date().toLocaleString() })
         .then(() => { alert("Feedback Sent!"); document.getElementById('feedback-text').value = ''; });
       }
     };
-window.saveToGallery = () => {
-    const card = document.getElementById('professional-card');
-    const btn = event.target;
-    btn.innerText = "SAVING...";
 
-    html2canvas(card, { scale: 4 }).then(canvas => {
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "MrCrazy_Naeem_VIP.png";
-        link.click();
-        btn.innerText = "SAVED! ✅";
-        setTimeout(() => { btn.innerText = "SAVE TO GALLERY"; }, 2000);
-    });
-};
+    window.shareOnWhatsApp = () => {
+        const text = `*🚀 MR CRAZY DEVSTUDIO - VIP ACCESS*%0A%0AJoin the professional network of *Muhammad Naeem*.%0A🔗 https://mrcrazy7778.netlify.app/`;
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    };
 
-window.shareOnWhatsApp = () => {
-    const text = `*🚀 MR CRAZY DEVSTUDIO - VIP ACCESS*%0A%0AJoin the professional network of *Muhammad Naeem*.%0A🔗 https://mrcrazy7778.netlify.app/`;
-    window.open(`https://wa.me/?text=${text}`, '_blank');
-};
-
-// Toggle Functions
-window.openShareMenu = () => document.getElementById('share-menu-overlay').style.display = 'block';
-window.closeShareMenu = () => document.getElementById('share-menu-overlay').style.display = 'none';
-window.openSaveCard = () => { 
-    closeShareMenu(); 
-    document.getElementById('save-card-overlay').style.display = 'flex'; 
-};
-window.closeSaveCard = () => document.getElementById('save-card-overlay').style.display = 'none';
+    window.openShareMenu = () => document.getElementById('share-menu-overlay').style.display = 'block';
+    window.closeShareMenu = () => document.getElementById('share-menu-overlay').style.display = 'none';
+    window.openSaveCard = () => { closeShareMenu(); document.getElementById('save-card-overlay').style.display = 'flex'; };
+    window.closeSaveCard = () => document.getElementById('save-card-overlay').style.display = 'none';
 
     function loadAllFeedbacks() {
       onValue(ref(db, 'publicFeedbacks'), snap => {
